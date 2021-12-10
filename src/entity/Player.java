@@ -103,7 +103,7 @@ public class Player extends Human {
                 image = this.getSprite(this.getActionFrame(), 3);
             }
         }
-        g2d.drawImage(image, getPosX(), getPosY(), Map.scaledTileSize, Map.scaledTileSize, null);
+        g2d.drawImage(image, 480, 228, Map.scaledTileSize, Map.scaledTileSize, null);
     }
 
     public void setWalkSpeed(int walkSpeed) {

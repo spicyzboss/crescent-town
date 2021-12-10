@@ -1,6 +1,8 @@
 package main;
 
 import entity.Player;
+import tile.MainMap;
+import tile.TileManager;
 
 import java.awt.*;
 import java.time.LocalDateTime;
@@ -53,6 +55,14 @@ public class Map extends JPanel implements Runnable {
      */
     public static int frame = 0;
 
+    /**
+     * Map
+     */
+    TileManager tileManager;
+    MainMap mainMap;
+    String[] mainMapLayers = {"src/resource/csv/Map_Tile Layer 1.csv", "src/resource/csv/Map_Tile Layer 2.csv", "src/resource/csv/Map_Tile Layer 3.csv", "src/resource/csv/Map_Tile Layer 4.csv"};
+
+
     Thread mapThread; // global attribute for threading
 
     GameControlHandler controlHandler = new GameControlHandler();
@@ -65,6 +75,8 @@ public class Map extends JPanel implements Runnable {
         this.setPreferredSize(new Dimension(width, height)); // set size of JPanel
         this.setBackground(Color.BLACK); // set panel's background color to black
         this.setDoubleBuffered(true); // buffer for performance
+        tileManager = new TileManager(this);
+        mainMap = new MainMap(mainMapLayers, tileSize);
         initThread();
     }
 
@@ -111,6 +123,7 @@ public class Map extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+        mainMap.render(g2d, player.getPosX(), player.getPosY());
         player.draw(g2d);
     }
 }
