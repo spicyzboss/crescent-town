@@ -2,6 +2,7 @@ package tile;
 
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +16,9 @@ public class Tile {
     public Tile(String s, boolean collision){
         this.setImage(s);
         this.collision = collision;
+    }
+    public boolean isCollision(){
+        return collision;
     }
     public void setImage(String s){
         try {

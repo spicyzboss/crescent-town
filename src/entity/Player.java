@@ -2,15 +2,25 @@ package entity;
 
 import main.GameControlHandler;
 import main.Map;
+import tile.CollisionChecker;
+import tile.MainMap;
+import tile.TileManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Player extends Human {
     private int walkSpeed;
+    private int screenX;
+    private int screenY;
     private int posX;
     private int posY;
     private int energy;
+    public Rectangle playerArea = new Rectangle(((Map.tileColumn)/2)*Map.scaledTileSize, ((Map.tileRow)/2)*Map.scaledTileSize, Map.scaledTileSize, Map.scaledTileSize);
+    public Rectangle solidArea = new Rectangle(((Map.tileColumn)/2)*Map.scaledTileSize+14, ((Map.tileRow)/2)*Map.scaledTileSize+48, Map.tileSize+1, Map.tileSize/2);
+
+    private MainMap currentMap;
+
     private GameControlHandler controlHandler;
 
     public Player(String name, GameControlHandler controlHandler) {
@@ -21,33 +31,36 @@ public class Player extends Human {
     }
 
     public void playerInit() {
-        this.setWalkSpeed(4);
-        this.setPosX(0);
-        this.setPosY(0);
+        this.setWalkSpeed(Map.scale*2);
         this.setEnergy(100);
         this.setDirection("down");
         this.setMaxActionFrame(3);
     }
-
     public void update() {
         if (controlHandler.upKeyPressed) {
             this.setDirection("up");
-            this.setPosY(this.getPosY() - this.getWalkSpeed());
+            CollisionChecker.checkTile(this);
+            if(!CollisionChecker.checkTile(this))
+                this.setScreenY(this.getScreenY() - this.getWalkSpeed());
         } else if (controlHandler.downKeyPressed) {
             this.setDirection("down");
-            this.setPosY(this.getPosY() + this.getWalkSpeed());
+            if(!CollisionChecker.checkTile(this))
+                this.setScreenY(this.getScreenY() + this.getWalkSpeed());
         } else if (controlHandler.leftKeyPressed) {
             this.setDirection("left");
-            this.setPosX(this.getPosX() - this.getWalkSpeed());
+            if(!CollisionChecker.checkTile(this))
+                this.setScreenX(this.getScreenX() - this.getWalkSpeed());
         } else if (controlHandler.rightKeyPressed) {
             this.setDirection("right");
-            this.setPosX(this.getPosX() + this.getWalkSpeed());
+            if(!CollisionChecker.checkTile(this))
+                this.setScreenX(this.getScreenX() + this.getWalkSpeed());
         }
     }
 
     public void draw(Graphics2D g2d) {
         BufferedImage image = null;
         String state = this.getDirection();
+
 
         switch (this.getDirection()) {
             case "down" -> {
@@ -103,7 +116,9 @@ public class Player extends Human {
                 image = this.getSprite(this.getActionFrame(), 3);
             }
         }
-        g2d.drawImage(image, 480, 228, Map.scaledTileSize, Map.scaledTileSize, null);
+        g2d.drawImage(image, playerArea.x, playerArea.y, playerArea.width, playerArea.height, null);
+
+        g2d.fillRect(solidArea.x, solidArea.y, solidArea.width, solidArea.height);
     }
 
     public void setWalkSpeed(int walkSpeed) {
@@ -114,20 +129,36 @@ public class Player extends Human {
         return walkSpeed;
     }
 
-    public void setPosX(int posX) {
-        this.posX = posX;
+    public void setScreenX(int screenX) {
+        this.screenX = screenX;
     }
 
-    public int getPosX() {
+    public int getScreenX() {
+        return screenX;
+    }
+
+    public void setScreenY(int screenY) {
+        this.screenY = screenY;
+    }
+
+    public int getScreenY() {
+        return screenY;
+    }
+
+    public int getPosX(){
         return posX;
     }
 
-    public void setPosY(int posY) {
-        this.posY = posY;
+    public int getPosY(){
+        return posY;
     }
 
-    public int getPosY() {
-        return posY;
+    public void setPosX(int posX){
+        this.posX = posX;
+    }
+
+    public void setPosY(int posY){
+        this.posY = posY;
     }
 
     public void setEnergy(int energy) {
@@ -137,6 +168,15 @@ public class Player extends Human {
     public int getEnergy() {
         return energy;
     }
+
+    public void setCurrentMap(MainMap map){
+        this.currentMap = map;
+    }
+
+    public MainMap getCurrentMap(){
+        return currentMap;
+    }
+
 
     public void setControlHandler(GameControlHandler controlHandler) {
         this.controlHandler = controlHandler;
