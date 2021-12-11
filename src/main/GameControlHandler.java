@@ -8,6 +8,8 @@ public class GameControlHandler implements KeyListener {
     public boolean leftKeyPressed;
     public boolean rightKeyPressed;
     public boolean arrowKeyPressed;
+    public boolean scaleUp;
+    public boolean scaleDown;
 
     public void keyTyped(KeyEvent e) {
 
@@ -25,6 +27,12 @@ public class GameControlHandler implements KeyListener {
             leftKeyPressed = true;
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             rightKeyPressed = true;
+        } else if (e.getKeyCode() == KeyEvent.VK_F) {
+            Map.adjustTileSize(1);
+            scaleUp = true;
+        } else if (e.getKeyCode() == KeyEvent.VK_G) {
+            Map.adjustTileSize(2);
+            scaleDown = true;
         }
     }
 
@@ -40,6 +48,10 @@ public class GameControlHandler implements KeyListener {
             leftKeyPressed = false;
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             rightKeyPressed = false;
+        } else if (e.getKeyCode() == KeyEvent.VK_F) {
+            scaleUp = false;
+        } else if (e.getKeyCode() == KeyEvent.VK_G) {
+            scaleDown = false;
         }
     }
 }

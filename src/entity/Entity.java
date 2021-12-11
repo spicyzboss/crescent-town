@@ -14,13 +14,14 @@ public abstract class Entity {
     private BufferedImage sprite;
     private int actionFrame;
     private int maxActionFrame;
+    private int spriteLoadTime;
 
     public void loadSprite(String file) {
         try {
-            sprite = ImageIO.read(new File("src/resource/" + file + ".png"));
-            System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: " + file + " sprite" + "\u001B[0m");
+            sprite = ImageIO.read(new File("src/resource/sprite/" + file + ".png"));
+            System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: sprite " + file + "\u001B[0m");
         } catch (IOException e) {
-            System.out.println("\u001B[31m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - ERROR: " + file + " sprite" + "\u001B[0m");
+            System.out.println("\u001B[31m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - ERROR: sprite " + file + "\u001B[0m");
         }
     }
 
@@ -58,5 +59,13 @@ public abstract class Entity {
 
     public int getMaxActionFrame() {
         return maxActionFrame;
+    }
+
+    public void setSpriteLoadTime(int millis) {
+        this.spriteLoadTime = millis;
+    }
+
+    public int getSpriteLoadTime() {
+        return spriteLoadTime;
     }
 }

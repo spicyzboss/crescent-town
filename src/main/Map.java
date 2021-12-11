@@ -60,13 +60,18 @@ public class Map extends JPanel implements Runnable {
      */
     TileManager tileManager;
     MainMap mainMap;
-    String[] mainMapLayers = {"src/resource/csv/Map_Tile Layer 1.csv", "src/resource/csv/Map_Tile Layer 2.csv", "src/resource/csv/Map_Tile Layer 3.csv", "src/resource/csv/Map_Tile Layer 4.csv"};
+    String[] mainMapLayers = {
+        "src/resource/map_layer/map_layer_1.csv",
+        "src/resource/map_layer/map_layer_2.csv",
+        "src/resource/map_layer/map_layer_3.csv",
+        "src/resource/map_layer/map_layer_4.csv"
+    };
 
 
     Thread mapThread; // global attribute for threading
 
     GameControlHandler controlHandler = new GameControlHandler();
-    Player player = new Player("BobLee", controlHandler);
+    Player player = new Player("gongcha", controlHandler);
 
     // Map constructor method for initialization
     public Map() {
@@ -76,13 +81,22 @@ public class Map extends JPanel implements Runnable {
         this.setBackground(Color.BLACK); // set panel's background color to black
         this.setDoubleBuffered(true); // buffer for performance
         tileManager = new TileManager(this);
-        mainMap = new MainMap(mainMapLayers, tileSize);
+        mainMap = new MainMap(mainMapLayers);
         initThread();
     }
 
     private void initThread() {
         mapThread = new Thread(this); // use this class for threading
         mapThread.start(); // assign this class to thread scheduler
+    }
+
+    public static void adjustTileSize(int state) {
+        if (state == 1) {
+            scale = Math.min(scale + 1, 4);
+        } else if (state == 2) {
+            scale = Math.max(scale - 1, 2);
+        }
+        scaledTileSize = tileSize * scale;
     }
 
     public void run() {
@@ -123,7 +137,7 @@ public class Map extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        mainMap.render(g2d, player.getPosX(), player.getPosY());
+        mainMap.render(g2d, player);
         player.draw(g2d);
     }
 }
