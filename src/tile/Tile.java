@@ -8,22 +8,14 @@ import java.time.format.DateTimeFormatter;
 
 public class Tile {
     private BufferedImage image;
-    private final boolean collision;
     private final String tileName;
 
     public Tile(String tileName) {
         this.tileName = tileName;
         this.setImage();
-        this.collision = false;
     }
 
-    public Tile(String tileName, boolean collision) {
-        this.tileName = tileName;
-        this.setImage();
-        this.collision = collision;
-    }
-
-    public void setImage(){
+    private void setImage(){
         try {
             this.image = ImageIO.read(new File("src/resource/tile/" + this.tileName + ".png"));
             System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: tile " + tileName + "\u001B[0m");

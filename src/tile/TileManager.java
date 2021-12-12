@@ -1,19 +1,12 @@
 package tile;
 
-import main.Map;
-
 import java.util.*;
 
 public class TileManager {
-    Map map;
-
     public static HashMap<String, Tile> tile;
 
-    public TileManager(Map map){
-        this.map = map;
-
+    public TileManager() {
         tile = new HashMap<String, Tile>();
-
         loadTile();
     }
 
@@ -168,6 +161,8 @@ public class TileManager {
         addTile("sign02");
         addTile("sign03");
         addTile("post_box");
+        addTile("not_use");
+        addTile("pass");
     }
 
     private void addTile(String filename) {
@@ -178,4 +173,160 @@ public class TileManager {
         return tile.get(name);
     }
 
+    public static Tile getTileByNumber(int tileNumber){
+        return switch (tileNumber) {
+            case 2054 -> TileManager.getTile("water");
+            case 6 -> TileManager.getTile("sand");
+            case 75 -> TileManager.getTile("grass01");
+            case 76 -> TileManager.getTile("grass02");
+            case 77 -> TileManager.getTile("grass03");
+            case 78 -> TileManager.getTile("grass04");
+            case 83 -> TileManager.getTile("grass05");
+            case 84 -> TileManager.getTile("grass06");
+            case 85 -> TileManager.getTile("grass07");
+            case 86 -> TileManager.getTile("grass08");
+            case 1 -> TileManager.getTile("road01");
+            case 52 -> TileManager.getTile("road02");
+            case 33 -> TileManager.getTile("road03");
+            case 4 -> TileManager.getTile("road04");
+            case 21 -> TileManager.getTile("road05");
+            case 35 -> TileManager.getTile("road06");
+            case 31 -> TileManager.getTile("road07");
+            case 23 -> TileManager.getTile("road08");
+            case 14 -> TileManager.getTile("road");
+            case 89 -> TileManager.getTile("grass_corner01");
+            case 80 -> TileManager.getTile("grass_corner02");
+            case 73 -> TileManager.getTile("grass_corner03");
+            case 82 -> TileManager.getTile("grass_corner04");
+            case 88 -> TileManager.getTile("grass_corner05");
+            case 72 -> TileManager.getTile("grass_corner06");
+            case 74 -> TileManager.getTile("grass_corner07");
+            case 90 -> TileManager.getTile("grass_corner08");
+            case 104 -> TileManager.getTile("level_floor01");
+            case 105 -> TileManager.getTile("level_floor02");
+            case 106 -> TileManager.getTile("level_floor03");
+            case 298 -> TileManager.getTile("brick01");
+            case 322 -> TileManager.getTile("brick02");
+            case 225 -> TileManager.getTile("port01");
+            case 233 -> TileManager.getTile("port02");
+            case 496 -> TileManager.getTile("player_house_wall01_1");
+            case 497 -> TileManager.getTile("player_house_wall01_2");
+            case 498 -> TileManager.getTile("player_house_wall01_3");
+            case 504 -> TileManager.getTile("player_house_wall02_1");
+            case 505 -> TileManager.getTile("player_house_wall02_2");
+            case 506 -> TileManager.getTile("player_house_wall02_3");
+            case 560 -> TileManager.getTile("player_house_roof01");
+            case 568 -> TileManager.getTile("player_house_roof02");
+            case 576 -> TileManager.getTile("player_house_roof03");
+            case 584 -> TileManager.getTile("player_house_roof04");
+            case 366 -> TileManager.getTile("player_house_floor01");
+            case 358 -> TileManager.getTile("player_house_floor02");
+            case 448 -> TileManager.getTile("stone_house_wall01_1");
+            case 449 -> TileManager.getTile("stone_house_wall01_2");
+            case 450 -> TileManager.getTile("stone_house_wall01_3");
+            case 456 -> TileManager.getTile("stone_house_wall02_1");
+            case 457 -> TileManager.getTile("stone_house_wall02_2");
+            case 458 -> TileManager.getTile("stone_house_wall02_3");
+            case 564 -> TileManager.getTile("stone_house_roof01");
+            case 572 -> TileManager.getTile("stone_house_roof02");
+            case 580 -> TileManager.getTile("stone_house_roof03");
+            case 588 -> TileManager.getTile("stone_house_roof04");
+            case 528 -> TileManager.getTile("shop_wall01_1");
+            case 529 -> TileManager.getTile("shop_wall01_2");
+            case 530 -> TileManager.getTile("shop_wall01_3");
+            case 536 -> TileManager.getTile("shop_wall02_1");
+            case 537 -> TileManager.getTile("shop_wall02_2");
+            case 538 -> TileManager.getTile("shop_wall02_3");
+            case 561 -> TileManager.getTile("shop_roof01");
+            case 569 -> TileManager.getTile("shop_roof02");
+            case 577 -> TileManager.getTile("shop_roof03");
+            case 585 -> TileManager.getTile("shop_roof04");
+            case 928 -> TileManager.getTile("pool01_1");
+            case 929 -> TileManager.getTile("pool01_2");
+            case 930 -> TileManager.getTile("pool01_3");
+            case 936 -> TileManager.getTile("pool02_1");
+            case 937 -> TileManager.getTile("pool02_2");
+            case 938 -> TileManager.getTile("pool02_3");
+            case 944 -> TileManager.getTile("pool03_1");
+            case 945 -> TileManager.getTile("pool03_2");
+            case 946 -> TileManager.getTile("pool03_3");
+            case 40 -> TileManager.getTile("bush");
+            case 848 -> TileManager.getTile("bench01");
+            case 849 -> TileManager.getTile("bench02");
+            case 850 -> TileManager.getTile("bench03");
+            case 262 -> TileManager.getTile("clothes_line01_1");
+            case 263 -> TileManager.getTile("clothes_line01_2");
+            case 270 -> TileManager.getTile("clothes_line01_3");
+            case 271 -> TileManager.getTile("clothes_line01_4");
+            case 278 -> TileManager.getTile("clothes_line02_1");
+            case 279 -> TileManager.getTile("clothes_line02_2");
+            case 286 -> TileManager.getTile("clothes_line02_3");
+            case 287 -> TileManager.getTile("clothes_line02_4");
+            case 909 -> TileManager.getTile("camber01");
+            case 917 -> TileManager.getTile("camber02");
+            case 925 -> TileManager.getTile("camber03");
+            case 933 -> TileManager.getTile("camber04");
+            case 941 -> TileManager.getTile("camber05");
+            case 949 -> TileManager.getTile("camber06");
+            case 717 -> TileManager.getTile("table01_1");
+            case 718 -> TileManager.getTile("table01_2");
+            case 719 -> TileManager.getTile("table01_3");
+            case 725 -> TileManager.getTile("table02_1");
+            case 726 -> TileManager.getTile("table02_2");
+            case 727 -> TileManager.getTile("table02_3");
+            case 733 -> TileManager.getTile("table03_1");
+            case 734 -> TileManager.getTile("table03_2");
+            case 735 -> TileManager.getTile("table03_3");
+            case 858 -> TileManager.getTile("jar01");
+            case 859 -> TileManager.getTile("jar02");
+            case 184 -> TileManager.getTile("fence_x");
+            case 176 -> TileManager.getTile("fence_y");
+            case 178 -> TileManager.getTile("fence_top_left");
+            case 179 -> TileManager.getTile("fence_top_right");
+            case 187 -> TileManager.getTile("fence_bot_right");
+            case 186 -> TileManager.getTile("fence_bot_left");
+            case 180 -> TileManager.getTile("fence_end_left");
+            case 188 -> TileManager.getTile("fence_end_right");
+            case 177 -> TileManager.getTile("fence_end_top");
+            case 328 -> TileManager.getTile("stair_top_left");
+            case 330 -> TileManager.getTile("stair_top_right");
+            case 336 -> TileManager.getTile("stair_mid_left");
+            case 337 -> TileManager.getTile("stair_mid_cen");
+            case 338 -> TileManager.getTile("stair_mid_right");
+            case 344 -> TileManager.getTile("stair_bot_left");
+            case 345 -> TileManager.getTile("stair_bot_cen");
+            case 346 -> TileManager.getTile("stair_bot_right");
+            case 503 -> TileManager.getTile("player_house_door01");
+            case 511 -> TileManager.getTile("player_house_door02");
+            case 880 -> TileManager.getTile("straws01");
+            case 881 -> TileManager.getTile("straws02");
+            case 888 -> TileManager.getTile("straws03");
+            case 889 -> TileManager.getTile("straws04");
+            case 896 -> TileManager.getTile("straws05");
+            case 897 -> TileManager.getTile("straws06");
+            case 375 -> TileManager.getTile("shop_door01");
+            case 383 -> TileManager.getTile("shop_door02");
+            case 50 -> TileManager.getTile("stone_house_door01");
+            case 58 -> TileManager.getTile("stone_house_door02");
+            case 660 -> TileManager.getTile("stone_house_tag");
+            case 884 -> TileManager.getTile("barrel01");
+            case 885 -> TileManager.getTile("barrel02");
+            case 892 -> TileManager.getTile("barrel03");
+            case 893 -> TileManager.getTile("barrel04");
+            case 900 -> TileManager.getTile("barrel05");
+            case 901 -> TileManager.getTile("barrel06");
+            case 597 -> TileManager.getTile("window01");
+            case 605 -> TileManager.getTile("window02");
+            case 230 -> TileManager.getTile("mission_board01");
+            case 231 -> TileManager.getTile("mission_board02");
+            case 238 -> TileManager.getTile("mission_board03");
+            case 239 -> TileManager.getTile("mission_board04");
+            case 235 -> TileManager.getTile("sign01");
+            case 229 -> TileManager.getTile("sign02");
+            case 237 -> TileManager.getTile("sign03");
+            case 228 -> TileManager.getTile("post_box");
+//            case 293 -> TileManager.getTile("not_use");
+            default -> null;
+        };
+    }
 }

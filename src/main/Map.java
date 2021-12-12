@@ -58,15 +58,8 @@ public class Map extends JPanel implements Runnable {
     /**
      * Map
      */
-    TileManager tileManager;
-    MainMap mainMap;
-    String[] mainMapLayers = {
-        "src/resource/map_layer/map_layer_1.csv",
-        "src/resource/map_layer/map_layer_2.csv",
-        "src/resource/map_layer/map_layer_3.csv",
-        "src/resource/map_layer/map_layer_4.csv"
-    };
 
+    MainMap mainMap = new MainMap();
 
     Thread mapThread; // global attribute for threading
 
@@ -80,8 +73,8 @@ public class Map extends JPanel implements Runnable {
         this.setPreferredSize(new Dimension(width, height)); // set size of JPanel
         this.setBackground(Color.BLACK); // set panel's background color to black
         this.setDoubleBuffered(true); // buffer for performance
-        tileManager = new TileManager(this);
-        mainMap = new MainMap(mainMapLayers);
+        new TileManager();
+        player.setCurrentMap(mainMap);
         initThread();
     }
 
@@ -138,6 +131,5 @@ public class Map extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         mainMap.render(g2d, player);
-        player.draw(g2d);
     }
 }
