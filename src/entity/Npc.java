@@ -24,13 +24,13 @@ public class Npc extends Human{
         this.setWalkSpeed(2*Map.scale);
     }
 
-    public void draw(Graphics2D g2d, int playerX, int playerY, Player player) {
+    public void draw(Graphics2D g2d, int sceneX, int sceneY, Player player) {
         // get direction of npc
         this.setSpriteOnAction();
 
         // get pos npc should be on current scenario
-        double screenX = this.getPixelPosX() - playerX;
-        double screenY = this.getPixelPosY() - playerY;
+        double screenX = this.getPixelPosX() - sceneX;
+        double screenY = this.getPixelPosY() - sceneY;
 
         // check if npc is on scenario
         if(this.getPixelPosX() + Map.scaledTileSize > player.getPixelPosX() - player.getScreenPosX()

@@ -43,7 +43,7 @@ public class MainMap {
         return tileMaps;
     }
 
-    public void draw(Graphics2D renderer, int screenX, int screenY, int layer){
+    public void draw(Graphics2D renderer, int sceneX, int sceneY, int layer){
         for (int row = 0; row < this.getTileMaps().get(layer).mapHeight; row++) {
             for (int col = 0; col < this.getTileMaps().get(layer).mapWidth; col++) {
                 int tileNumber = this.getTileMaps().get(layer).map[row][col];
@@ -51,7 +51,7 @@ public class MainMap {
                 if (tile != null) {
                     BufferedImage tileImage = tile.getImage();
                     // draw tile in screen
-                    renderer.drawImage(tileImage,(col * Map.scaledTileSize) - screenX, (row * Map.scaledTileSize) - screenY, Map.scaledTileSize, Map.scaledTileSize, null);
+                    renderer.drawImage(tileImage,(col * Map.scaledTileSize) - sceneX, (row * Map.scaledTileSize) - sceneY, Map.scaledTileSize, Map.scaledTileSize, null);
                 }
             }
         }
@@ -60,17 +60,17 @@ public class MainMap {
 
     public void render(Graphics2D renderer, Player player){
         // find current scenario
-        int screenX = (int)player.getPixelPosX() - (int)player.getScreenPosX();
-        int screenY = (int)player.getPixelPosY() - (int)player.getScreenPosY();
+        int sceneX = (int)player.getPixelPosX() - (int)player.getScreenPosX();
+        int sceneY = (int)player.getPixelPosY() - (int)player.getScreenPosY();
 
         for (int layer = 0; layer < this.getTileMaps().size(); layer++){
             // draw map in each layer
-            this.draw(renderer, screenX, screenY, layer);
+            this.draw(renderer, sceneX, sceneY, layer);
         }
         player.draw(renderer);
         for(int index = 0; index < npcs.size(); index++){
             // draw each npc
-            npcs.get(index).draw(renderer, screenX, screenY, player);
+            npcs.get(index).draw(renderer, sceneX, sceneY, player);
         }
     }
 }
