@@ -5,17 +5,12 @@ import main.Map;
 import tile.*;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class Player extends Human {
     public static MainMap currentMap;
 
     private double screenPosX;
     private double screenPosY;
-    private double tilePosX;
-    private double tilePosY;
-    private double pixelPosX;
-    private double pixelPosY;
     private double collisionBoxTop;
     private double collisionBoxLeft;
     private double collisionBoxBottom;
@@ -67,6 +62,7 @@ public class Player extends Human {
             if (this.collisionCheck())
                 this.setPixelPosX((this.getTilePosX() * Map.scaledTileSize) + this.getWalkSpeed());
         }
+        // update screen pos for scale size
         this.setScreenPosX((double) Map.width/2 - (double) Map.scaledTileSize/2);
         this.setScreenPosY((double) Map.height/2 - (double) Map.scaledTileSize/2);
     }
@@ -81,7 +77,6 @@ public class Player extends Human {
     private boolean collisionCheck() {
         int tile = -1;
         if (this.getTilePosX() - 1 >= 0 && this.getTilePosY() - 1 >= 0 && this.getTilePosX() <= this.getCurrentMap().getTileMaps().get(0).mapWidth && this.getTilePosY() <= this.getCurrentMap().getTileMaps().get(0).mapHeight) {
-            System.out.println((int)this.getTilePosX() + " " + (int)this.getTilePosY());
             tile = switch (this.getDirection()) {
                 case "up" -> this.getCurrentMap().getTileMaps().get(4).map[(int)this.getTilePosX()][(int)this.getTilePosY() - 1];
                 case "down" -> this.getCurrentMap().getTileMaps().get(4).map[(int)this.getTilePosX()][(int)this.getTilePosY() + 1];
@@ -90,11 +85,8 @@ public class Player extends Human {
                 default -> -1;
             };
         }
-        System.out.println(this.getCurrentMap().getTileMaps().get(4).map[(int)this.getTilePosX()][(int)this.getTilePosY()]);
         return tile != 293;
     }
-
-
 
     public void setScreenPosX(double screenPosX) {
         this.screenPosX = screenPosX;
