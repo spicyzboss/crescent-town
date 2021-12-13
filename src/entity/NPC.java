@@ -4,7 +4,7 @@ import main.Game;
 
 import java.awt.*;
 
-public class NPC extends Human{
+public class NPC extends Human {
     private String job;
     private int moveAble;
     private int movedX;
@@ -19,6 +19,8 @@ public class NPC extends Human{
     public void npcInit(){
         this.loadSprite(this.getName());
         this.setWalkSpeed(2* Game.scale);
+        this.setMaxActionFrame(3);
+        this.setSpriteLoadTime(Game.FPS/this.getMaxActionFrame());
     }
 
     public void draw(Graphics2D g2d, int sceneX, int sceneY, Player player) {
@@ -56,6 +58,7 @@ public class NPC extends Human{
 
     public void update(){
         this.move();
+        this.setWalkSpeed(2* Game.scale);
     }
 
     public void move(){

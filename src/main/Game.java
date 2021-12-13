@@ -52,18 +52,20 @@ public class Game extends JPanel implements Runnable {
     public static int height = tileRow * scaledTileSize;
 
     /**
-     * frame rate
+     * frame passed in one second
      */
     public static int frame = 0;
 
     /**
-     * Game
+     * Game state
      */
+    public static String gameState;
+
     MainMap mainMap = new MainMap(100, 100);
 
     private final NPC mongo = new NPC("mongo", "gender", "merchant");
 
-    public static Thread mapThread; // global attribute for threading
+    public static Thread gameThread; // global attribute for threading
 
     GameControlHandler controlHandler = new GameControlHandler();
     Player player = new Player("gongcha", controlHandler);
@@ -83,12 +85,13 @@ public class Game extends JPanel implements Runnable {
         mongo.setMoveAble(4);
         mongo.setDirection("right");
         mainMap.addNpc(mongo);
+        gameState = "PLAY";
         initThread();
     }
 
     private void initThread() {
-        mapThread = new Thread(this); // use this class for threading
-        mapThread.start(); // assign this class to thread scheduler
+        gameThread = new Thread(this); // use this class for threading
+        gameThread.start(); // assign this class to thread scheduler
     }
 
     public static void adjustTileSize(int state) {
@@ -108,7 +111,7 @@ public class Game extends JPanel implements Runnable {
         int timer = 0; // timer for 1 second
 
         // Game loop theory
-        while (mapThread != null) {
+        while (gameThread != null) {
             currentTime = System.nanoTime(); // get current system time in nanosecond
             delta += (currentTime - lastRefreshTime) / refreshInterval; // capture CPU clock FPS to match game FPS
             timer += (currentTime - lastRefreshTime);
@@ -132,8 +135,10 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void update() {
-        player.update();
-        mongo.update();
+        if (gameState.equals("PLAY")) {
+            player.update();
+            mongo.update();
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -144,7 +149,10 @@ public class Game extends JPanel implements Runnable {
         mainMap.render(g2d, player);
 
         // Draw UI
-        ui.draw(g2d);
+        // ui.draw(g2d);
+        ui.drawDialog(g2d, "หิวชาบูว่ะเพื่อน ไปกินชาบูด้วยกันไหม?");
+
+        // Restore resource
         g2d.dispose();
     }
 }
