@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 
 public class MainMap {
-//    TileMap[] tileMaps;
     public ArrayList<TileMap> tileMaps;
 
     public MainMap() {
@@ -41,7 +40,7 @@ public class MainMap {
                 if (tile != null) {
                     BufferedImage tileImage = tile.getImage();
                     // draw tile in screen
-                    renderer.drawImage(tileImage,(col * Map.scaledTileSize) - (int)player.getPixelPosX() + (int)player.getScreenPosX(), (row * Map.scaledTileSize) - (int)player.getPixelPosY() + (int)player.getScreenPosY(), Map.scaledTileSize, Map.scaledTileSize, null);
+                    renderer.drawImage(tileImage,(col * Map.scaledTileSize) + (int)player.getScreenPosX() - (int)player.getPixelPosX(), (row * Map.scaledTileSize) + (int)player.getScreenPosY() - (int)player.getPixelPosY(), Map.scaledTileSize, Map.scaledTileSize, null);
                 }
             }
         }

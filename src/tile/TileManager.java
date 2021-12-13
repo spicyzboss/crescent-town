@@ -325,7 +325,7 @@ public class TileManager {
             case 229 -> TileManager.getTile("sign02");
             case 237 -> TileManager.getTile("sign03");
             case 228 -> TileManager.getTile("post_box");
-//            case 293 -> TileManager.getTile("not_use");
+            case 293 -> TileManager.getTile("not_use");
             default -> null;
         };
     }

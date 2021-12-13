@@ -6,7 +6,6 @@ import tile.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class Player extends Human {
     private int walkSpeed;
@@ -16,8 +15,10 @@ public class Player extends Human {
     private double tilePosY;
     private double pixelPosX;
     private double pixelPosY;
-    private int screenX;
-    private int screenY;
+    private double collisionBoxTop;
+    private double collisionBoxLeft;
+    private double collisionBoxBottom;
+    private double collisionBoxRight;
     private int energy;
 
     private MainMap currentMap;
@@ -51,19 +52,19 @@ public class Player extends Human {
         }
         if (this.getControlHandler().upKeyPressed) {
             this.setDirection("up");
-//            if (this.collisionCheck())
+            if (this.collisionCheck())
                 this.setPixelPosY((this.getTilePosY() * Map.scaledTileSize) - this.getWalkSpeed());
         } else if (this.getControlHandler().downKeyPressed) {
             this.setDirection("down");
-//            if (this.collisionCheck())
+            if (this.collisionCheck())
                 this.setPixelPosY((this.getTilePosY() * Map.scaledTileSize) + this.getWalkSpeed());
         } else if (this.getControlHandler().leftKeyPressed) {
             this.setDirection("left");
-//            if (this.collisionCheck())
+            if (this.collisionCheck())
                 this.setPixelPosX((this.getTilePosX() * Map.scaledTileSize) - this.getWalkSpeed());
         } else if (this.getControlHandler().rightKeyPressed) {
             this.setDirection("right");
-//            if (this.collisionCheck())
+            if (this.collisionCheck())
                 this.setPixelPosX((this.getTilePosX() * Map.scaledTileSize) + this.getWalkSpeed());
         }
         this.setTilePosX(getPixelPosX() / (double)Map.scaledTileSize);
@@ -82,7 +83,7 @@ public class Player extends Human {
         };
         // draw player at center of screen
         renderer.drawImage(image, (int)this.getScreenPosX(), (int)this.getScreenPosY(), Map.scaledTileSize, Map.scaledTileSize, null);
-        renderer.fillRect(Map.width/2 - Map.scaledTileSize/2, Map.height/2 + Map.scaledTileSize/4, Map.scaledTileSize, Map.scaledTileSize/4);
+        renderer.fillRect((int)this.getScreenPosX(), Map.height/2 + Map.scaledTileSize/4, Map.scaledTileSize, Map.scaledTileSize/4);
     }
 
     private BufferedImage spriteUpdate(int spriteAction) {
@@ -97,9 +98,9 @@ public class Player extends Human {
     }
 
     private boolean collisionCheck() {
-        ArrayList<TileMap> tileMaps = this.getCurrentMap().getTileMaps();
         int tile = -1;
         if (this.getTilePosX() - 1 >= 0 && this.getTilePosY() - 1 >= 0 && this.getTilePosX() <= this.getCurrentMap().getTileMaps().get(0).mapWidth && this.getTilePosY() <= this.getCurrentMap().getTileMaps().get(0).mapHeight) {
+            System.out.println((int)this.getTilePosX() + " " + (int)this.getTilePosY());
             tile = switch (this.getDirection()) {
                 case "up" -> this.getCurrentMap().getTileMaps().get(4).map[(int)this.getTilePosX()][(int)this.getTilePosY() - 1];
                 case "down" -> this.getCurrentMap().getTileMaps().get(4).map[(int)this.getTilePosX()][(int)this.getTilePosY() + 1];
@@ -108,7 +109,8 @@ public class Player extends Human {
                 default -> -1;
             };
         }
-        return tile == 293;
+        System.out.println(this.getCurrentMap().getTileMaps().get(4).map[(int)this.getTilePosX()][(int)this.getTilePosY()]);
+        return tile != 293;
     }
 
     public void setWalkSpeed(int walkSpeed) {
@@ -189,5 +191,37 @@ public class Player extends Human {
 
     public GameControlHandler getControlHandler() {
         return controlHandler;
+    }
+
+    public void setCollisionBoxTop(double collisionBoxTop) {
+        this.collisionBoxTop = collisionBoxTop;
+    }
+
+    public double getCollisionBoxTop() {
+        return collisionBoxTop;
+    }
+
+    public void setCollisionBoxLeft(double collisionBoxLeft) {
+        this.collisionBoxLeft = collisionBoxLeft;
+    }
+
+    public double getCollisionBoxLeft() {
+        return collisionBoxLeft;
+    }
+
+    public void setCollisionBoxBottom(double collisionBoxBottom) {
+        this.collisionBoxBottom = collisionBoxBottom;
+    }
+
+    public double getCollisionBoxBottom() {
+        return collisionBoxBottom;
+    }
+
+    public void setCollisionBoxRight(double collisionBoxRight) {
+        this.collisionBoxRight = collisionBoxRight;
+    }
+
+    public double getCollisionBoxRight() {
+        return collisionBoxRight;
     }
 }
