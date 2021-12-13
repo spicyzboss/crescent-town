@@ -1,7 +1,7 @@
 package tile;
 
 import entity.Player;
-import main.Map;
+import main.Game;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,21 +15,21 @@ public class CollisionChecker {
 
     public static boolean checkTile(Player player) {
         MainMap map = player.getCurrentMap();
-        int mapToScreenX = (int)player.getTilePosX() * Map.scaledTileSize;
-        int mapToScreenY = (int)player.getTilePosY() * Map.scaledTileSize;
+        int mapToScreenX = (int)player.getTilePosX() * Game.scaledTileSize;
+        int mapToScreenY = (int)player.getTilePosY() * Game.scaledTileSize;
 
-        int screenToPlayerLeft = Map.width/2 - Map.scaledTileSize/2;
-        int screenToPlayerRight = Map.width/2 - Map.scaledTileSize/2 + Map.scaledTileSize;
-        int screenToPlayerTop = Map.height/2 + Map.scaledTileSize/4;
-        int screenToPlayerBot = Map.height/2 + Map.scaledTileSize/4 + Map.scaledTileSize/4;
+        int screenToPlayerLeft = Game.width/2 - Game.scaledTileSize/2;
+        int screenToPlayerRight = Game.width/2 - Game.scaledTileSize/2 + Game.scaledTileSize;
+        int screenToPlayerTop = Game.height/2 + Game.scaledTileSize/4;
+        int screenToPlayerBot = Game.height/2 + Game.scaledTileSize/4 + Game.scaledTileSize/4;
 
-//        int playerTop = (mapToScreenY + screenToPlayerTop + player.getScreenY()) / Map.scaledTileSize;
-//        int playerBot = (mapToScreenY + screenToPlayerBot + player.getScreenY()) / Map.scaledTileSize;
-//        int playerLeft = (mapToScreenX + screenToPlayerLeft + player.getScreenX()) / Map.scaledTileSize;
-//        int playerRight = (mapToScreenX + screenToPlayerRight + player.getScreenX()) / Map.scaledTileSize;
+//        int playerTop = (mapToScreenY + screenToPlayerTop + player.getScreenY()) / Game.scaledTileSize;
+//        int playerBot = (mapToScreenY + screenToPlayerBot + player.getScreenY()) / Game.scaledTileSize;
+//        int playerLeft = (mapToScreenX + screenToPlayerLeft + player.getScreenX()) / Game.scaledTileSize;
+//        int playerRight = (mapToScreenX + screenToPlayerRight + player.getScreenX()) / Game.scaledTileSize;
 //
-//        int x = -((int)player.getTilePosX()*Map.scaledTileSize+player.getScreenX());
-//        int y = -((int)player.getTilePosY()*Map.scaledTileSize+player.getScreenY());
+//        int x = -((int)player.getTilePosX()*Game.scaledTileSize+player.getScreenX());
+//        int y = -((int)player.getTilePosY()*Game.scaledTileSize+player.getScreenY());
 
         ArrayList<TileMap> tileMaps = map.getTileMaps();
         boolean[] state = new boolean[2];
@@ -62,10 +62,10 @@ public class CollisionChecker {
 
         }
         if (state[0]) {
-            renderer.drawImage(TileManager.getTile("not_use").getImage(), x + playerRight * Map.scaledTileSize, y + playerTop * Map.scaledTileSize, Map.scaledTileSize, Map.scaledTileSize, null);
+            renderer.drawImage(TileManager.getTile("not_use").getImage(), x + playerRight * Game.scaledTileSize, y + playerTop * Game.scaledTileSize, Game.scaledTileSize, Game.scaledTileSize, null);
         }
         if (state[1]) {
-            renderer.drawImage(TileManager.getTile("not_use").getImage(), x + playerRight * Map.scaledTileSize, y + playerBot * Map.scaledTileSize, Map.scaledTileSize, Map.scaledTileSize, null);
+            renderer.drawImage(TileManager.getTile("not_use").getImage(), x + playerRight * Game.scaledTileSize, y + playerBot * Game.scaledTileSize, Game.scaledTileSize, Game.scaledTileSize, null);
         }
     }
 
@@ -81,10 +81,10 @@ public class CollisionChecker {
             }
         }
         if (state[0]) {
-            renderer.drawImage(TileManager.getTile("not_use").getImage(), x + playerLeft * Map.scaledTileSize, y + playerTop * Map.scaledTileSize, Map.scaledTileSize, Map.scaledTileSize, null);
+            renderer.drawImage(TileManager.getTile("not_use").getImage(), x + playerLeft * Game.scaledTileSize, y + playerTop * Game.scaledTileSize, Game.scaledTileSize, Game.scaledTileSize, null);
         }
         if (state[1]) {
-            renderer.drawImage(TileManager.getTile("not_use").getImage(), x + playerRight * Map.scaledTileSize, y + playerTop * Map.scaledTileSize, Map.scaledTileSize, Map.scaledTileSize, null);
+            renderer.drawImage(TileManager.getTile("not_use").getImage(), x + playerRight * Game.scaledTileSize, y + playerTop * Game.scaledTileSize, Game.scaledTileSize, Game.scaledTileSize, null);
         }
     }
 }

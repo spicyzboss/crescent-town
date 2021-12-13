@@ -1,28 +1,27 @@
 package tile;
 
-import entity.Npc;
+import entity.NPC;
 import entity.Player;
-import main.Map;
+import main.Game;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.List;
 
 public class MainMap {
     public ArrayList<TileMap> tileMaps;
-    public ArrayList<Npc> npcs;
+    public ArrayList<NPC> npcs;
     public int mapWidth, mapHeight;
 
     public MainMap(int mapWidth, int mapHeight) {
         tileMaps = new ArrayList<TileMap>();
-        npcs = new ArrayList<Npc>();
+        npcs = new ArrayList<NPC>();
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         loadMap();
     }
 
-    public void addNpc(Npc npc){
+    public void addNpc(NPC npc){
         this.npcs.add(npc);
     }
 
@@ -50,7 +49,7 @@ public class MainMap {
                 if (tile != null) {
                     BufferedImage tileImage = tile.getImage();
                     // draw tile in screen
-                    renderer.drawImage(tileImage,(col * Map.scaledTileSize) - sceneX, (row * Map.scaledTileSize) - sceneY, Map.scaledTileSize, Map.scaledTileSize, null);
+                    renderer.drawImage(tileImage,(col * Game.scaledTileSize) - sceneX, (row * Game.scaledTileSize) - sceneY, Game.scaledTileSize, Game.scaledTileSize, null);
                 }
             }
         }

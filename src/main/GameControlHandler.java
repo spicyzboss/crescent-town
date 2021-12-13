@@ -29,10 +29,10 @@ public class GameControlHandler implements KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             rightKeyPressed = true;
         } else if (e.getKeyCode() == KeyEvent.VK_F) {
-            Map.adjustTileSize(1);
+            Game.adjustTileSize(1);
             scaleUp = true;
         } else if (e.getKeyCode() == KeyEvent.VK_G) {
-            Map.adjustTileSize(2);
+            Game.adjustTileSize(2);
             scaleDown = true;
         }else if(e.getKeyCode() == KeyEvent.VK_M){
             move = true;

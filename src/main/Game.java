@@ -1,6 +1,6 @@
 package main;
 
-import entity.Npc;
+import entity.NPC;
 import entity.Player;
 import tile.MainMap;
 import tile.TileManager;
@@ -10,9 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 
-import static tile.CollisionChecker.renderer;
-
-public class Map extends JPanel implements Runnable {
+public class Game extends JPanel implements Runnable {
     /**
     * this game use refresh rate at 60 frame per second
     */
@@ -59,20 +57,20 @@ public class Map extends JPanel implements Runnable {
     public static int frame = 0;
 
     /**
-     * Map
+     * Game
      */
 
     MainMap mainMap = new MainMap(100, 100);
 
-    Npc mongo = new Npc("mongo", "gender", "merchant");
+    NPC mongo = new NPC("mongo", "gender", "merchant");
 
     Thread mapThread; // global attribute for threading
 
     GameControlHandler controlHandler = new GameControlHandler();
     Player player = new Player("gongcha", controlHandler);
 
-    // Map constructor method for initialization
-    public Map() {
+    // Game constructor method for initialization
+    public Game() {
         this.setFocusable(true);
         this.addKeyListener(controlHandler); // use KeyListener in GameControlHandler
         this.setPreferredSize(new Dimension(width, height)); // set size of JPanel

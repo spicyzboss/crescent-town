@@ -1,7 +1,7 @@
 package entity;
 
+import main.Game;
 import main.GameControlHandler;
-import main.Map;
 import tile.*;
 
 import java.awt.*;
@@ -28,50 +28,50 @@ public class Player extends Human {
     }
 
     public void playerInit() {
-        this.setWalkSpeed(2 * Map.scale);
+        this.setWalkSpeed(2 * Game.scale);
         this.setTilePosX(32);
         this.setTilePosY(54);
-        this.setPixelPosX(getTilePosX() * Map.scaledTileSize);
-        this.setPixelPosY(getTilePosY() * Map.scaledTileSize);
+        this.setPixelPosX(getTilePosX() * Game.scaledTileSize);
+        this.setPixelPosY(getTilePosY() * Game.scaledTileSize);
         this.setEnergy(100);
         this.setDirection("down");
         this.setMaxActionFrame(3);
-        this.setSpriteLoadTime(Map.FPS/this.getMaxActionFrame());
+        this.setSpriteLoadTime(Game.FPS/this.getMaxActionFrame());
     }
 
     public void update() {
         if (this.getControlHandler().scaleUp || this.getControlHandler().scaleDown) {
-            this.setWalkSpeed(2 * Map.scale);
-            this.setPixelPosX(getTilePosX() * Map.scaledTileSize);
-            this.setPixelPosY(getTilePosY() * Map.scaledTileSize);
+            this.setWalkSpeed(2 * Game.scale);
+            this.setPixelPosX(getTilePosX() * Game.scaledTileSize);
+            this.setPixelPosY(getTilePosY() * Game.scaledTileSize);
         }
         if (this.getControlHandler().upKeyPressed) {
             this.setDirection("up");
             if (this.collisionCheck())
-                this.setPixelPosY((this.getTilePosY() * Map.scaledTileSize) - this.getWalkSpeed());
+                this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) - this.getWalkSpeed());
         } else if (this.getControlHandler().downKeyPressed) {
             this.setDirection("down");
             if (this.collisionCheck())
-                this.setPixelPosY((this.getTilePosY() * Map.scaledTileSize) + this.getWalkSpeed());
+                this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) + this.getWalkSpeed());
         } else if (this.getControlHandler().leftKeyPressed) {
             this.setDirection("left");
             if (this.collisionCheck())
-                this.setPixelPosX((this.getTilePosX() * Map.scaledTileSize) - this.getWalkSpeed());
+                this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) - this.getWalkSpeed());
         } else if (this.getControlHandler().rightKeyPressed) {
             this.setDirection("right");
             if (this.collisionCheck())
-                this.setPixelPosX((this.getTilePosX() * Map.scaledTileSize) + this.getWalkSpeed());
+                this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) + this.getWalkSpeed());
         }
         // update screen pos for scale size
-        this.setScreenPosX((double) Map.width/2 - (double) Map.scaledTileSize/2);
-        this.setScreenPosY((double) Map.height/2 - (double) Map.scaledTileSize/2);
+        this.setScreenPosX((double) Game.width/2 - (double) Game.scaledTileSize/2);
+        this.setScreenPosY((double) Game.height/2 - (double) Game.scaledTileSize/2);
     }
 
     public void draw(Graphics2D renderer) {
         this.setSpriteOnAction();
         // draw player at center of screen
-        renderer.drawImage(this.getSpriteOnAction(), (int)this.getScreenPosX(), (int)this.getScreenPosY(), Map.scaledTileSize, Map.scaledTileSize, null);
-        renderer.fillRect(Map.width/2 - Map.scaledTileSize/2, Map.height/2 + Map.scaledTileSize/4, Map.scaledTileSize, Map.scaledTileSize/4);
+        renderer.drawImage(this.getSpriteOnAction(), (int)this.getScreenPosX(), (int)this.getScreenPosY(), Game.scaledTileSize, Game.scaledTileSize, null);
+        renderer.fillRect(Game.width/2 - Game.scaledTileSize/2, Game.height/2 + Game.scaledTileSize/4, Game.scaledTileSize, Game.scaledTileSize/4);
     }
 
     private boolean collisionCheck() {

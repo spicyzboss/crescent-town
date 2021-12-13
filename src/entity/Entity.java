@@ -1,7 +1,6 @@
 package entity;
 
-import main.GameControlHandler;
-import main.Map;
+import main.Game;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -33,7 +32,7 @@ public abstract class Entity {
     }
 
     public BufferedImage getSprite(int xGrid, int yGrid) {
-        return sprite.getSubimage(xGrid * Map.tileSize, yGrid * Map.tileSize, Map.tileSize, Map.tileSize);
+        return sprite.getSubimage(xGrid * Game.tileSize, yGrid * Game.tileSize, Game.tileSize, Game.tileSize);
     }
 
     public void setSpriteOnAction(){
@@ -46,8 +45,8 @@ public abstract class Entity {
         this.spriteOnAction = image;
     }
     private BufferedImage spriteUpdate(int spriteAction) {
-        if (Map.frame != 0 && this.getSpriteLoadTime()!= 0) {
-            this.setActionFrame(Math.min(Map.frame / this.getSpriteLoadTime(), this.getMaxActionFrame() - 1));
+        if (Game.frame != 0 && this.getSpriteLoadTime()!= 0) {
+            this.setActionFrame(Math.min(Game.frame / this.getSpriteLoadTime(), this.getMaxActionFrame() - 1));
         } else {
             this.setActionFrame(0);
         }
@@ -100,7 +99,7 @@ public abstract class Entity {
 
     public void setPixelPosX(double pixelPosX) {
         this.pixelPosX = pixelPosX;
-        this.tilePosX = pixelPosX/Map.scaledTileSize;
+        this.tilePosX = pixelPosX/ Game.scaledTileSize;
     }
 
     public double getPixelPosX() {
@@ -109,7 +108,7 @@ public abstract class Entity {
 
     public void setPixelPosY(double pixelPosY) {
         this.pixelPosY = pixelPosY;
-        this.tilePosY = pixelPosY/Map.scaledTileSize;
+        this.tilePosY = pixelPosY/ Game.scaledTileSize;
     }
 
     public double getPixelPosY() {
@@ -118,7 +117,7 @@ public abstract class Entity {
 
     public void setTilePosX(double tilePosX) {
         this.tilePosX = tilePosX;
-        this.pixelPosX = tilePosX * Map.scaledTileSize;
+        this.pixelPosX = tilePosX * Game.scaledTileSize;
     }
 
     public double getTilePosX() {
@@ -127,7 +126,7 @@ public abstract class Entity {
 
     public void setTilePosY(double tilePosY) {
         this.tilePosY = tilePosY;
-        this.pixelPosY = tilePosY * Map.scaledTileSize;
+        this.pixelPosY = tilePosY * Game.scaledTileSize;
     }
 
     public double getTilePosY() {
