@@ -60,7 +60,7 @@ public class MainMap {
         int sceneX = (int)player.getPixelPosX() - (int)player.getScreenPosX();
         int sceneY = (int)player.getPixelPosY() - (int)player.getScreenPosY();
 
-        for (int layer = 0; layer < this.getTileMaps().size(); layer++){
+        for (int layer = 0; layer < this.getTileMaps().size() - 1; layer++){
             // draw map in each layer
             this.draw(renderer, sceneX, sceneY, layer);
         }
