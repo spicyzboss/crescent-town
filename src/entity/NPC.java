@@ -17,8 +17,9 @@ public class NPC extends Human {
     }
 
     public void npcInit(){
+        this.solidArea = new Rectangle();
         this.loadSprite(this.getName());
-        this.setWalkSpeed(2* Game.scale);
+        this.setWalkSpeed(Game.scale / 2);
         this.setMaxActionFrame(3);
         this.setSpriteLoadTime(Game.FPS/this.getMaxActionFrame());
     }
@@ -37,6 +38,8 @@ public class NPC extends Human {
         && this.getPixelPosY() + Game.scaledTileSize > player.getPixelPosY() - player.getScreenPosY()
         && this.getPixelPosY() - Game.scaledTileSize < player.getPixelPosY() + player.getScreenPosY()){
             g2d.drawImage(this.getSpriteOnAction(), (int) screenX, (int) screenY, Game.scaledTileSize, Game.scaledTileSize, null);
+            this.solidArea.setRect((int) screenX, (int) screenY, Game.scaledTileSize, Game.scaledTileSize);
+
         }
     }
 
@@ -46,6 +49,7 @@ public class NPC extends Human {
 
     public void setJob(String job) {
         this.job = job;
+
     }
 
     public int getMoveAble() {
@@ -53,11 +57,13 @@ public class NPC extends Human {
     }
 
     public void setMoveAble(int moveAble) {
-        this.moveAble = (moveAble* Game.scaledTileSize)/this.getWalkSpeed();
+        this.moveAble = (moveAble * Game.scaledTileSize)/this.getWalkSpeed();
     }
 
     public void update(){
-        this.move();
+//        if(this.collisionEntity){
+//            this.move();
+//        }
         this.setWalkSpeed(2* Game.scale);
     }
 

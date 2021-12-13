@@ -55,7 +55,6 @@ public class MainMap {
         }
     }
 
-
     public void render(Graphics2D renderer, Player player){
         // find current scenario
         int sceneX = (int)player.getPixelPosX() - (int)player.getScreenPosX();
@@ -65,10 +64,10 @@ public class MainMap {
             // draw map in each layer
             this.draw(renderer, sceneX, sceneY, layer);
         }
-        player.draw(renderer);
-        for(int index = 0; index < npcs.size(); index++){
+        for (NPC npc : npcs) {
             // draw each npc
-            npcs.get(index).draw(renderer, sceneX, sceneY, player);
+            npc.draw(renderer, sceneX, sceneY, player);
         }
+        player.draw(renderer);
     }
 }

@@ -1,8 +1,12 @@
 package entity;
 
 import main.Game;
+import tile.MainMap;
+import tile.Tile;
+import tile.TileManager;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalDateTime;
@@ -21,6 +25,15 @@ public abstract class Entity {
     private double tilePosY;
     private double pixelPosX;
     private double pixelPosY;
+    protected double borderLeft;
+    protected double borderRight;
+    protected double borderTop;
+    protected double borderBot;
+    public static MainMap currentMap;
+    public boolean collisionObj;
+    public  boolean collisionEntity = true;
+
+    protected Rectangle solidArea;
 
     public void loadSprite(String file) {
         try {
@@ -51,6 +64,77 @@ public abstract class Entity {
             this.setActionFrame(0);
         }
         return this.getSprite(this.getActionFrame(), spriteAction);
+    }
+
+    public void collisionCheck() {
+        Tile tile1 = null;
+        Tile tile2 = null;
+
+        switch (this.getDirection()){
+            case "up" -> {
+                tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderLeft)]);
+                tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderRight)]);
+            }
+            case "down" -> {
+                tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderLeft)]);
+                tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderRight)]);
+            }
+            case "left" -> {
+                tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderLeft)]);
+                tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderLeft)]);
+
+            }
+            case "right" -> {
+                tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderRight)]);
+                tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderRight)]);
+            }
+        }
+
+        this.collisionObj = (((tile1 == null) ||(tile2 == null)));
+    }
+
+    public void checkEntity(Entity target){
+        if(this.solidArea.intersects(target.solidArea)){
+            switch (this.getDirection()){
+                case "up" -> {
+                    this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) + walkSpeed/2);
+                    this.collisionEntity = false;
+                }
+                case "down" -> {
+                    this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) - walkSpeed/2);
+                    this.collisionEntity = false;
+                }
+                case "left" -> {
+                    this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) + walkSpeed/2);
+                    this.collisionEntity = false;
+                }
+                case "right" -> {
+                    this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) - walkSpeed/2);
+                    this.collisionEntity = false;
+                }
+            }
+        }
+        else{
+            this.collisionEntity = true;
+        }
+//        if(this.solidArea.intersects(target.solidArea)){
+//            target.collisionEntity = false;
+//        }
+//        else{
+//            target.collisionEntity = true;
+//        }
+    }
+
+    private int pixelToTile(double pixel){
+        return (int) pixel / Game.scaledTileSize;
+    }
+
+    public void setCurrentMap(MainMap map){
+        this.currentMap = map;
+    }
+
+    public MainMap getCurrentMap(){
+        return currentMap;
     }
 
     public void setName(String name) {
