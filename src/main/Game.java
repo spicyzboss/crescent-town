@@ -59,15 +59,15 @@ public class Game extends JPanel implements Runnable {
     /**
      * Game
      */
-
     MainMap mainMap = new MainMap(100, 100);
 
-    NPC mongo = new NPC("mongo", "gender", "merchant");
+    private final NPC mongo = new NPC("mongo", "gender", "merchant");
 
-    Thread mapThread; // global attribute for threading
+    public static Thread mapThread; // global attribute for threading
 
     GameControlHandler controlHandler = new GameControlHandler();
     Player player = new Player("gongcha", controlHandler);
+    GameUI ui = new GameUI();
 
     // Game constructor method for initialization
     public Game() {
@@ -139,6 +139,12 @@ public class Game extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+
+        // Draw player and map
         mainMap.render(g2d, player);
+
+        // Draw UI
+        ui.draw(g2d);
+        g2d.dispose();
     }
 }
