@@ -4,6 +4,7 @@ import main.GameControlHandler;
 import main.Map;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalDateTime;
@@ -22,6 +23,12 @@ public abstract class Entity {
     private double tilePosY;
     private double pixelPosX;
     private double pixelPosY;
+    protected double borderLeft;
+    protected double borderRight;
+    protected double borderTop;
+    protected double borderBot;
+
+    protected Rectangle solidArea;
 
     public void loadSprite(String file) {
         try {
@@ -128,6 +135,7 @@ public abstract class Entity {
     public void setTilePosY(double tilePosY) {
         this.tilePosY = tilePosY;
         this.pixelPosY = tilePosY * Map.scaledTileSize;
+
     }
 
     public double getTilePosY() {
