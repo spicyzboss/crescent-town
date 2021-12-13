@@ -9,20 +9,15 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Player extends Human {
-    private int walkSpeed;
+    public static MainMap currentMap;
+
     private double screenPosX;
     private double screenPosY;
-    private double tilePosX;
-    private double tilePosY;
-    private double pixelPosX;
-    private double pixelPosY;
-    private int screenX;
-    private int screenY;
+
     private int energy;
 
-    private MainMap currentMap;
-
     private GameControlHandler controlHandler;
+
 
     public Player(String name, GameControlHandler controlHandler) {
         setName(name);
@@ -33,8 +28,8 @@ public class Player extends Human {
 
     public void playerInit() {
         this.setWalkSpeed(2 * Map.scale);
-        this.setTilePosX(33);
-        this.setTilePosY(55);
+        this.setTilePosX(32);
+        this.setTilePosY(54);
         this.setPixelPosX(getTilePosX() * Map.scaledTileSize);
         this.setPixelPosY(getTilePosY() * Map.scaledTileSize);
         this.setEnergy(100);
@@ -66,34 +61,15 @@ public class Player extends Human {
 //            if (this.collisionCheck())
                 this.setPixelPosX((this.getTilePosX() * Map.scaledTileSize) + this.getWalkSpeed());
         }
-        this.setTilePosX(getPixelPosX() / (double)Map.scaledTileSize);
-        this.setTilePosY(getPixelPosY() / (double)Map.scaledTileSize);
         this.setScreenPosX((double) Map.width/2 - (double) Map.scaledTileSize/2);
         this.setScreenPosY((double) Map.height/2 - (double) Map.scaledTileSize/2);
     }
 
     public void draw(Graphics2D renderer) {
-        BufferedImage image = switch (this.getDirection()) {
-            case "down" -> this.spriteUpdate(0);
-            case "left" -> this.spriteUpdate(1);
-            case "right" -> this.spriteUpdate(2);
-            case "up" -> this.spriteUpdate(3);
-            default -> this.spriteUpdate(0);
-        };
+        this.setSpriteOnAction();
         // draw player at center of screen
-        renderer.drawImage(image, (int)this.getScreenPosX(), (int)this.getScreenPosY(), Map.scaledTileSize, Map.scaledTileSize, null);
+        renderer.drawImage(this.getSpriteOnAction(), (int)this.getScreenPosX(), (int)this.getScreenPosY(), Map.scaledTileSize, Map.scaledTileSize, null);
         renderer.fillRect(Map.width/2 - Map.scaledTileSize/2, Map.height/2 + Map.scaledTileSize/4, Map.scaledTileSize, Map.scaledTileSize/4);
-    }
-
-    private BufferedImage spriteUpdate(int spriteAction) {
-        if (this.getControlHandler().arrowKeyPressed) {
-            if (Map.frame != 0) {
-                this.setActionFrame(Math.min(Map.frame / this.getSpriteLoadTime(), this.getMaxActionFrame() - 1));
-            } else {
-                this.setActionFrame(0);
-            }
-        }
-        return this.getSprite(this.getActionFrame(), spriteAction);
     }
 
     private boolean collisionCheck() {
@@ -111,13 +87,7 @@ public class Player extends Human {
         return tile == 293;
     }
 
-    public void setWalkSpeed(int walkSpeed) {
-        this.walkSpeed = walkSpeed;
-    }
 
-    public int getWalkSpeed() {
-        return walkSpeed;
-    }
 
     public void setScreenPosX(double screenPosX) {
         this.screenPosX = screenPosX;
@@ -133,38 +103,6 @@ public class Player extends Human {
 
     public double getScreenPosY() {
         return screenPosY;
-    }
-
-    public void setPixelPosX(double x) {
-        this.pixelPosX = x;
-    }
-
-    public double getPixelPosX() {
-        return pixelPosX;
-    }
-
-    public void setPixelPosY(double pixelPosY) {
-        this.pixelPosY = pixelPosY;
-    }
-
-    public double getPixelPosY() {
-        return pixelPosY;
-    }
-
-    public void setTilePosX(double tilePosX) {
-        this.tilePosX = tilePosX;
-    }
-
-    public double getTilePosX() {
-        return tilePosX;
-    }
-
-    public void setTilePosY(double tilePosY) {
-        this.tilePosY = tilePosY;
-    }
-
-    public double getTilePosY() {
-        return tilePosY;
     }
 
     public void setEnergy(int energy) {

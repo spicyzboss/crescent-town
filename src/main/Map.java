@@ -1,5 +1,6 @@
 package main;
 
+import entity.Npc;
 import entity.Player;
 import tile.MainMap;
 import tile.TileManager;
@@ -8,6 +9,8 @@ import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
+
+import static tile.CollisionChecker.renderer;
 
 public class Map extends JPanel implements Runnable {
     /**
@@ -59,7 +62,9 @@ public class Map extends JPanel implements Runnable {
      * Map
      */
 
-    MainMap mainMap = new MainMap();
+    MainMap mainMap = new MainMap(100, 100);
+
+    Npc mongo = new Npc("mongo", "gender", "merchant");
 
     Thread mapThread; // global attribute for threading
 
@@ -75,6 +80,11 @@ public class Map extends JPanel implements Runnable {
         this.setDoubleBuffered(true); // buffer for performance
         new TileManager();
         player.setCurrentMap(mainMap);
+        mongo.setTilePosX(26);
+        mongo.setTilePosY(58);
+        mongo.setMoveAble(4);
+        mongo.setDirection("right");
+        mainMap.addNpc(mongo);
         initThread();
     }
 
@@ -125,6 +135,7 @@ public class Map extends JPanel implements Runnable {
 
     public void update() {
         player.update();
+        mongo.update();
     }
 
     public void paintComponent(Graphics g) {
