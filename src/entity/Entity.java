@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public abstract class Entity {
     private String name;
@@ -67,49 +68,45 @@ public abstract class Entity {
         return this.getSprite(this.getActionFrame(), spriteAction);
     }
 
-    protected void collisionCheck() {
+    public void collisionCheck() {
         Tile tile1 = null;
         Tile tile2 = null;
-        Npc npc = this.getCurrentMap().npcs.get(0);
-        boolean foundEntity = true;
-//        this.getCurrentMap().tileMaps.get(4).map[pixelToTile(npc.getPixelPosY())][pixelToTile(npc.getPixelPosX())] = 293;
+
         switch (this.getDirection()){
             case "up" -> {
                 tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderLeft)]);
                 tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderRight)]);
-                if(Math.floor(npc.getPixelPosX()) == this.borderTop && ((Math.floor(npc.getTilePosX()) == this.pixelToTile(borderLeft))
-                || Math.floor(npc.getTilePosX()) == this.pixelToTile(borderRight))){
-                    foundEntity = false;
-                }
             }
             case "down" -> {
                 tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderLeft)]);
                 tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderRight)]);
-                if(Math.floor(npc.getTilePosY()) == this.pixelToTile(borderBot) && ((Math.floor(npc.getTilePosX()) == this.pixelToTile(borderLeft))
-                || (Math.floor(npc.getTilePosX()) == this.pixelToTile(borderRight)))){
-                    foundEntity = false;
-                }
             }
             case "left" -> {
                 tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderLeft)]);
                 tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderLeft)]);
-                if( Math.floor(npc.getTilePosX()) == this.pixelToTile(borderLeft) && (Math.floor(npc.getTilePosY()) == this.pixelToTile(borderTop))
-                || (Math.floor(npc.getTilePosY()) == this.pixelToTile(borderBot))){
-                    foundEntity = false;
-                }
+
             }
             case "right" -> {
                 tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderRight)]);
                 tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderRight)]);
-                if(Math.floor(npc.getTilePosX()) == this.pixelToTile(borderRight) && ((Math.floor(npc.getTilePosY()) == this.pixelToTile(borderTop))
-                || ((Math.floor(npc.getTilePosY()) == this.pixelToTile(borderBot))))) {
-                    foundEntity = false;
-
-                }
-                }
             }
-        System.out.println((int) (npc.getTilePosX()));
-        this.collisionObj = (((tile1 == null) ||(tile2 == null)) && foundEntity);
+        }
+
+        this.collisionObj = (((tile1 == null) ||(tile2 == null)));
+    }
+
+    public void checkEntity(Entity target){
+        if(this.solidArea.intersects(target.solidArea)){
+            target.collisionEntity = false;
+            this.getCurrentMap().tileMaps.get(4).map[(int) Math.round(target.getTilePosY())][(int) Math.round(target.getTilePosX())] = 293;
+
+        }
+        else{
+            target.collisionEntity = true;
+
+            this.getCurrentMap().tileMaps.get(4).map[(int) Math.round(target.getTilePosY())][(int) Math.round(target.getTilePosX())] = -1;
+
+        }
     }
 
     private int pixelToTile(double pixel){

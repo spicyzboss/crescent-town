@@ -6,13 +6,13 @@ import tile.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Player extends Human {
 
     public static double screenPosX;
     public static double screenPosY;
-    public static double worldX;
-    public static double worldY;
+
     private int energy;
 
     private GameControlHandler controlHandler;
@@ -42,6 +42,10 @@ public class Player extends Human {
 
     public void update() {
         this.collisionCheck();
+        ArrayList<Npc> npcs = this.getCurrentMap().npcs;
+        for(int index = 0; index < npcs.size(); index++){
+            this.checkEntity(npcs.get(index));
+        }
         if (this.getControlHandler().scaleUp || this.getControlHandler().scaleDown) {
             this.setWalkSpeed(2 * Map.scale);
             this.setPixelPosX(getTilePosX() * Map.scaledTileSize);
@@ -49,8 +53,10 @@ public class Player extends Human {
         }
         if (this.getControlHandler().upKeyPressed) {
             this.setDirection("up");
-            if (this.collisionEntity && this.collisionObj)
+            if (this.collisionObj && this.collisionEntity) {
                 this.setPixelPosY((this.getTilePosY() * Map.scaledTileSize) - this.getWalkSpeed());
+
+            }
         } else if (this.getControlHandler().downKeyPressed) {
             this.setDirection("down");
             if (this.collisionObj && this.collisionEntity)
@@ -70,8 +76,6 @@ public class Player extends Human {
         this.borderRight = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x + this.solidArea.width;
         this.setScreenPosX((double) Map.width/2 - (double) Map.scaledTileSize/2);
         this.setScreenPosY((double) Map.height/2 - (double) Map.scaledTileSize/2);
-        worldX = this.getPixelPosX() + this.getScreenPosX();
-        worldY = this.getPixelPosY() + this.getScreenPosY();
     }
 
     public void draw(Graphics2D renderer) {
