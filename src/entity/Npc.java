@@ -62,9 +62,9 @@ public class Npc extends Human{
     }
 
     public void update(){
-        if(this.collisionEntity){
-            this.move();
-        }
+//        if(this.collisionEntity){
+//            this.move();
+//        }
 
     }
 

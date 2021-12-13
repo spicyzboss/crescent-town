@@ -97,16 +97,34 @@ public abstract class Entity {
 
     public void checkEntity(Entity target){
         if(this.solidArea.intersects(target.solidArea)){
-            target.collisionEntity = false;
-            this.getCurrentMap().tileMaps.get(4).map[(int) Math.round(target.getTilePosY())][(int) Math.round(target.getTilePosX())] = 293;
-
+            switch (this.getDirection()){
+                case "up" -> {
+                    this.setPixelPosY((this.getTilePosY() * Map.scaledTileSize) + walkSpeed/2);
+                    this.collisionEntity = false;
+                }
+                case "down" -> {
+                    this.setPixelPosY((this.getTilePosY() * Map.scaledTileSize) - walkSpeed/2);
+                    this.collisionEntity = false;
+                }
+                case "left" -> {
+                    this.setPixelPosX((this.getTilePosX() * Map.scaledTileSize) + walkSpeed/2);
+                    this.collisionEntity = false;
+                }
+                case "right" -> {
+                    this.setPixelPosX((this.getTilePosX() * Map.scaledTileSize) - walkSpeed/2);
+                    this.collisionEntity = false;
+                }
+            }
         }
         else{
-            target.collisionEntity = true;
-
-            this.getCurrentMap().tileMaps.get(4).map[(int) Math.round(target.getTilePosY())][(int) Math.round(target.getTilePosX())] = -1;
-
+            this.collisionEntity = true;
         }
+//        if(this.solidArea.intersects(target.solidArea)){
+//            target.collisionEntity = false;
+//        }
+//        else{
+//            target.collisionEntity = true;
+//        }
     }
 
     private int pixelToTile(double pixel){
