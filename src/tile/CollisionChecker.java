@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class CollisionChecker {
-    private static Graphics2D renderer;
+    public static Graphics2D renderer;
 
     public CollisionChecker(Graphics2D renderer){
         CollisionChecker.renderer = renderer;
@@ -35,7 +35,14 @@ public class CollisionChecker {
         boolean[] state = new boolean[2];
         switch (player.getDirection()) {
             case "up" -> {
-//                checkCol(playerTop, playerLeft, playerRight, x, y, tileMaps, state);
+//                Tile tile1 = TileManager.getTileByNumber(tileMaps[layer].map[playerTop][playerRight]);
+    //            Tile tile2 = TileManager.getTileByNumber(tileMaps[layer].map[playerBot][playerRight]);
+    //            if (tile1 != null) {
+    ////                state[0] = tile1.isCollision();
+    //            }
+    //            if (tile2 != null) {
+    ////                state[1] = tile2.isCollision();
+    //            }
             }
             case "down" -> {
 //                checkCol(playerBot, playerLeft, playerRight, x, y, tileMaps, state);
@@ -52,14 +59,7 @@ public class CollisionChecker {
 
     private static void checkRow(int playerTop, int playerBot, int playerRight, int x, int y, TileMap[] tileMaps, boolean[] state) {
         for (int layer = 0; layer < tileMaps.length; layer++) {
-            Tile tile1 = TileManager.getTileByNumber(tileMaps[layer].map[playerTop][playerRight]);
-            Tile tile2 = TileManager.getTileByNumber(tileMaps[layer].map[playerBot][playerRight]);
-            if (tile1 != null) {
-//                state[0] = tile1.isCollision();
-            }
-            if (tile2 != null) {
-//                state[1] = tile2.isCollision();
-            }
+
         }
         if (state[0]) {
             renderer.drawImage(TileManager.getTile("not_use").getImage(), x + playerRight * Map.scaledTileSize, y + playerTop * Map.scaledTileSize, Map.scaledTileSize, Map.scaledTileSize, null);

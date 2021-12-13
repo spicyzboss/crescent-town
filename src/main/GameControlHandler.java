@@ -3,13 +3,14 @@ package main;
 import java.awt.event.*;
 
 public class GameControlHandler implements KeyListener {
+    public static boolean arrowKeyPressed;
     public boolean upKeyPressed;
     public boolean downKeyPressed;
     public boolean leftKeyPressed;
     public boolean rightKeyPressed;
-    public boolean arrowKeyPressed;
     public boolean scaleUp;
     public boolean scaleDown;
+    public static boolean move;
 
     public void keyTyped(KeyEvent e) {
 
@@ -33,6 +34,8 @@ public class GameControlHandler implements KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_G) {
             Map.adjustTileSize(2);
             scaleDown = true;
+        }else if(e.getKeyCode() == KeyEvent.VK_M){
+            move = true;
         }
     }
 
@@ -52,6 +55,8 @@ public class GameControlHandler implements KeyListener {
             scaleUp = false;
         } else if (e.getKeyCode() == KeyEvent.VK_G) {
             scaleDown = false;
+        } else if(e.getKeyCode() == KeyEvent.VK_M){
+            move = false;
         }
     }
 }
