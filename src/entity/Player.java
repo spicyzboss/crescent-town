@@ -8,10 +8,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Player extends Human {
-    public static MainMap currentMap;
 
-    private double screenPosX;
-    private double screenPosY;
+    public static double screenPosX;
+    public static double screenPosY;
+    public static double worldX;
+    public static double worldY;
     private int energy;
 
     private GameControlHandler controlHandler;
@@ -38,36 +39,9 @@ public class Player extends Human {
         this.setSpriteLoadTime(Map.FPS/this.getMaxActionFrame());
     }
 
-    @Override
-    public void setTilePosX(double tilePosX) {
-        super.setTilePosX(tilePosX);
-        this.borderLeft = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x;
-        this.borderRight = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x + this.solidArea.width;
-
-    }
-
-    @Override
-    public void setTilePosY(double tilePosY) {
-        super.setTilePosY(tilePosY);
-        this.borderTop = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y;
-        this.borderBot = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y + this.solidArea.height;
-    }
-
-    @Override
-    public void setPixelPosX(double pixelPosX) {
-        super.setPixelPosX(pixelPosX);
-        this.borderLeft = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x;
-        this.borderRight = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x + this.solidArea.width;
-    }
-
-    @Override
-    public void setPixelPosY(double pixelPosY) {
-        super.setPixelPosY(pixelPosY);
-        this.borderTop = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y;
-        this.borderBot = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y + this.solidArea.height;
-    }
 
     public void update() {
+        this.collisionCheck();
         if (this.getControlHandler().scaleUp || this.getControlHandler().scaleDown) {
             this.setWalkSpeed(2 * Map.scale);
             this.setPixelPosX(getTilePosX() * Map.scaledTileSize);
@@ -75,62 +49,41 @@ public class Player extends Human {
         }
         if (this.getControlHandler().upKeyPressed) {
             this.setDirection("up");
-            if (this.collisionCheck())
+            if (this.collisionEntity && this.collisionObj)
                 this.setPixelPosY((this.getTilePosY() * Map.scaledTileSize) - this.getWalkSpeed());
         } else if (this.getControlHandler().downKeyPressed) {
             this.setDirection("down");
-            if (this.collisionCheck())
+            if (this.collisionObj && this.collisionEntity)
                 this.setPixelPosY((this.getTilePosY() * Map.scaledTileSize) + this.getWalkSpeed());
         } else if (this.getControlHandler().leftKeyPressed) {
             this.setDirection("left");
-            if (this.collisionCheck())
+            if (this.collisionEntity && this.collisionObj)
                 this.setPixelPosX((this.getTilePosX() * Map.scaledTileSize) - this.getWalkSpeed());
         } else if (this.getControlHandler().rightKeyPressed) {
             this.setDirection("right");
-            if (this.collisionCheck())
+            if (this.collisionEntity && this.collisionObj)
                 this.setPixelPosX((this.getTilePosX() * Map.scaledTileSize) + this.getWalkSpeed());
         }
+        this.borderTop = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y;
+        this.borderBot = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y + this.solidArea.height;
+        this.borderLeft = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x;
+        this.borderRight = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x + this.solidArea.width;
         this.setScreenPosX((double) Map.width/2 - (double) Map.scaledTileSize/2);
         this.setScreenPosY((double) Map.height/2 - (double) Map.scaledTileSize/2);
+        worldX = this.getPixelPosX() + this.getScreenPosX();
+        worldY = this.getPixelPosY() + this.getScreenPosY();
     }
 
     public void draw(Graphics2D renderer) {
         this.setSpriteOnAction();
         // draw player at center of screen
         renderer.drawImage(this.getSpriteOnAction(), (int)this.getScreenPosX(), (int)this.getScreenPosY(), Map.scaledTileSize, Map.scaledTileSize, null);
+        renderer.setColor(Color.red);
         renderer.fillRect(this.solidArea.x, this.solidArea.y, this.solidArea.width, this.solidArea.height);
     }
 
-    private int pixelToTile(double pixel){
-        return (int) pixel / Map.scaledTileSize;
-    }
 
-    private boolean collisionCheck() {
-        System.out.println(getDirection());
-        Tile tile1 = null;
-        Tile tile2 = null;
-        switch (this.getDirection()){
-            case "up" -> {
-                tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderLeft)]);
-                tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderRight)]);
-            }
-            case "down" -> {
-                tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderLeft)]);
-                tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderRight)]);
-            }
-            case "left" -> {
-                tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderLeft)]);
-                tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderLeft)]);
-            }
-            case "right" -> {
-                tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderRight)]);
-                tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderRight)]);
-            }
-        }
-        System.out.println(tile1);
-        System.out.println(tile2);
-        return (tile1 == null) && (tile2 == null);
-    }
+
 
 
 
@@ -158,13 +111,7 @@ public class Player extends Human {
         return energy;
     }
 
-    public void setCurrentMap(MainMap map){
-        this.currentMap = map;
-    }
 
-    public MainMap getCurrentMap(){
-        return currentMap;
-    }
 
     public void setControlHandler(GameControlHandler controlHandler) {
         this.controlHandler = controlHandler;

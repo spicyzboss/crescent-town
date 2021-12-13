@@ -2,6 +2,9 @@ package entity;
 
 import main.GameControlHandler;
 import main.Map;
+import tile.MainMap;
+import tile.Tile;
+import tile.TileManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -27,6 +30,9 @@ public abstract class Entity {
     protected double borderRight;
     protected double borderTop;
     protected double borderBot;
+    public static MainMap currentMap;
+    public boolean collisionObj;
+    public  boolean collisionEntity = true;
 
     protected Rectangle solidArea;
 
@@ -59,6 +65,63 @@ public abstract class Entity {
             this.setActionFrame(0);
         }
         return this.getSprite(this.getActionFrame(), spriteAction);
+    }
+
+    protected void collisionCheck() {
+        Tile tile1 = null;
+        Tile tile2 = null;
+        Npc npc = this.getCurrentMap().npcs.get(0);
+        boolean foundEntity = true;
+//        this.getCurrentMap().tileMaps.get(4).map[pixelToTile(npc.getPixelPosY())][pixelToTile(npc.getPixelPosX())] = 293;
+        switch (this.getDirection()){
+            case "up" -> {
+                tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderLeft)]);
+                tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderRight)]);
+                if(Math.floor(npc.getPixelPosX()) == this.borderTop && ((Math.floor(npc.getTilePosX()) == this.pixelToTile(borderLeft))
+                || Math.floor(npc.getTilePosX()) == this.pixelToTile(borderRight))){
+                    foundEntity = false;
+                }
+            }
+            case "down" -> {
+                tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderLeft)]);
+                tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderRight)]);
+                if(Math.floor(npc.getTilePosY()) == this.pixelToTile(borderBot) && ((Math.floor(npc.getTilePosX()) == this.pixelToTile(borderLeft))
+                || (Math.floor(npc.getTilePosX()) == this.pixelToTile(borderRight)))){
+                    foundEntity = false;
+                }
+            }
+            case "left" -> {
+                tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderLeft)]);
+                tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderLeft)]);
+                if( Math.floor(npc.getTilePosX()) == this.pixelToTile(borderLeft) && (Math.floor(npc.getTilePosY()) == this.pixelToTile(borderTop))
+                || (Math.floor(npc.getTilePosY()) == this.pixelToTile(borderBot))){
+                    foundEntity = false;
+                }
+            }
+            case "right" -> {
+                tile1 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderTop)][pixelToTile(borderRight)]);
+                tile2 = TileManager.getTileByNumber(this.getCurrentMap().tileMaps.get(4).map[pixelToTile(borderBot)][pixelToTile(borderRight)]);
+                if(Math.floor(npc.getTilePosX()) == this.pixelToTile(borderRight) && ((Math.floor(npc.getTilePosY()) == this.pixelToTile(borderTop))
+                || ((Math.floor(npc.getTilePosY()) == this.pixelToTile(borderBot))))) {
+                    foundEntity = false;
+
+                }
+                }
+            }
+        System.out.println((int) (npc.getTilePosX()));
+        this.collisionObj = (((tile1 == null) ||(tile2 == null)) && foundEntity);
+    }
+
+    private int pixelToTile(double pixel){
+        return (int) pixel / Map.scaledTileSize;
+    }
+
+    public void setCurrentMap(MainMap map){
+        this.currentMap = map;
+    }
+
+    public MainMap getCurrentMap(){
+        return currentMap;
     }
 
     public void setName(String name) {

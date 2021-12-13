@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 
-import static tile.CollisionChecker.renderer;
 
 public class Map extends JPanel implements Runnable {
     /**

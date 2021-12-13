@@ -52,10 +52,11 @@ public class MainMap {
                     // draw tile in screen
                     renderer.drawImage(tileImage,(col * Map.scaledTileSize) - sceneX, (row * Map.scaledTileSize) - sceneY, Map.scaledTileSize, Map.scaledTileSize, null);
                 }
+
+
             }
         }
     }
-
 
     public void render(Graphics2D renderer, Player player){
         // find current scenario
@@ -66,10 +67,10 @@ public class MainMap {
             // draw map in each layer
             this.draw(renderer, sceneX, sceneY, layer);
         }
-        player.draw(renderer);
         for(int index = 0; index < npcs.size(); index++){
             // draw each npc
             npcs.get(index).draw(renderer, sceneX, sceneY, player);
         }
+        player.draw(renderer);
     }
 }
