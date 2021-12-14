@@ -12,12 +12,12 @@ public class TileMap {
     public int mapWidth;
     public int mapHeight;
 
-    public TileMap(String mapName, int mapWidth, int mapHeight) {
+    public TileMap(String path, int mapWidth, int mapHeight) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         try {
-            BufferedReader bt = new BufferedReader(new FileReader("src/resource/map/" + mapName + ".csv"));
-            System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: map " + mapName + "\u001B[0m");
+            BufferedReader bt = new BufferedReader(new FileReader("src/resource/map/" + path));
+            System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: map " + path + "\u001B[0m");
             map = new int[mapHeight][mapWidth];
             String delimeter = ",";
             for (int row = 0; row < mapHeight; row++) {
@@ -28,7 +28,7 @@ public class TileMap {
                 }
             }
         } catch (IOException e) {
-            System.out.println("\u001B[31m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - ERROR: map " + mapName + " not found" + "\u001B[0m");
+            System.out.println("\u001B[31m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - ERROR: map " + path + " not found" + "\u001B[0m");
         }
     }
 
