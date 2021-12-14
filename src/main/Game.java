@@ -56,10 +56,16 @@ public class Game extends JPanel implements Runnable {
      */
     public static int frame = 0;
 
+    public enum gameState {
+        INTRO,
+        PLAY,
+        PAUSE,
+    }
+
     /**
      * Game state
      */
-    public static String gameState;
+    public static gameState globalState;
 
     MainMap mainMap = new MainMap(100, 100);
 
@@ -69,7 +75,7 @@ public class Game extends JPanel implements Runnable {
 
     GameControlHandler controlHandler = new GameControlHandler();
     Player player = new Player("gongcha", controlHandler);
-    GameUI ui = new GameUI();
+    GameUI ui;
 
     // Game constructor method for initialization
     public Game() {
@@ -85,7 +91,7 @@ public class Game extends JPanel implements Runnable {
         mongo.setMoveAble(4);
         mongo.setDirection("right");
         mainMap.addNpc(mongo);
-        gameState = "PLAY";
+        globalState = gameState.INTRO;
         initThread();
     }
 
@@ -95,12 +101,14 @@ public class Game extends JPanel implements Runnable {
     }
 
     public static void adjustTileSize(int state) {
-        if (state == 1) {
-            scale = Math.min(scale + 1, 4);
-        } else if (state == 2) {
-            scale = Math.max(scale - 1, 2);
+        if (globalState == gameState.PLAY) {
+            if (state == 1) {
+                scale = Math.min(scale + 1, 4);
+            } else if (state == 2) {
+                scale = Math.max(scale - 1, 2);
+            }
+            scaledTileSize = tileSize * scale;
         }
-        scaledTileSize = tileSize * scale;
     }
 
     public void run() {
@@ -135,23 +143,30 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (gameState.equals("PLAY")) {
+        if (globalState == gameState.PLAY) {
             player.update();
             mongo.update();
         }
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+        ui = new GameUI(g2d);
+        switch (globalState) {
+            case PLAY -> {
+                // Draw player and map
+                mainMap.render(g2d, player);
 
-        // Draw player and map
-        mainMap.render(g2d, player);
-
-        // Draw UI
-        // ui.draw(g2d);
-        ui.drawDialog(g2d, "หิวชาบูว่ะเพื่อน ไปกินชาบูด้วยกันไหม?");
-
+                // Draw UI
+                // ui.draw(g2d);
+                 ui.drawDialog("หิวชาบูว่ะเพื่อน\nไปกินชาบูด้วยกันไหม?");
+            }
+            case INTRO -> {
+                ui.drawTitleScreen();
+            }
+        }
         // Restore resource
         g2d.dispose();
     }

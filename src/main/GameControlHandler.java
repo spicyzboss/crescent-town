@@ -17,25 +17,37 @@ public class GameControlHandler implements KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
-        if (0x25 <= e.getKeyCode() && e.getKeyCode() <= 0x28) {
-            arrowKeyPressed = true;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            upKeyPressed = true;
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            downKeyPressed = true;
-        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            leftKeyPressed = true;
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            rightKeyPressed = true;
-        } else if (e.getKeyCode() == KeyEvent.VK_F) {
-            Game.adjustTileSize(1);
-            scaleUp = true;
-        } else if (e.getKeyCode() == KeyEvent.VK_G) {
-            Game.adjustTileSize(2);
-            scaleDown = true;
-        }else if(e.getKeyCode() == KeyEvent.VK_M){
-            move = true;
+        switch (Game.globalState) {
+            case PLAY -> {
+                if (0x25 <= e.getKeyCode() && e.getKeyCode() <= 0x28) {
+                    arrowKeyPressed = true;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    upKeyPressed = true;
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    downKeyPressed = true;
+                } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    leftKeyPressed = true;
+                } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    rightKeyPressed = true;
+                } else if (e.getKeyCode() == KeyEvent.VK_F) {
+                    Game.adjustTileSize(1);
+                    scaleUp = true;
+                } else if (e.getKeyCode() == KeyEvent.VK_G) {
+                    Game.adjustTileSize(2);
+                    scaleDown = true;
+                } else if (e.getKeyCode() == KeyEvent.VK_M){
+                    move = true;
+                }
+            }
+            case PAUSE -> {
+
+            }
+            case INTRO -> {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    Game.globalState = Game.gameState.PLAY;
+                }
+            }
         }
     }
 

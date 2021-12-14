@@ -41,8 +41,8 @@ public class Player extends Human {
     public void update() {
         this.collisionCheck();
         ArrayList<NPC> npcs = this.getCurrentMap().npcs;
-        for(int index = 0; index < npcs.size(); index++){
-            this.checkEntity(npcs.get(index));
+        for (NPC npc : npcs) {
+            this.checkEntity(npc);
         }
         if (this.getControlHandler().scaleUp || this.getControlHandler().scaleDown) {
             this.setWalkSpeed(2 * Game.scale);
@@ -81,7 +81,6 @@ public class Player extends Human {
         // draw player at center of screen
         renderer.drawImage(this.getSpriteOnAction(), (int)this.getScreenPosX(), (int)this.getScreenPosY(), Game.scaledTileSize, Game.scaledTileSize, null);
         renderer.setColor(Color.red);
-        renderer.fillRect(this.solidArea.x, this.solidArea.y, this.solidArea.width, this.solidArea.height);
     }
 
 
@@ -110,8 +109,6 @@ public class Player extends Human {
     public int getEnergy() {
         return energy;
     }
-
-
 
     public void setControlHandler(GameControlHandler controlHandler) {
         this.controlHandler = controlHandler;

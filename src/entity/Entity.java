@@ -31,7 +31,7 @@ public abstract class Entity {
     protected double borderBot;
     public static MainMap currentMap;
     public boolean collisionObj;
-    public  boolean collisionEntity = true;
+    public boolean collisionEntity = true;
 
     protected Rectangle solidArea;
 
@@ -94,7 +94,7 @@ public abstract class Entity {
     }
 
     public void checkEntity(Entity target){
-        if(this.solidArea.intersects(target.solidArea)){
+        if (this.solidArea.intersects(target.solidArea)){
             switch (this.getDirection()){
                 case "up" -> {
                     this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) + walkSpeed/2);

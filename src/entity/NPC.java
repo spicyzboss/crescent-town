@@ -13,10 +13,10 @@ public class NPC extends Human {
     public NPC(String name, String gender, String job){
         this.setName(name);
         this.setGender(gender);
-        npcInit();
+        NPCInit();
     }
 
-    public void npcInit(){
+    public void NPCInit(){
         this.solidArea = new Rectangle();
         this.loadSprite(this.getName());
         this.setWalkSpeed(Game.scale / 2);
@@ -39,7 +39,6 @@ public class NPC extends Human {
         && this.getPixelPosY() - Game.scaledTileSize < player.getPixelPosY() + player.getScreenPosY()){
             g2d.drawImage(this.getSpriteOnAction(), (int) screenX, (int) screenY, Game.scaledTileSize, Game.scaledTileSize, null);
             this.solidArea.setRect((int) screenX, (int) screenY, Game.scaledTileSize, Game.scaledTileSize);
-
         }
     }
 
@@ -64,7 +63,7 @@ public class NPC extends Human {
 //        if(this.collisionEntity){
 //            this.move();
 //        }
-        this.setWalkSpeed(2* Game.scale);
+        this.setWalkSpeed(2 * Game.scale);
     }
 
     public void move(){
