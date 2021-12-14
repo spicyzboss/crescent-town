@@ -36,7 +36,7 @@ public class MainMap {
     }
 
     private void loadMap(String name) {
-        File folder = new File("src/resource/map/"+name.replace(" ", "_"));
+        File folder = new File("res/map/"+name.replace(" ", "_"));
         File[] files = folder.listFiles();
         Arrays.sort(files);
         for(File layer : Objects.requireNonNull(files)){

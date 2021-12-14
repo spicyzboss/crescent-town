@@ -12,13 +12,13 @@ import java.util.HashMap;
 
 public class GameUI {
     private static Font normalFont;
-    private int titleSelect;
+    private static int titleSelect;
     private GameControlHandler controlHandler;
     private HashMap<String, BufferedImage> interfaces;
 
     public GameUI(GameControlHandler controlHandler) {
         this.loadFonts();
-        this.setTitleSelect(Game.loadedSave ? 2 : 1);
+        GameUI.setTitleSelect(Game.loadedSave ? 2 : 1);
         this.setControlHandler(controlHandler);
         interfaces = new HashMap<String, BufferedImage>();
         this.loadInterface("background", "introBackground");
@@ -27,7 +27,7 @@ public class GameUI {
 
     private void loadInterface(String interfaceType, String interfaceName) {
         try {
-            interfaces.put(interfaceType, ImageIO.read(new File("src/resource/interface/" + interfaceName +".png")));
+            interfaces.put(interfaceType, ImageIO.read(new File("res/interface/" + interfaceName +".png")));
             System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: interface " + interfaceType + " " + interfaceName + "\u001B[0m");
         } catch (IOException e) {
             System.out.println("\u001B[31m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - ERROR: interface " + interfaceType + " " + interfaceName + " not found" + "\u001B[0m");
@@ -55,23 +55,6 @@ public class GameUI {
         }
     }
 
-    public void update() {
-        if (Game.frame % 10 == 0) {
-            if (this.getControlHandler().upKeyPressed) {
-                this.setTitleSelect(Math.max(this.getTitleSelect() - 1, 1));
-            } else if (this.getControlHandler().downKeyPressed) {
-                this.setTitleSelect(Math.min(this.getTitleSelect() + 1, 3));
-            }
-        }
-        if (this.getControlHandler().enterKeyPressed) {
-            if (this.getTitleSelect() == 1) {
-                Game.globalState = Game.gameState.PLAY;
-            } else if (this.getTitleSelect() == 3) {
-                System.exit(0);
-            }
-        }
-    }
-
     public void drawTitleScreen(Graphics2D renderer) {
         renderer.drawImage(interfaces.get("background"), 0, 0, Game.width, Game.height, null);
         renderer.setFont(new Font("2005_iannnnnCPU", Font.PLAIN, Game.tileSize*5));
@@ -88,7 +71,7 @@ public class GameUI {
         renderer.setColor(Color.BLACK);
         renderer.drawString(playText, Game.width/2 - playTextWidth/2, Game.height/2 + Game.tileSize/8);
         renderer.setColor(Color.WHITE);
-        if (this.getTitleSelect() == 1) {
+        if (GameUI.getTitleSelect() == 1) {
             renderer.setColor(Color.BLACK);
             renderer.drawString(">", Game.width/2 - playTextWidth/2 - Game.tileSize, Game.height/2 + Game.tileSize/8);
             renderer.drawString("<", Game.width/2 + playTextWidth/2 + Game.tileSize, Game.height/2 + Game.tileSize/8);
@@ -104,7 +87,7 @@ public class GameUI {
         renderer.setColor(Color.BLACK);
         renderer.drawString(loadText, Game.width/2 - loadTextWidth/2, (int)(Game.height*(5/8D)) + Game.tileSize/8);
         renderer.setColor(Game.loadedSave ? Color.WHITE : Color.GRAY);
-        if (this.getTitleSelect() == 2) {
+        if (GameUI.getTitleSelect() == 2) {
             renderer.setColor(Color.BLACK);
             renderer.drawString(">", Game.width/2 - loadTextWidth/2 - Game.tileSize, (int)(Game.height*(5/8D)) + Game.tileSize/8);
             renderer.drawString("<", Game.width/2 + loadTextWidth/2 + Game.tileSize, (int)(Game.height*(5/8D)) + Game.tileSize/8);
@@ -120,7 +103,7 @@ public class GameUI {
         renderer.setColor(Color.BLACK);
         renderer.drawString(quitText, Game.width/2 - quitTextWidth/2, (int)(Game.height*(6/8D)) + Game.tileSize/8);
         renderer.setColor(Color.WHITE);
-        if (this.getTitleSelect() == 3) {
+        if (GameUI.getTitleSelect() == 3) {
             renderer.setColor(Color.BLACK);
             renderer.drawString(">", Game.width/2 - quitTextWidth/2 - Game.tileSize, (int)(Game.height*(6/8D)) + Game.tileSize/8);
             renderer.drawString("<", Game.width/2 + quitTextWidth/2 + Game.tileSize, (int)(Game.height*(6/8D)) + Game.tileSize/8);
@@ -151,11 +134,11 @@ public class GameUI {
         return controlHandler;
     }
 
-    public void setTitleSelect(int titleSelect) {
-        this.titleSelect = titleSelect;
+    public static void setTitleSelect(int titleSelect) {
+        GameUI.titleSelect = titleSelect;
     }
 
-    public int getTitleSelect() {
+    public static int getTitleSelect() {
         return titleSelect;
     }
 }

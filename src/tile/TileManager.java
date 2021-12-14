@@ -12,7 +12,7 @@ public class TileManager {
     }
 
     public void loadTile(){
-        File folder = new File("src/resource/tile");
+        File folder = new File("res/tile");
         for (final File fileEntry : folder.listFiles()) {
             addTile(fileEntry.getName().replace(".png", ""));
         }

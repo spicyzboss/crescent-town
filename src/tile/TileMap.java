@@ -16,7 +16,7 @@ public class TileMap {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         try {
-            BufferedReader bt = new BufferedReader(new FileReader("src/resource/map/" + path));
+            BufferedReader bt = new BufferedReader(new FileReader("res/map/" + path));
             System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: map " + path + "\u001B[0m");
             map = new int[mapHeight][mapWidth];
             String delimeter = ",";

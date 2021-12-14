@@ -37,7 +37,7 @@ public abstract class Entity {
 
     public void loadSprite(String file) {
         try {
-            sprite = ImageIO.read(new File("src/resource/sprite/" + file + ".png"));
+            sprite = ImageIO.read(new File("res/sprite/" + file + ".png"));
             System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: sprite " + file + "\u001B[0m");
         } catch (IOException e) {
             System.out.println("\u001B[31m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - ERROR: sprite " + file + "\u001B[0m");

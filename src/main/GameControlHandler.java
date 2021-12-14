@@ -10,7 +10,6 @@ public class GameControlHandler implements KeyListener {
     public boolean downKeyPressed;
     public boolean leftKeyPressed;
     public boolean rightKeyPressed;
-    public boolean enterKeyPressed;
     public boolean scaleUp;
     public boolean scaleDown;
     public static boolean move;
@@ -46,45 +45,73 @@ public class GameControlHandler implements KeyListener {
                     move = true;
                 }
             }
-            case PAUSE -> {
+            case PAUSE, INTRO -> {
 
-            }
-            case INTRO -> {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    enterKeyPressed = true;
-                } else if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    upKeyPressed = true;
-                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    downKeyPressed = true;
-                }
             }
         }
     }
 
     public void keyReleased(KeyEvent e) {
-        if (0x25 <= e.getKeyCode() && e.getKeyCode() <= 0x28) {
-            arrowKeyPressed = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            upKeyPressed = false;
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            downKeyPressed = false;
-        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            leftKeyPressed = false;
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            rightKeyPressed = false;
-        } else if (e.getKeyCode() == KeyEvent.VK_F) {
-            scaleUp = false;
-        } else if (e.getKeyCode() == KeyEvent.VK_G) {
-            scaleDown = false;
-        } else if (e.getKeyCode() == KeyEvent.VK_M) {
-            move = false;
-        } else if (e.getKeyCode() == KeyEvent.VK_Z) {
-            interact = true;
-            if (Player.interactEntity != null)
-                dialog++;
-            if (Player.interactObj != null)
-                objState = !objState;
+        switch (Game.globalState) {
+            case INTRO -> {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (GameUI.getTitleSelect() == 1) {
+                        Game.playSoundEffect("select");
+                        Game.globalState = Game.gameState.PLAY;
+                        Game.playBGM("beach_house");
+                    } else if (GameUI.getTitleSelect() == 2) {
+                        if (Game.loadedSave) {
+                            Game.playSoundEffect("select");
+                        } else {
+                            Game.playSoundEffect("cancel");
+                        }
+                    } else if (GameUI.getTitleSelect() == 3) {
+                        Game.playSoundEffect("select");
+                        System.exit(0);
+                    }
+                } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    int oldSelect = GameUI.getTitleSelect();
+                    GameUI.setTitleSelect(Math.max(GameUI.getTitleSelect() - 1, 1));
+                    if (oldSelect != GameUI.getTitleSelect()) {
+                        Game.playSoundEffect("change");
+                    }
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    int oldSelect = GameUI.getTitleSelect();
+                    GameUI.setTitleSelect(Math.min(GameUI.getTitleSelect() + 1, 3));
+                    if (oldSelect != GameUI.getTitleSelect()) {
+                        Game.playSoundEffect("change");
+                    }
+                }
+            }
+            case PLAY -> {
+                if (0x25 <= e.getKeyCode() && e.getKeyCode() <= 0x28) {
+                    arrowKeyPressed = false;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    upKeyPressed = false;
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    downKeyPressed = false;
+                } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    leftKeyPressed = false;
+                } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    rightKeyPressed = false;
+                } else if (e.getKeyCode() == KeyEvent.VK_F) {
+                    scaleUp = false;
+                } else if (e.getKeyCode() == KeyEvent.VK_G) {
+                    scaleDown = false;
+                } else if (e.getKeyCode() == KeyEvent.VK_M) {
+                    move = false;
+                } else if (e.getKeyCode() == KeyEvent.VK_Z) {
+                    interact = true;
+                    if (Player.interactEntity != null)
+                        dialog++;
+                    if (Player.interactObj != null)
+                        objState = !objState;
+                }
+            }
+            case PAUSE -> {
+
+            }
         }
     }
 }

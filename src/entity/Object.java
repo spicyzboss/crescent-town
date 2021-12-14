@@ -34,7 +34,7 @@ public class Object{
 
     public BufferedImage loadImage(String file) {
         try {
-            BufferedImage image = ImageIO.read(new File("src/resource/object/" + file + ".png"));
+            BufferedImage image = ImageIO.read(new File("res/object/" + file + ".png"));
             System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: object " + file + "\u001B[0m");
             return image;
         } catch (IOException e) {

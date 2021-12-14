@@ -78,6 +78,7 @@ public class Game extends JPanel implements Runnable {
     GameControlHandler controlHandler = new GameControlHandler();
     Player player = new Player("gongcha", controlHandler);
     GameUI ui;
+    public static SoundManager sound;
 
     // Game constructor method for initialization
     public Game() {
@@ -91,6 +92,7 @@ public class Game extends JPanel implements Runnable {
         player.setCurrentMap(village);
         globalState = gameState.INTRO;
         ui = new GameUI(controlHandler);
+        sound = new SoundManager();
         initThread();
     }
 
@@ -147,8 +149,6 @@ public class Game extends JPanel implements Runnable {
             for(NPC npc : player.getCurrentMap().NPCs){
                 npc.update();
             }
-        } else if (globalState == gameState.INTRO) {
-            ui.update();
         }
     }
 
@@ -174,6 +174,22 @@ public class Game extends JPanel implements Runnable {
         // Restore resource
         g2d.dispose();
     }
+
+    public static void playBGM(String name) {
+        sound.setSound(name);
+        sound.playSound();
+        sound.loopSound();
+    }
+
+    public static void stopBGM() {
+        sound.stopSound();
+    }
+
+    public static void playSoundEffect(String name) {
+        sound.setSound(name);
+        sound.playSound();
+    }
+
 //    public void changeMap(){
 //        switch (player.getCurrentMap().name){
 //            case -> {

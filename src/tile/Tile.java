@@ -17,7 +17,7 @@ public class Tile {
 
     private void setImage(){
         try {
-            this.image = ImageIO.read(new File("src/resource/tile/" + this.tileName + ".png"));
+            this.image = ImageIO.read(new File("res/tile/" + this.tileName + ".png"));
             System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: tile " + tileName + "\u001B[0m");
         } catch (IOException e) {
             System.out.println("\u001B[31m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - ERROR: tile " + tileName + " not found" + "\u001B[0m");
