@@ -12,6 +12,7 @@ public class MainMap {
     public ArrayList<TileMap> tileMaps;
     public ArrayList<NPC> npcs;
     public int mapWidth, mapHeight;
+    public static int sceneX, sceneY;
 
     public MainMap(int mapWidth, int mapHeight) {
         tileMaps = new ArrayList<TileMap>();
@@ -41,7 +42,23 @@ public class MainMap {
         return tileMaps;
     }
 
-    public void draw(Graphics2D renderer, int sceneX, int sceneY, int layer){
+    public int getSceneX() {
+        return sceneX;
+    }
+
+    public void setSceneX(int sceneX) {
+        this.sceneX = sceneX;
+    }
+
+    public int getSceneY() {
+        return sceneY;
+    }
+
+    public void setSceneY(int sceneY) {
+        this.sceneY = sceneY;
+    }
+
+    public void draw(Graphics2D renderer, int layer){
         for (int row = 0; row < this.getTileMaps().get(layer).mapHeight; row++) {
             for (int col = 0; col < this.getTileMaps().get(layer).mapWidth; col++) {
                 int tileNumber = this.getTileMaps().get(layer).map[row][col];
@@ -57,16 +74,16 @@ public class MainMap {
 
     public void render(Graphics2D renderer, Player player){
         // find current scenario
-        int sceneX = (int)player.getPixelPosX() - (int)player.getScreenPosX();
-        int sceneY = (int)player.getPixelPosY() - (int)player.getScreenPosY();
+        setSceneX((int)player.getPixelPosX() - (int)player.getScreenPosX());
+        setSceneY((int)player.getPixelPosY() - (int)player.getScreenPosY());
 
         for (int layer = 0; layer < this.getTileMaps().size() - 1; layer++){
             // draw map in each layer
-            this.draw(renderer, sceneX, sceneY, layer);
+            this.draw(renderer, layer);
         }
         for (NPC npc : npcs) {
             // draw each npc
-            npc.draw(renderer, sceneX, sceneY, player);
+            npc.draw(renderer, player);
         }
         player.draw(renderer);
     }

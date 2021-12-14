@@ -85,6 +85,7 @@ public class Game extends JPanel implements Runnable {
         this.setBackground(Color.BLACK); // set panel's background color to black
         this.setDoubleBuffered(true); // buffer for performance
         new TileManager();
+        new GameFonts();
         player.setCurrentMap(mainMap);
         mongo.setTilePosX(26);
         mongo.setTilePosY(58);
@@ -146,6 +147,7 @@ public class Game extends JPanel implements Runnable {
         if (globalState == gameState.PLAY) {
             player.update();
             mongo.update();
+            player.update();
         }
     }
 
@@ -161,10 +163,13 @@ public class Game extends JPanel implements Runnable {
 
                 // Draw UI
                 // ui.draw(g2d);
-                 ui.drawDialog("หิวชาบูว่ะเพื่อน\nไปกินชาบูด้วยกันไหม?");
+                //  ui.drawDialog("หิวชาบูว่ะเพื่อน\nไปกินชาบูด้วยกันไหม?");
             }
             case INTRO -> {
-                ui.drawTitleScreen();
+                ui.drawTitleScreen(g2d);
+            }
+            default -> {
+                // ui.drawPauseScreen(g2d);
             }
         }
         // Restore resource

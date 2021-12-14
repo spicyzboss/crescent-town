@@ -10,11 +10,13 @@ public class Player extends Human {
 
     public static double screenPosX;
     public static double screenPosY;
+    public static Interactable interactEntity;
 
     private int energy;
 
     private GameControlHandler controlHandler;
 
+    public static Rectangle playerArea = new Rectangle();
 
     public Player(String name, GameControlHandler controlHandler) {
         setName(name);
@@ -74,20 +76,67 @@ public class Player extends Human {
         this.borderRight = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x + this.solidArea.width;
         this.setScreenPosX((double) Game.width/2 - (double) Game.scaledTileSize/2);
         this.setScreenPosY((double) Game.height/2 - (double) Game.scaledTileSize/2);
+        playerArea.setRect((int)screenPosX, (int)screenPosY, Game.scaledTileSize, Game.scaledTileSize);
     }
 
     public void draw(Graphics2D renderer) {
         this.setSpriteOnAction();
+        if(this.getControlHandler().interact && !collisionEntity){
+            if(this.interactEntity != null)
+                interactEntity.interact(renderer);
+        }
         // draw player at center of screen
-        renderer.drawImage(this.getSpriteOnAction(), (int)this.getScreenPosX(), (int)this.getScreenPosY(), Game.scaledTileSize, Game.scaledTileSize, null);
-        renderer.setColor(Color.red);
+        renderer.drawImage(this.getSpriteOnAction(), playerArea.x, playerArea.y, playerArea.width, playerArea.height, null);
+//        renderer.setColor(Color.CYAN);
+//        renderer.fillRect(playerArea.x, playerArea.y, playerArea.width, playerArea.height);
+//        renderer.setColor(Color.red);
+//        renderer.fillRect(this.solidArea.x, this.solidArea.y, this.solidArea.width, this.solidArea.height);
+    }
+
+    public void checkEntity(Entity target){
+        Rectangle recIntersection = playerArea.intersection(target.solidArea);
+        if(playerArea.intersects(target.solidArea)){
+            if(target.getClass().getInterfaces()[0].getSimpleName().equals("Interactable")) {
+                this.interactEntity = (Interactable) target;
+            }
+
+            target.collisionEntity = false;
+            switch (this.getDirection()){
+                case "up" -> {
+                    if(recIntersection.y == playerArea.y && recIntersection.width > recIntersection.height)
+                        this.collisionEntity = false;
+                    else
+                        this.collisionEntity = true;
+                }
+                case "down" -> {
+                    if(recIntersection.y == target.solidArea.y && recIntersection.width > recIntersection.height)
+                        this.collisionEntity = false;
+                    else
+                        this.collisionEntity = true;
+                }
+                case "left" -> {
+                    if(recIntersection.x == playerArea.x && recIntersection.height > recIntersection.width)
+                        this.collisionEntity = false;
+                    else
+                        this.collisionEntity = true;
+                }
+                case "right" -> {
+                    if(recIntersection.x == target.solidArea.x &&  recIntersection.height > recIntersection.width)
+                        this.collisionEntity = false;
+                    else
+                        this.collisionEntity = true;
+                }
+            }
+        }
+        else{
+            this.collisionEntity = true;
+            this.interactEntity = null;
+        }
     }
 
 
-
-
     public void setScreenPosX(double screenPosX) {
-        this.screenPosX = screenPosX;
+        Player.screenPosX = screenPosX;
     }
 
     public double getScreenPosX() {
@@ -95,7 +144,7 @@ public class Player extends Human {
     }
 
     public void setScreenPosY(double screenPosY) {
-        this.screenPosY = screenPosY;
+        Player.screenPosY = screenPosY;
     }
 
     public double getScreenPosY() {
