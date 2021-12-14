@@ -37,7 +37,9 @@ public class MainMap {
 
     private void loadMap(String name) {
         File folder = new File("src/resource/map/"+name.replace(" ", "_"));
-        for(File layer : Objects.requireNonNull(folder.listFiles())){
+        File[] files = folder.listFiles();
+        Arrays.sort(files);
+        for(File layer : Objects.requireNonNull(files)){
             TileMap tileMap = new TileMap(name.replace(" ", "_")+"/"+layer.getName(), mapWidth, mapHeight);
             if(layer.getName().endsWith("collision.csv"))
                 this.collisionTileMap = tileMap;
