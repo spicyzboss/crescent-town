@@ -136,8 +136,8 @@ public class Game extends JPanel implements Runnable {
 
     public void update() {
         if (gameState.equals("PLAY")) {
-            player.update();
             mongo.update();
+            player.update();
         }
     }
 
@@ -150,7 +150,6 @@ public class Game extends JPanel implements Runnable {
 
         // Draw UI
         // ui.draw(g2d);
-        ui.drawDialog(g2d, "หิวชาบูว่ะเพื่อน ไปกินชาบูด้วยกันไหม?");
 
         // Restore resource
         g2d.dispose();

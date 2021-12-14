@@ -3,7 +3,7 @@ package main;
 import java.awt.*;
 
 public class GameUI {
-    private Font normalFont;
+    private static Font normalFont;
 
     public GameUI() {
         new GameFonts();
@@ -22,7 +22,7 @@ public class GameUI {
         renderer.drawString(name, Game.width/2 - stringSize/2, Game.height/2 - Game.scaledTileSize);
     }
 
-    public void drawDialog(Graphics2D renderer, String dialogMessage) {
+    public static void drawDialog(Graphics2D renderer, String dialogMessage) {
         // Dialog background
         renderer.setColor(new Color(0, 0, 0, 200));
         renderer.fillRoundRect(Game.width/8, (int)(Game.height*10D/16D), (int)(Game.width*3D/4D), (int)(Game.height*5D/16D), 50, 50);
@@ -33,7 +33,7 @@ public class GameUI {
         renderer.drawRoundRect(Game.width/8 + Game.tileSize/4, (int)(Game.height*10D/16D) + Game.tileSize/4, (int)(Game.width*3D/4D) - Game.tileSize/2, (int)(Game.height*5D/16D) - Game.tileSize/2, Game.tileSize, Game.tileSize);
 
         // Dialog message
-        renderer.setFont(this.getNormalFont());
+        renderer.setFont(getNormalFont());
         renderer.drawString(dialogMessage, Game.width/8 + Game.tileSize, (int)((Game.height*10D/16D) + Game.tileSize*(3/2D)));
     }
 
@@ -41,7 +41,7 @@ public class GameUI {
         this.normalFont = normalFont;
     }
 
-    public Font getNormalFont() {
-        return this.normalFont;
+    public static Font getNormalFont() {
+        return normalFont;
     }
 }

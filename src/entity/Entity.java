@@ -93,37 +93,7 @@ public abstract class Entity {
         this.collisionObj = (((tile1 == null) ||(tile2 == null)));
     }
 
-    public void checkEntity(Entity target){
-        if(this.solidArea.intersects(target.solidArea)){
-            switch (this.getDirection()){
-                case "up" -> {
-                    this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) + walkSpeed/2);
-                    this.collisionEntity = false;
-                }
-                case "down" -> {
-                    this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) - walkSpeed/2);
-                    this.collisionEntity = false;
-                }
-                case "left" -> {
-                    this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) + walkSpeed/2);
-                    this.collisionEntity = false;
-                }
-                case "right" -> {
-                    this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) - walkSpeed/2);
-                    this.collisionEntity = false;
-                }
-            }
-        }
-        else{
-            this.collisionEntity = true;
-        }
-//        if(this.solidArea.intersects(target.solidArea)){
-//            target.collisionEntity = false;
-//        }
-//        else{
-//            target.collisionEntity = true;
-//        }
-    }
+
 
     private int pixelToTile(double pixel){
         return (int) pixel / Game.scaledTileSize;

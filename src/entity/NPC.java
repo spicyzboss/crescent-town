@@ -1,15 +1,18 @@
 package entity;
 
 import main.Game;
+import main.GameControlHandler;
+import main.GameUI;
+import tile.MainMap;
 
 import java.awt.*;
 
-public class NPC extends Human {
+public class NPC extends Human implements Interactable {
     private String job;
     private int moveAble;
     private int movedX;
     private int movedY;
-
+    public static int message = 1;
     public NPC(String name, String gender, String job){
         this.setName(name);
         this.setGender(gender);
@@ -24,22 +27,22 @@ public class NPC extends Human {
         this.setSpriteLoadTime(Game.FPS/this.getMaxActionFrame());
     }
 
-    public void draw(Graphics2D g2d, int sceneX, int sceneY, Player player) {
+    public void draw(Graphics2D g2d, Player player) {
         // get direction of npc
         this.setSpriteOnAction();
 
         // get pos npc should be on current scenario
-        double screenX = this.getPixelPosX() - sceneX;
-        double screenY = this.getPixelPosY() - sceneY;
+        double screenX = this.getPixelPosX() - MainMap.sceneX;
+        double screenY = this.getPixelPosY() - MainMap.sceneY;
 
         // check if npc is on scenario
         if(this.getPixelPosX() + Game.scaledTileSize > player.getPixelPosX() - player.getScreenPosX()
         && this.getPixelPosX() - Game.scaledTileSize < player.getPixelPosX() + player.getScreenPosX()
         && this.getPixelPosY() + Game.scaledTileSize > player.getPixelPosY() - player.getScreenPosY()
         && this.getPixelPosY() - Game.scaledTileSize < player.getPixelPosY() + player.getScreenPosY()){
-            g2d.drawImage(this.getSpriteOnAction(), (int) screenX, (int) screenY, Game.scaledTileSize, Game.scaledTileSize, null);
             this.solidArea.setRect((int) screenX, (int) screenY, Game.scaledTileSize, Game.scaledTileSize);
-
+//            g2d.fillRect(this.solidArea.x, this.solidArea.y, this.solidArea.width, this.solidArea.height);
+            g2d.drawImage(this.getSpriteOnAction(), (int) screenX, (int) screenY, Game.scaledTileSize, Game.scaledTileSize, null);
         }
     }
 
@@ -57,36 +60,54 @@ public class NPC extends Human {
     }
 
     public void setMoveAble(int moveAble) {
-        this.moveAble = (moveAble * Game.scaledTileSize)/this.getWalkSpeed();
+        this.moveAble = (moveAble * Game.scaledTileSize)/this.getWalkSpeed()/Game.scale;
     }
 
     public void update(){
-//        if(this.collisionEntity){
-//            this.move();
-//        }
+        if(this.collisionEntity){
+            this.move();
+        }
         this.setWalkSpeed(2* Game.scale);
     }
 
-    public void move(){
-        if(this.movedX < this.moveAble && this.movedY == 0) {
+    public void move() {
+        if (this.movedX < this.moveAble && this.movedY == 0) {
             this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) + this.getWalkSpeed());
             this.movedX++;
             this.setDirection("right");
-        }
-        else if(this.movedY < this.moveAble && this.movedX == moveAble){
+        } else if (this.movedY < this.moveAble && this.movedX == moveAble) {
             this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) + this.getWalkSpeed());
             this.movedY++;
             this.setDirection("down");
-        }
-        else if(this.movedX > 0){
+        } else if (this.movedX > 0) {
             this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) - this.getWalkSpeed());
             this.movedX--;
             this.setDirection("left");
-        }
-        else{
+        } else {
             this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) - this.getWalkSpeed());
             this.movedY--;
             this.setDirection("up");
+        }
+    }
+
+    public void interact(Graphics2D renderer){
+        if(GameControlHandler.interact){
+            switch (GameControlHandler.dialog){
+                case 1 -> {
+                    GameUI.drawDialog(renderer, "สวัสดีชั้นชื่อ Mongo เป็นพ่อค้า");
+                }
+                case 2 -> {
+                    GameUI.drawDialog(renderer, "ว่าไงนะแกว่าชั้นว่าหน้าโฉดเกินจะเป็นพ่อค้างั้นหรอ");
+                }
+                case 3 -> {
+                    GameUI.drawDialog(renderer, "บังอาจ!!!!");
+                }
+                case 4 -> {
+                    GameUI.drawDialog(renderer, "...");
+                }
+                default -> {
+                }
+            }
         }
     }
 }
