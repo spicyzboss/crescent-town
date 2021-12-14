@@ -1,7 +1,5 @@
 package main;
 
-import entity.NPC;
-
 import java.awt.event.*;
 
 public class GameControlHandler implements KeyListener {
@@ -10,6 +8,7 @@ public class GameControlHandler implements KeyListener {
     public boolean downKeyPressed;
     public boolean leftKeyPressed;
     public boolean rightKeyPressed;
+    public boolean enterKeyPressed;
     public boolean scaleUp;
     public boolean scaleDown;
     public static boolean move;
@@ -51,7 +50,11 @@ public class GameControlHandler implements KeyListener {
             }
             case INTRO -> {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    Game.globalState = Game.gameState.PLAY;
+                    enterKeyPressed = true;
+                } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    upKeyPressed = true;
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    downKeyPressed = true;
                 }
             }
         }
@@ -73,12 +76,13 @@ public class GameControlHandler implements KeyListener {
             scaleUp = false;
         } else if (e.getKeyCode() == KeyEvent.VK_G) {
             scaleDown = false;
-        } else if(e.getKeyCode() == KeyEvent.VK_M){
+        } else if (e.getKeyCode() == KeyEvent.VK_M) {
             move = false;
-        } else if(e.getKeyCode() == KeyEvent.VK_Z){
+        } else if (e.getKeyCode() == KeyEvent.VK_Z) {
             interact = true;
             dialog++;
-
+        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            enterKeyPressed = false;
         }
     }
 }

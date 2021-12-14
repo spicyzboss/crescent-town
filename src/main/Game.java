@@ -67,6 +67,8 @@ public class Game extends JPanel implements Runnable {
      */
     public static gameState globalState;
 
+    public static boolean loadedSave;
+
     MainMap mainMap = new MainMap(100, 100);
 
     private final NPC mongo = new NPC("mongo", "gender", "merchant");
@@ -93,6 +95,7 @@ public class Game extends JPanel implements Runnable {
         mongo.setDirection("right");
         mainMap.addNpc(mongo);
         globalState = gameState.INTRO;
+        ui = new GameUI(controlHandler);
         initThread();
     }
 
@@ -147,7 +150,8 @@ public class Game extends JPanel implements Runnable {
         if (globalState == gameState.PLAY) {
             player.update();
             mongo.update();
-            player.update();
+        } else if (globalState == gameState.INTRO) {
+            ui.update();
         }
     }
 
@@ -155,7 +159,6 @@ public class Game extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        ui = new GameUI(g2d);
         switch (globalState) {
             case PLAY -> {
                 // Draw player and map

@@ -1,18 +1,37 @@
 package main;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class GameUI {
     private static Font normalFont;
-    private Font titleFont;
+    private int titleSelect;
+    private GameControlHandler controlHandler;
+    private BufferedImage titleBackgroundImage;
 
-    public GameUI(Graphics2D renderer) {
+    public GameUI(GameControlHandler controlHandler) {
         this.loadFonts();
+        this.setTitleSelect(Game.loadedSave ? 2 : 1);
+        this.setControlHandler(controlHandler);
+        this.loadBackground("introBackground");
+    }
+
+    private void loadBackground(String backgroundName) {
+        try {
+            titleBackgroundImage = ImageIO.read(new File("src/resource/background/" + backgroundName +".png"));
+            System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: background " + backgroundName + "\u001B[0m");
+        } catch (IOException e) {
+            System.out.println("\u001B[31m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - ERROR: background " + backgroundName + " not found" + "\u001B[0m");
+        }
     }
 
     private void loadFonts() {
         this.setNormalFont(new Font("2005_iannnnnCPU", Font.PLAIN, 40));
-        this.setTitleFont(new Font("2005_iannnnnCPU", Font.PLAIN, 128));
     }
 
     public static void drawDialog(Graphics2D renderer, String dialogMessage) {
@@ -32,12 +51,80 @@ public class GameUI {
         }
     }
 
+    public void update() {
+        if (Game.frame % 10 == 0) {
+            if (this.getControlHandler().upKeyPressed) {
+                this.setTitleSelect(Math.max(this.getTitleSelect() - 1, 1));
+            } else if (this.getControlHandler().downKeyPressed) {
+                this.setTitleSelect(Math.min(this.getTitleSelect() + 1, 3));
+            }
+        }
+        if (this.getControlHandler().enterKeyPressed) {
+            if (this.getTitleSelect() == 1) {
+                Game.globalState = Game.gameState.PLAY;
+            } else if (this.getTitleSelect() == 3) {
+                System.exit(0);
+            }
+        }
+    }
+
     public void drawTitleScreen(Graphics2D renderer) {
-        renderer.setFont(this.getTitleFont());
-        renderer.setColor(Color.WHITE);
+        renderer.drawImage(titleBackgroundImage, 0, 0, Game.width, Game.height, null);
+        renderer.setFont(new Font("2005_iannnnnCPU", Font.PLAIN, Game.tileSize*5));
         String titleText = "Crescent Town";
         int titleTextWidth = (int)renderer.getFontMetrics().getStringBounds(titleText, renderer).getWidth();
+        renderer.setColor(Color.BLACK);
+        renderer.drawString(titleText, Game.width/2 - titleTextWidth/2, Game.height/4 + Game.tileSize/4);
+        renderer.setColor(Color.WHITE);
         renderer.drawString(titleText, Game.width/2 - titleTextWidth/2, Game.height/4);
+
+        renderer.setFont(new Font("2005_iannnnnCPU", Font.PLAIN, (int)(Game.tileSize*(5/2D))));
+        String playText = "Play";
+        int playTextWidth = (int)renderer.getFontMetrics().getStringBounds(playText, renderer).getWidth();
+        renderer.setColor(Color.BLACK);
+        renderer.drawString(playText, Game.width/2 - playTextWidth/2, Game.height/2 + Game.tileSize/8);
+        renderer.setColor(Color.WHITE);
+        if (this.getTitleSelect() == 1) {
+            renderer.setColor(Color.BLACK);
+            renderer.drawString(">", Game.width/2 - playTextWidth/2 - Game.tileSize, Game.height/2 + Game.tileSize/8);
+            renderer.drawString("<", Game.width/2 + playTextWidth/2 + Game.tileSize, Game.height/2 + Game.tileSize/8);
+            renderer.setColor(Color.ORANGE);
+            renderer.drawString(">", Game.width/2 - playTextWidth/2 - Game.tileSize, Game.height/2);
+            renderer.drawString("<", Game.width/2 + playTextWidth/2 + Game.tileSize, Game.height/2);
+        }
+        renderer.drawString(playText, Game.width/2 - playTextWidth/2, Game.height/2);
+
+        renderer.setFont(new Font("2005_iannnnnCPU", Font.PLAIN, (int)(Game.tileSize*(5/2D))));
+        String loadText = "Load";
+        int loadTextWidth = (int)renderer.getFontMetrics().getStringBounds(loadText, renderer).getWidth();
+        renderer.setColor(Color.BLACK);
+        renderer.drawString(loadText, Game.width/2 - loadTextWidth/2, (int)(Game.height*(5/8D)) + Game.tileSize/8);
+        renderer.setColor(Game.loadedSave ? Color.WHITE : Color.GRAY);
+        if (this.getTitleSelect() == 2) {
+            renderer.setColor(Color.BLACK);
+            renderer.drawString(">", Game.width/2 - loadTextWidth/2 - Game.tileSize, (int)(Game.height*(5/8D)) + Game.tileSize/8);
+            renderer.drawString("<", Game.width/2 + loadTextWidth/2 + Game.tileSize, (int)(Game.height*(5/8D)) + Game.tileSize/8);
+            renderer.setColor(Game.loadedSave ? Color.ORANGE : Color.GRAY);
+            renderer.drawString(">", Game.width/2 - loadTextWidth/2 - Game.tileSize, (int)(Game.height*(5/8D)));
+            renderer.drawString("<", Game.width/2 + loadTextWidth/2 + Game.tileSize, (int)(Game.height*(5/8D)));
+        }
+        renderer.drawString(loadText, Game.width/2 - loadTextWidth/2, (int)(Game.height*(5/8D)));
+
+        renderer.setFont(new Font("2005_iannnnnCPU", Font.PLAIN, (int)(Game.tileSize*(5/2D))));
+        String quitText = "Quit";
+        int quitTextWidth = (int)renderer.getFontMetrics().getStringBounds(quitText, renderer).getWidth();
+        renderer.setColor(Color.BLACK);
+        renderer.drawString(quitText, Game.width/2 - quitTextWidth/2, (int)(Game.height*(6/8D)) + Game.tileSize/8);
+        renderer.setColor(Color.WHITE);
+        if (this.getTitleSelect() == 3) {
+            renderer.setColor(Color.BLACK);
+            renderer.drawString(">", Game.width/2 - quitTextWidth/2 - Game.tileSize, (int)(Game.height*(6/8D)) + Game.tileSize/8);
+            renderer.drawString("<", Game.width/2 + quitTextWidth/2 + Game.tileSize, (int)(Game.height*(6/8D)) + Game.tileSize/8);
+            renderer.setColor(Color.ORANGE);
+            renderer.drawString(">", Game.width/2 - quitTextWidth/2 - Game.tileSize, (int)(Game.height*(6/8D)));
+            renderer.drawString("<", Game.width/2 + quitTextWidth/2 + Game.tileSize, (int)(Game.height*(6/8D)));
+        }
+        renderer.drawString(quitText, Game.width/2 - quitTextWidth/2, (int)(Game.height*(6/8D)));
     }
 
     private void setNormalFont(Font normalFont) {
@@ -48,11 +135,19 @@ public class GameUI {
         return normalFont;
     }
 
-    public void setTitleFont(Font titleFont) {
-        this.titleFont = titleFont;
+    public void setControlHandler(GameControlHandler controlHandler) {
+        this.controlHandler = controlHandler;
     }
 
-    public Font getTitleFont() {
-        return titleFont;
+    public GameControlHandler getControlHandler() {
+        return controlHandler;
+    }
+
+    public void setTitleSelect(int titleSelect) {
+        this.titleSelect = titleSelect;
+    }
+
+    public int getTitleSelect() {
+        return titleSelect;
     }
 }
