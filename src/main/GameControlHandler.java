@@ -1,6 +1,7 @@
 package main;
 
 import entity.NPC;
+import entity.Player;
 
 import java.awt.event.*;
 
@@ -13,8 +14,9 @@ public class GameControlHandler implements KeyListener {
     public boolean scaleUp;
     public boolean scaleDown;
     public static boolean move;
-    public static boolean interact;
+    public static boolean interact = false;
     public static int dialog;
+    public static boolean objState;
 
     public void keyTyped(KeyEvent e) {
 
@@ -42,8 +44,6 @@ public class GameControlHandler implements KeyListener {
                     scaleDown = true;
                 } else if (e.getKeyCode() == KeyEvent.VK_M) {
                     move = true;
-                } else if(e.getKeyCode() == KeyEvent.VK_Z) {
-                    interact = false;
                 }
             }
             case PAUSE -> {
@@ -77,8 +77,10 @@ public class GameControlHandler implements KeyListener {
             move = false;
         } else if(e.getKeyCode() == KeyEvent.VK_Z){
             interact = true;
-            dialog++;
-
+            if(Player.interactEntity != null)
+                dialog++;
+            if(Player.interactObj != null)
+                objState = !objState;
         }
     }
 }

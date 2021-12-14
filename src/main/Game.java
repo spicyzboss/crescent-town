@@ -1,6 +1,7 @@
 package main;
 
 import entity.NPC;
+import entity.Object;
 import entity.Player;
 import tile.MainMap;
 import tile.TileManager;
@@ -67,9 +68,9 @@ public class Game extends JPanel implements Runnable {
      */
     public static gameState globalState;
 
-    MainMap mainMap = new MainMap(100, 100);
+    MainMap village = new MainMap("village" ,100, 100);
+    MainMap player_room = new MainMap("player room" ,25, 25);
 
-    private final NPC mongo = new NPC("mongo", "gender", "merchant");
 
     public static Thread gameThread; // global attribute for threading
 
@@ -86,12 +87,7 @@ public class Game extends JPanel implements Runnable {
         this.setDoubleBuffered(true); // buffer for performance
         new TileManager();
         new GameFonts();
-        player.setCurrentMap(mainMap);
-        mongo.setTilePosX(26);
-        mongo.setTilePosY(58);
-        mongo.setMoveAble(4);
-        mongo.setDirection("right");
-        mainMap.addNpc(mongo);
+        player.setCurrentMap(village);
         globalState = gameState.INTRO;
         initThread();
     }
@@ -146,8 +142,10 @@ public class Game extends JPanel implements Runnable {
     public void update() {
         if (globalState == gameState.PLAY) {
             player.update();
-            mongo.update();
-            player.update();
+            for(NPC npc : player.getCurrentMap().NPCs){
+                npc.update();
+            }
+
         }
     }
 
@@ -159,7 +157,7 @@ public class Game extends JPanel implements Runnable {
         switch (globalState) {
             case PLAY -> {
                 // Draw player and map
-                mainMap.render(g2d, player);
+                player.getCurrentMap().render(g2d, player);
 
                 // Draw UI
                 // ui.draw(g2d);
@@ -175,4 +173,10 @@ public class Game extends JPanel implements Runnable {
         // Restore resource
         g2d.dispose();
     }
+//    public void changeMap(){
+//        switch (player.getCurrentMap().name){
+//            case -> {
+//            }
+//        }
+//    }
 }

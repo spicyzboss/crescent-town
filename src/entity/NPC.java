@@ -60,7 +60,7 @@ public class NPC extends Human implements Interactable {
     }
 
     public void setMoveAble(int moveAble) {
-        this.moveAble = (moveAble * Game.scaledTileSize)/this.getWalkSpeed()/Game.scale;
+        this.moveAble = ((moveAble * Game.scaledTileSize)/this.getWalkSpeed())/Game.scale/2;
     }
 
     public void update(){
@@ -106,6 +106,7 @@ public class NPC extends Human implements Interactable {
                     GameUI.drawDialog(renderer, "...");
                 }
                 default -> {
+                    GameControlHandler.dialog  = 0;
                 }
             }
         }
