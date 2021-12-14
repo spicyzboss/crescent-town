@@ -165,8 +165,7 @@ public class Game extends JPanel implements Runnable {
                 mainMap.render(g2d, player);
 
                 // Draw UI
-                // ui.draw(g2d);
-                //  ui.drawDialog("หิวชาบูว่ะเพื่อน\nไปกินชาบูด้วยกันไหม?");
+                ui.drawInterface(g2d);
             }
             case INTRO -> {
                 ui.drawTitleScreen(g2d);

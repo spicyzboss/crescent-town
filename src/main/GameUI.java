@@ -1,32 +1,36 @@
 package main;
 
 import javax.imageio.ImageIO;
+import javax.swing.border.StrokeBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 
 public class GameUI {
     private static Font normalFont;
     private int titleSelect;
     private GameControlHandler controlHandler;
-    private BufferedImage titleBackgroundImage;
+    private HashMap<String, BufferedImage> interfaces;
 
     public GameUI(GameControlHandler controlHandler) {
         this.loadFonts();
         this.setTitleSelect(Game.loadedSave ? 2 : 1);
         this.setControlHandler(controlHandler);
-        this.loadBackground("introBackground");
+        interfaces = new HashMap<String, BufferedImage>();
+        this.loadInterface("background", "introBackground");
+        this.loadInterface("playerBar", "bar");
     }
 
-    private void loadBackground(String backgroundName) {
+    private void loadInterface(String interfaceType, String interfaceName) {
         try {
-            titleBackgroundImage = ImageIO.read(new File("src/resource/background/" + backgroundName +".png"));
-            System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: background " + backgroundName + "\u001B[0m");
+            interfaces.put(interfaceType, ImageIO.read(new File("src/resource/interface/" + interfaceName +".png")));
+            System.out.println("\u001B[32m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - LOADED: interface " + interfaceType + " " + interfaceName + "\u001B[0m");
         } catch (IOException e) {
-            System.out.println("\u001B[31m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - ERROR: background " + backgroundName + " not found" + "\u001B[0m");
+            System.out.println("\u001B[31m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - ERROR: interface " + interfaceType + " " + interfaceName + " not found" + "\u001B[0m");
         }
     }
 
@@ -69,7 +73,7 @@ public class GameUI {
     }
 
     public void drawTitleScreen(Graphics2D renderer) {
-        renderer.drawImage(titleBackgroundImage, 0, 0, Game.width, Game.height, null);
+        renderer.drawImage(interfaces.get("background"), 0, 0, Game.width, Game.height, null);
         renderer.setFont(new Font("2005_iannnnnCPU", Font.PLAIN, Game.tileSize*5));
         String titleText = "Crescent Town";
         int titleTextWidth = (int)renderer.getFontMetrics().getStringBounds(titleText, renderer).getWidth();
@@ -125,6 +129,10 @@ public class GameUI {
             renderer.drawString("<", Game.width/2 + quitTextWidth/2 + Game.tileSize, (int)(Game.height*(6/8D)));
         }
         renderer.drawString(quitText, Game.width/2 - quitTextWidth/2, (int)(Game.height*(6/8D)));
+    }
+
+    public void drawInterface(Graphics2D renderer) {
+        renderer.drawImage(interfaces.get("playerBar"), 0, 0, Game.width, Game.tileSize * 2, null);
     }
 
     private void setNormalFont(Font normalFont) {
