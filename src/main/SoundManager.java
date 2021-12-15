@@ -37,6 +37,10 @@ public class SoundManager {
             audioPlayer = AudioSystem.getClip();
             AudioInputStream ais = AudioSystem.getAudioInputStream(this.getSound(name));
             audioPlayer.open(ais);
+            if (audioPlayer.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+                FloatControl gainControl = (FloatControl) audioPlayer.getControl(FloatControl.Type.MASTER_GAIN);
+                gainControl.setValue(-10F);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
