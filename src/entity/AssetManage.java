@@ -6,7 +6,7 @@ import tile.MainMap;
 import java.awt.*;
 
 public class AssetManage {
-    public static void mapSetting(MainMap map){
+    public static void mapSetting(MainMap map) {
         switch (map.name){
             case "village"->{
                 Object woodenChest = new Chest("wooden chest");

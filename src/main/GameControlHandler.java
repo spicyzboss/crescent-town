@@ -58,6 +58,12 @@ public class GameControlHandler implements KeyListener {
                     if (GameUI.getTitleSelect() == 1) {
                         Game.playSoundEffect("select");
                         Game.globalState = Game.gameState.PLAY;
+                        // sleep for listen to "select" sound effect
+                        try {
+                            Thread.sleep(250);
+                        } catch (InterruptedException interruptedException) {
+                            interruptedException.printStackTrace();
+                        }
                         Game.playBGM("beach_house");
                     } else if (GameUI.getTitleSelect() == 2) {
                         if (Game.loadedSave) {
