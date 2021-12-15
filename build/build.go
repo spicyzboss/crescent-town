@@ -13,6 +13,8 @@ func main() {
 	}
 	exPath := filepath.Dir(ex)
 	command := exec.Command("java", "-jar", exPath+"/jar/crescent_town.jar")
+	command.Stdout = os.Stdout
+	command.Stderr = os.Stderr
 	command.Dir = exPath
 	command.Start()
 }
