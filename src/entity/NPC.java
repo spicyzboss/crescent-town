@@ -1,5 +1,6 @@
 package entity;
 
+import inventory.Inventory;
 import main.Game;
 import main.GameControlHandler;
 import main.GameUI;
@@ -16,6 +17,8 @@ public class NPC extends Human implements Interactable {
     public NPC(String name, String gender, String job){
         this.setName(name);
         this.setGender(gender);
+        this.setJob(job);
+        this.setInventory(new Inventory(5));
         NPCInit();
     }
 

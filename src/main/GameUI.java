@@ -128,13 +128,16 @@ public class GameUI {
         renderer.setFont(new Font("2005_iannnnnCPU", Font.PLAIN, Game.tileSize*2));
         renderer.setColor(Color.WHITE);
 
-        BufferedImage energy = null;
-        energy = interfaces.get("energy_" + (int)(player.getEnergy() / (100/13D)));
-        System.out.println((int)(player.getEnergy() / (100/13D)));
+        BufferedImage energy = interfaces.get("energy_" + (int)(player.getEnergy() / (100/13D)));
         renderer.drawImage(energy, Game.tileSize, 0, Game.tileSize * 2 * 4, Game.tileSize * 2, null);
 
         renderer.drawImage(interfaces.get("coin"), Game.tileSize * 2 * 12, 0, Game.tileSize * 2, Game.tileSize * 2, null);
         renderer.drawString("X " + player.getWallet().getMoney(), Game.tileSize * 2 * 13, Game.tileSize + Game.tileSize/2);
+        this.drawInventory();
+    }
+
+    public void drawInventory() {
+
     }
 
     private void setNormalFont(Font normalFont) {

@@ -13,10 +13,7 @@ public class Chest extends Object implements Interactable{
     @Override
     public void interact(Graphics2D renderer) {
         if(GameControlHandler.interact){
-            if(GameControlHandler.objState)
-                isActive = true;
-            else
-                isActive = false;
+            isActive = GameControlHandler.objState;
         }
     }
 }

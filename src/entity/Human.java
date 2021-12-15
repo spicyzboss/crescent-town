@@ -1,8 +1,11 @@
 package entity;
 
+import inventory.Inventory;
+
 public abstract class Human extends Entity {
     private String gender;
     private HumanWallet wallet;
+    private Inventory inventory;
 
     public void setGender(String gender) {
         this.gender = gender;
@@ -18,5 +21,13 @@ public abstract class Human extends Entity {
 
     public HumanWallet getWallet() {
         return wallet;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 }

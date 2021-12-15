@@ -1,5 +1,7 @@
 package entity;
 
+import inventory.Inventory;
+import inventory.Item;
 import main.Game;
 import main.GameControlHandler;
 import tile.MainMap;
@@ -15,6 +17,7 @@ public class Player extends Human {
     public static double screenPosY;
     public static Interactable interactEntity, interactObj;
     private int energy;
+    private Inventory inventory;
 
     private GameControlHandler controlHandler;
 
@@ -28,8 +31,7 @@ public class Player extends Human {
     }
 
     public void playerInit() {
-        this.solidArea = new Rectangle(Game.width/2 - Game.scaledTileSize/2 + 20,
-                Game.height/2 + Game.scaledTileSize/4, Game.scaledTileSize-40, Game.scaledTileSize/4);
+        this.solidArea = new Rectangle(Game.width/2 - Game.scaledTileSize/2 + 20,Game.height/2 + Game.scaledTileSize/4, Game.scaledTileSize-40, Game.scaledTileSize/4);
         this.setWalkSpeed(2 * Game.scale);
         this.setTilePosX(32);
         this.setTilePosY(54);
@@ -40,8 +42,9 @@ public class Player extends Human {
         this.setMaxActionFrame(3);
         this.setSpriteLoadTime(Game.FPS/this.getMaxActionFrame());
         this.setWallet(new HumanWallet(100));
+        this.setInventory(new Inventory(10));
+        this.getInventory().addItem(new Item("มาม่าซอง", 6, 5));
     }
-
 
     public void update() {
         this.collisionCheck();
@@ -253,4 +256,11 @@ public class Player extends Human {
         return (int) pixel / Game.scaledTileSize;
     }
 
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
 }
