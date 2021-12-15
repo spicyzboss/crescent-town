@@ -3,7 +3,7 @@ package entity;
 import main.Game;
 import main.GameControlHandler;
 import main.GameUI;
-import tile.MainMap;
+import tile.Map;
 
 import java.awt.*;
 
@@ -12,7 +12,8 @@ public class NPC extends Human implements Interactable {
     private int moveAble;
     private int movedX;
     private int movedY;
-    public static int message = 1;
+    private String[] map;
+
     public NPC(String name, String gender, String job){
         this.setName(name);
         this.setGender(gender);
@@ -32,8 +33,8 @@ public class NPC extends Human implements Interactable {
         this.setSpriteOnAction();
 
         // get pos npc should be on current scenario
-        double screenX = this.getPixelPosX() - MainMap.sceneX;
-        double screenY = this.getPixelPosY() - MainMap.sceneY;
+        double screenX = this.getPixelPosX() - Map.sceneX;
+        double screenY = this.getPixelPosY() - Map.sceneY;
 
         // check if npc is on scenario
         if (this.getPixelPosX() + Game.scaledTileSize > player.getPixelPosX() - player.getScreenPosX()
@@ -90,8 +91,9 @@ public class NPC extends Human implements Interactable {
         }
     }
 
-    public void interact(Graphics2D renderer){
+    public void interact(Graphics2D renderer, Player player){
         if(GameControlHandler.interact){
+            player.collisionEntity = false;
             switch (GameControlHandler.dialog){
                 case 1 -> {
                     GameUI.drawDialog(renderer, "สวัสดีชั้นชื่อ Mongo เป็นพ่อค้า");
@@ -107,8 +109,16 @@ public class NPC extends Human implements Interactable {
                 }
                 default -> {
                     GameControlHandler.dialog  = 0;
+                    player.collisionEntity = true;
                 }
             }
         }
+
+    }
+    public void setMap(String[] maps){
+        this.map = maps;
+    }
+    public String[] getMap(){
+        return this.map;
     }
 }

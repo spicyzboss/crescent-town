@@ -1,9 +1,10 @@
 package main;
 
 import entity.NPC;
-import entity.Object;
 import entity.Player;
-import tile.MainMap;
+import object.Chest;
+import object.Door;
+import tile.Map;
 import tile.TileManager;
 
 import java.awt.*;
@@ -70,16 +71,21 @@ public class Game extends JPanel implements Runnable {
 
     public static boolean loadedSave;
 
-    MainMap village = new MainMap("village" ,100, 100);
-    MainMap player_room = new MainMap("player room" ,25, 25);
+    /**
+     * Maps
+     */
 
-    public static Thread gameThread; // global attribute for threading
+
+
+
 
     GameControlHandler controlHandler = new GameControlHandler();
     Player player = new Player("gongcha", controlHandler);
     GameUI ui;
 
+    public static Thread gameThread; // global attribute for threading
     // Game constructor method for initialization
+
     public Game() {
         this.setFocusable(true);
         this.addKeyListener(controlHandler); // use KeyListener in GameControlHandler
@@ -88,7 +94,10 @@ public class Game extends JPanel implements Runnable {
         this.setDoubleBuffered(true); // buffer for performance
         new TileManager();
         new GameFonts();
-        player.setCurrentMap(village);
+        new Maps();
+
+
+        player.setCurrentMap(Maps.getMap("village"));
         globalState = gameState.INTRO;
         ui = new GameUI(controlHandler);
         initThread();
@@ -164,9 +173,7 @@ public class Game extends JPanel implements Runnable {
                 // Draw UI
                 ui.drawInterface(g2d);
             }
-            case INTRO -> {
-                ui.drawTitleScreen(g2d);
-            }
+            case INTRO -> ui.drawTitleScreen(g2d);
             default -> {
                 // ui.drawPauseScreen(g2d);
             }
@@ -174,6 +181,8 @@ public class Game extends JPanel implements Runnable {
         // Restore resource
         g2d.dispose();
     }
+
+
 //    public void changeMap(){
 //        switch (player.getCurrentMap().name){
 //            case -> {

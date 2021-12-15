@@ -1,8 +1,8 @@
 package tile;
 
-import entity.AssetManage;
 import entity.NPC;
-import entity.Object;
+import main.Maps;
+import object.Object;
 import entity.Player;
 import main.Game;
 
@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
 
-public class MainMap {
+public class Map {
     public String name;
     public ArrayList<TileMap> tileMaps;
     public ArrayList<NPC> NPCs;
@@ -20,31 +20,34 @@ public class MainMap {
     public int mapWidth, mapHeight;
     public static int sceneX, sceneY;
 
-    public MainMap(String name, int mapWidth, int mapHeight) {
+    public Map(String name, int mapWidth, int mapHeight) {
         this.name = name;
-        tileMaps = new ArrayList<TileMap>();
-        this.NPCs = new ArrayList<NPC>();
-        this.objects = new ArrayList<Object>();
+        tileMaps = new ArrayList<>();
+        this.NPCs = new ArrayList<>();
+        this.objects = new ArrayList<>();
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         loadMap(this.name);
-        AssetManage.mapSetting(this);
+        Maps.Setting(this);
     }
 
-    public void addNpc(NPC npc){
+    public void addNPC(NPC npc){
         this.NPCs.add(npc);
+    }
+    public void addObj(Object obj){
+        this.objects.add(obj);
     }
 
     private void loadMap(String name) {
         File folder = new File("src/resource/map/"+name.replace(" ", "_"));
         File[] files = folder.listFiles();
+        assert files != null;
         Arrays.sort(files);
         for(File layer : Objects.requireNonNull(files)){
             TileMap tileMap = new TileMap(name.replace(" ", "_")+"/"+layer.getName(), mapWidth, mapHeight);
             if(layer.getName().endsWith("collision.csv"))
                 this.collisionTileMap = tileMap;
-            else
-                this.tileMaps.add(tileMap);
+            this.tileMaps.add(tileMap);
         }
     }
 
@@ -87,10 +90,10 @@ public class MainMap {
     }
 
     public void setSceneX(int sceneX) {
-        MainMap.sceneX = sceneX;
+        Map.sceneX = sceneX;
     }
 
     public void setSceneY(int sceneY) {
-        MainMap.sceneY = sceneY;
+        Map.sceneY = sceneY;
     }
 }

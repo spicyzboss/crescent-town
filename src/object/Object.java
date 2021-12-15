@@ -1,7 +1,8 @@
-package entity;
+package object;
 
+import entity.Player;
 import main.Game;
-import tile.MainMap;
+import tile.Map;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -11,8 +12,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static java.awt.Transparency.TRANSLUCENT;
-
 public class Object{
     private String name;
     protected boolean isActive = false;
@@ -20,6 +19,7 @@ public class Object{
     public Rectangle solidArea;
     private double pixelPosX, pixelPosY;
     private double tilePosX, tilePosY;
+    private String map;
 
     public Object(String name){
         this.name = name;
@@ -50,21 +50,21 @@ public class Object{
     public void draw(Graphics2D renderer, Player player) {
         // get direction of npc
         // get pos npc should be on current scenario
-        double screenX = this.getPixelPosX() - MainMap.sceneX;
-        double screenY = this.getPixelPosY() - MainMap.sceneY;
+        double screenX = this.getPixelPosX() - Map.sceneX;
+        double screenY = this.getPixelPosY() - Map.sceneY;
 
         // check if npc is on scenario
         if (this.getPixelPosX() + Game.scaledTileSize > player.getPixelPosX() - player.getScreenPosX()
                 && this.getPixelPosX() - Game.scaledTileSize < player.getPixelPosX() + player.getScreenPosX()
                 && this.getPixelPosY() + Game.scaledTileSize > player.getPixelPosY() - player.getScreenPosY()
                 && this.getPixelPosY() - Game.scaledTileSize < player.getPixelPosY() + player.getScreenPosY()){
-            renderer.setColor(new Color(55, 55, 55, 0));
+            renderer.setColor(new Color(55, 55, 55, 70));
             if(Player.interactObj != null)
                 if(Player.interactObj.equals(this))
                     renderer.setColor(Color.ORANGE);
             this.solidArea.setRect((int) screenX, (int) screenY, Game.scaledTileSize, Game.scaledTileSize);
             renderer.fillRect(this.solidArea.x, this.solidArea.y, this.solidArea.width, this.solidArea.height);
-            renderer.drawImage(this.getActiveImage(), (int) screenX, (int) screenY, Game.scaledTileSize, Game.scaledTileSize, null);
+            renderer.drawImage(this.getActiveImage(), (int) screenX, (int) screenY, this.solidArea.width, this.solidArea.height, null);
         }
     }
 
@@ -112,4 +112,15 @@ public class Object{
         return tilePosY;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public String getMap() {
+        return map;
+    }
+
+    public void setMap(String map) {
+        this.map = map;
+    }
 }

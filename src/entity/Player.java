@@ -2,7 +2,9 @@ package entity;
 
 import main.Game;
 import main.GameControlHandler;
-import tile.MainMap;
+import main.Maps;
+import object.Object;
+import tile.Map;
 import tile.Tile;
 import tile.TileManager;
 
@@ -10,7 +12,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Player extends Human {
-    private MainMap currentMap;
+    private Map currentMap;
     public static double screenPosX;
     public static double screenPosY;
     public static Interactable interactEntity, interactObj;
@@ -43,6 +45,13 @@ public class Player extends Human {
 
 
     public void update() {
+
+
+        this.borderTop = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y;
+        this.borderBot = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y + this.solidArea.height;
+        this.borderLeft = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x;
+        this.borderRight = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x + this.solidArea.width;
+
         this.collisionCheck();
         ArrayList<NPC> npcs = this.getCurrentMap().NPCs;
         for (NPC npc : npcs) {
@@ -52,6 +61,7 @@ public class Player extends Human {
         for (Object object : objects){
             this.checkObject(object);
         }
+
         boolean isCollision = this.collisionTile && this.collisionEntity && this.collisionObj;
         if (this.getControlHandler().scaleUp || this.getControlHandler().scaleDown) {
             this.setWalkSpeed(2 * Game.scale);
@@ -62,36 +72,39 @@ public class Player extends Human {
             this.setDirection("up");
             if (isCollision) {
                 this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) - this.getWalkSpeed());
+                System.out.println(isCollision);
             }
         } else if (this.getControlHandler().downKeyPressed) {
             this.setDirection("down");
-            if (isCollision)
+            if (isCollision) {
                 this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) + this.getWalkSpeed());
+            }
         } else if (this.getControlHandler().leftKeyPressed) {
             this.setDirection("left");
-            if (isCollision)
+            if (isCollision) {
                 this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) - this.getWalkSpeed());
+            }
         } else if (this.getControlHandler().rightKeyPressed) {
             this.setDirection("right");
-            if (isCollision)
+            if (isCollision) {
                 this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) + this.getWalkSpeed());
+            }
         }
-        this.borderTop = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y;
-        this.borderBot = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y + this.solidArea.height;
-        this.borderLeft = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x;
-        this.borderRight = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x + this.solidArea.width;
+
         this.setScreenPosX((double) Game.width/2 - (double) Game.scaledTileSize/2);
         this.setScreenPosY((double) Game.height/2 - (double) Game.scaledTileSize/2);
         playerArea.setRect((int)screenPosX, (int)screenPosY, Game.scaledTileSize, Game.scaledTileSize);
+
+
     }
 
     public void draw(Graphics2D renderer) {
         this.setSpriteOnAction();
         if (interactEntity != null)
-            interactEntity.interact(renderer);
-        if (interactObj != null)
-            interactObj.interact(renderer);
-
+            interactEntity.interact(renderer, this);
+        if (interactObj != null) {
+            interactObj.interact(renderer, this);
+        }
 
         // draw player at center of screen
         renderer.drawImage(this.getSpriteOnAction(), playerArea.x, playerArea.y, playerArea.width, playerArea.height, null);
@@ -136,30 +149,10 @@ public class Player extends Human {
             }
             target.collisionEntity = false;
             switch (this.getDirection()){
-                case "up" -> {
-                    if(recIntersection.y == playerArea.y && recIntersection.width > recIntersection.height)
-                        this.collisionEntity = false;
-                    else
-                        this.collisionEntity = true;
-                }
-                case "down" -> {
-                    if(recIntersection.y == target.solidArea.y && recIntersection.width > recIntersection.height)
-                        this.collisionEntity = false;
-                    else
-                        this.collisionEntity = true;
-                }
-                case "left" -> {
-                    if(recIntersection.x == playerArea.x && recIntersection.height > recIntersection.width)
-                        this.collisionEntity = false;
-                    else
-                        this.collisionEntity = true;
-                }
-                case "right" -> {
-                    if(recIntersection.x == target.solidArea.x &&  recIntersection.height > recIntersection.width)
-                        this.collisionEntity = false;
-                    else
-                        this.collisionEntity = true;
-                }
+                case "up" -> this.collisionEntity = recIntersection.y != playerArea.y || recIntersection.width <= recIntersection.height;
+                case "down" -> this.collisionEntity = recIntersection.y != target.solidArea.y || recIntersection.width <= recIntersection.height;
+                case "left" -> this.collisionEntity = recIntersection.x != playerArea.x || recIntersection.height <= recIntersection.width;
+                case "right" -> this.collisionEntity = recIntersection.x != target.solidArea.x || recIntersection.height <= recIntersection.width;
             }
         }
         else{
@@ -176,35 +169,15 @@ public class Player extends Human {
                 interactObj = (Interactable) obj;
             }
             switch (this.getDirection()){
-                case "up" -> {
-                    if(recIntersection.y == playerArea.y && recIntersection.width > recIntersection.height)
-                        this.collisionObj = false;
-                    else
-                        this.collisionObj = true;
-                }
-                case "down" -> {
-                    if(recIntersection.y == obj.solidArea.y && recIntersection.width > recIntersection.height)
-                        this.collisionObj = false;
-                    else
-                        this.collisionObj = true;
-                }
-                case "left" -> {
-                    if(recIntersection.x == playerArea.x && recIntersection.height > recIntersection.width)
-                        this.collisionObj = false;
-                    else
-                        this.collisionObj = true;
-                }
-                case "right" -> {
-                    if(recIntersection.x == obj.solidArea.x &&  recIntersection.height > recIntersection.width)
-                        this.collisionObj = false;
-                    else
-                        this.collisionObj = true;
-                }
+                case "up" -> this.collisionObj = recIntersection.y != playerArea.y || recIntersection.width <= recIntersection.height;
+                case "down" -> this.collisionObj = recIntersection.y != obj.solidArea.y || recIntersection.width <= recIntersection.height;
+                case "left" -> this.collisionObj = recIntersection.x != playerArea.x || recIntersection.height <= recIntersection.width;
+                case "right" -> this.collisionObj = recIntersection.x != obj.solidArea.x || recIntersection.height <= recIntersection.width;
             }
         }
         else{
             this.collisionObj = true;
-            this.interactObj = null;
+            interactObj = null;
         }
     }
 
@@ -240,13 +213,18 @@ public class Player extends Human {
         return controlHandler;
     }
 
-    public void setCurrentMap(MainMap map){
+    public void setCurrentMap(Map map){
         this.currentMap = map;
     }
 
-    public MainMap getCurrentMap(){
+    public Map getCurrentMap(){
         return this.currentMap;
     }
+
+    public void setCurrentMapByName(String destination){
+        this.setCurrentMap(Maps.getMap(destination));
+    }
+
 
     private int pixelToTile(double pixel){
         return (int) pixel / Game.scaledTileSize;
