@@ -1,7 +1,6 @@
 package main;
 
 import entity.NPC;
-import entity.Object;
 import entity.Player;
 import tile.MainMap;
 import tile.TileManager;

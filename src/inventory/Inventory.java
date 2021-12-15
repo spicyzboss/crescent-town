@@ -1,6 +1,7 @@
 package inventory;
 
 import entity.Human;
+import item.Item;
 
 import java.util.*;
 
@@ -11,11 +12,6 @@ public class Inventory {
     public Inventory(int maxInventorySize) {
         this.inventory = new ArrayList<>();
         this.setMaxInventorySize(maxInventorySize);
-    }
-
-    @Override
-    public String toString() {
-        return this.getInventory().toString();
     }
 
     public void setMaxInventorySize(int maxInventorySize) {
@@ -49,5 +45,9 @@ public class Inventory {
 
     public Item getItem(int index) {
         return this.getInventory().get(index);
+    }
+
+    public int getSize() {
+        return this.getInventory().size();
     }
 }

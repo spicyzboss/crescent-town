@@ -138,6 +138,9 @@ public class GameUI {
 
         renderer.drawImage(interfaces.get("inventoryBar"), Game.width/2 - Game.tileSize * 2 * 9 / 2, Game.height - Game.tileSize * 2, Game.tileSize * 2 * 9, Game.tileSize * 2, null);
         renderer.drawImage(interfaces.get("selectItem"), (Game.width/2 - Game.tileSize * 2 * 9 / 2) + (Game.tileSize * 2 * player.getSelectedItem()), Game.height - Game.tileSize * 2, Game.tileSize * 2, Game.tileSize * 2, null);
+        for (int i = 0; i < player.getInventory().getSize(); i++) {
+            renderer.drawImage(player.getInventory().getItem(i).getSprite(0), (Game.width/2 - Game.tileSize * 2 * 9 / 2) + (Game.tileSize * 2 * i), Game.height - Game.tileSize * 2, Game.tileSize * 2, Game.tileSize * 2, null);
+        }
     }
 
     private void setNormalFont(Font normalFont) {

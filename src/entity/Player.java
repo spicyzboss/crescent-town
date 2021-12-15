@@ -1,7 +1,7 @@
 package entity;
 
 import inventory.Inventory;
-import inventory.Item;
+import item.*;
 import main.Game;
 import main.GameControlHandler;
 import tile.MainMap;
@@ -44,7 +44,12 @@ public class Player extends Human {
         this.setSpriteLoadTime(Game.FPS/this.getMaxActionFrame());
         this.setWallet(new HumanWallet(100));
         this.setInventory(new Inventory(9));
-        this.getInventory().addItem(new Item("มาม่าซอง", 6, 5));
+//        this.getInventory().addItem(new BlueBush());
+//        this.getInventory().addItem(new Corn());
+//        this.getInventory().addItem(new Flowder());
+//        this.getInventory().addItem(new PinkBush());
+//        this.getInventory().addItem(new Lotus());
+//        this.getInventory().addItem(new PoiSian());
         this.setSelectedItem(0);
     }
 
