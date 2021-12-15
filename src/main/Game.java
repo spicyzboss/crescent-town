@@ -30,7 +30,7 @@ public class Game extends JPanel implements Runnable {
     /**
      * integer height scale
      */
-    public static int tileRow = 10;
+    public static int tileRow = 9;
 
     /**
      * scaling integer for larger displays
@@ -162,7 +162,7 @@ public class Game extends JPanel implements Runnable {
                 player.getCurrentMap().render(g2d, player);
 
                 // Draw UI
-                ui.drawInterface(g2d);
+                ui.drawInterface(g2d, player);
             }
             case INTRO -> {
                 ui.drawTitleScreen(g2d);

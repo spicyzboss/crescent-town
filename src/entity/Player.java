@@ -39,6 +39,7 @@ public class Player extends Human {
         this.setDirection("down");
         this.setMaxActionFrame(3);
         this.setSpriteLoadTime(Game.FPS/this.getMaxActionFrame());
+        this.setWallet(new HumanWallet(100));
     }
 
 
@@ -125,7 +126,7 @@ public class Player extends Human {
             }
         }
 
-        this.collisionTile = (((tile1 == null) ||(tile2 == null)));
+        this.collisionTile = (((tile1 == null) && (tile2 == null)));
     }
 
     public void checkEntity(Entity target){
