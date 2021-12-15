@@ -18,6 +18,7 @@ public class Player extends Human {
     public static Interactable interactEntity, interactObj;
     private int energy;
     private Inventory inventory;
+    private int selectedItem;
 
     private GameControlHandler controlHandler;
 
@@ -42,11 +43,15 @@ public class Player extends Human {
         this.setMaxActionFrame(3);
         this.setSpriteLoadTime(Game.FPS/this.getMaxActionFrame());
         this.setWallet(new HumanWallet(100));
-        this.setInventory(new Inventory(10));
+        this.setInventory(new Inventory(9));
         this.getInventory().addItem(new Item("มาม่าซอง", 6, 5));
+        this.setSelectedItem(0);
     }
 
     public void update() {
+        if (this.getControlHandler().numbers.contains(true)) {
+            this.setSelectedItem(this.getControlHandler().numbers.indexOf(true));
+        }
         this.collisionCheck();
         ArrayList<NPC> npcs = this.getCurrentMap().NPCs;
         for (NPC npc : npcs) {
@@ -262,5 +267,13 @@ public class Player extends Human {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public void setSelectedItem(int selectedItem) {
+        this.selectedItem = selectedItem;
+    }
+
+    public int getSelectedItem() {
+        return selectedItem;
     }
 }

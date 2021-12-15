@@ -40,6 +40,8 @@ public class GameUI {
         this.loadInterface("energy_11", "energy_11");
         this.loadInterface("energy_12", "energy_12");
         this.loadInterface("energy_13", "energy_13");
+        this.loadInterface("inventoryBar", "inventory");
+        this.loadInterface("selectItem", "inventory_select");
     }
 
     private void loadInterface(String interfaceType, String interfaceName) {
@@ -133,11 +135,9 @@ public class GameUI {
 
         renderer.drawImage(interfaces.get("coin"), Game.tileSize * 2 * 12, 0, Game.tileSize * 2, Game.tileSize * 2, null);
         renderer.drawString("X " + player.getWallet().getMoney(), Game.tileSize * 2 * 13, Game.tileSize + Game.tileSize/2);
-        this.drawInventory();
-    }
 
-    public void drawInventory() {
-
+        renderer.drawImage(interfaces.get("inventoryBar"), Game.width/2 - Game.tileSize * 2 * 9 / 2, Game.height - Game.tileSize * 2, Game.tileSize * 2 * 9, Game.tileSize * 2, null);
+        renderer.drawImage(interfaces.get("selectItem"), (Game.width/2 - Game.tileSize * 2 * 9 / 2) + (Game.tileSize * 2 * player.getSelectedItem()), Game.height - Game.tileSize * 2, Game.tileSize * 2, Game.tileSize * 2, null);
     }
 
     private void setNormalFont(Font normalFont) {

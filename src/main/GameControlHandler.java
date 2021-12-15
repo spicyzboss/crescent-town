@@ -3,6 +3,8 @@ package main;
 import entity.Player;
 
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GameControlHandler implements KeyListener {
     public static boolean arrowKeyPressed;
@@ -16,6 +18,7 @@ public class GameControlHandler implements KeyListener {
     public static boolean interact = false;
     public static int dialog;
     public static boolean objState;
+    public ArrayList<Boolean> numbers = new ArrayList<Boolean>(Arrays.asList(false, false, false, false, false, false, false, false, false));
 
     public void keyTyped(KeyEvent e) {
 
@@ -43,6 +46,8 @@ public class GameControlHandler implements KeyListener {
                     scaleDown = true;
                 } else if (e.getKeyCode() == KeyEvent.VK_M) {
                     move = true;
+                } else if (KeyEvent.VK_1 <= e.getKeyCode() && e.getKeyCode() <= KeyEvent.VK_9) {
+                    numbers.set(e.getKeyCode() - KeyEvent.VK_1, true);
                 }
             }
             case PAUSE, INTRO -> {
@@ -113,6 +118,8 @@ public class GameControlHandler implements KeyListener {
                         dialog++;
                     if (Player.interactObj != null)
                         objState = !objState;
+                } else if (KeyEvent.VK_1 <= e.getKeyCode() && e.getKeyCode() <= KeyEvent.VK_9) {
+                    numbers.set(e.getKeyCode() - KeyEvent.VK_1, false);
                 }
             }
             case PAUSE -> {
