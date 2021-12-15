@@ -2,6 +2,7 @@ package object;
 
 import entity.Interactable;
 import entity.Player;
+import main.Game;
 import main.GameControlHandler;
 
 import java.awt.*;
@@ -44,6 +45,7 @@ public class Door extends Object implements Interactable {
             player.setTilePosY(spawnPointY);
             player.setCurrentMapByName(this.getDestination());
             player.collisionObj = true;
+            GameControlHandler.interact = false;
         }
     }
 }

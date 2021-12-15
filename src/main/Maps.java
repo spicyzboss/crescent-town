@@ -56,11 +56,12 @@ public class Maps {
         Door door = new Door("door01");
         door.setTilePosX(26);
         door.setTilePosY(53);
-        door.setSpawnPointX(33);
-        door.setSpawnPointY(56);
+        door.setSpawnPointX(12);
+        door.setSpawnPointY(18);
         door.solidArea.setSize(Game.scaledTileSize, Game.scaledTileSize*2);
-        door.setDestination("village2");
+        door.setDestination("player_room");
         door.setMap("village");
+
         objects.add(door);
     }
     private void addMap(String mapName) {
@@ -100,6 +101,9 @@ public class Maps {
                         }
                     };
                 }
+            }
+            case "player_room" -> {
+
             }
         }
     }

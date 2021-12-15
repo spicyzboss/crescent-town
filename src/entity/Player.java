@@ -53,18 +53,31 @@ public class Player extends Human {
         this.borderRight = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x + this.solidArea.width;
 
         this.collisionCheck();
+
         ArrayList<NPC> npcs = this.getCurrentMap().NPCs;
-        for (NPC npc : npcs) {
-            this.checkEntity(npc);
+        System.out.println("npc: "+npcs.isEmpty());
+        if(!npcs.isEmpty()) {
+            for (NPC npc : npcs) {
+                this.checkEntity(npc);
+            }
+        }
+        else{
+            this.collisionEntity = true;
         }
         ArrayList<Object> objects = this.getCurrentMap().objects;
-        for (Object object : objects){
-            this.checkObject(object);
+        System.out.println("object: "+objects.isEmpty());
+        if(!objects.isEmpty()) {
+            for (Object object : objects) {
+                this.checkObject(object);
+            }
+        }
+        else{
+            this.collisionObj = true;
         }
 
         boolean isCollision = this.collisionTile && this.collisionEntity && this.collisionObj;
         if (this.getControlHandler().scaleUp || this.getControlHandler().scaleDown) {
-            this.setWalkSpeed(2 * Game.scale);
+            this.setWalkSpeed(4 * Game.scale);
             this.setPixelPosX(getTilePosX() * Game.scaledTileSize);
             this.setPixelPosY(getTilePosY() * Game.scaledTileSize);
         }
@@ -72,7 +85,6 @@ public class Player extends Human {
             this.setDirection("up");
             if (isCollision) {
                 this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) - this.getWalkSpeed());
-                System.out.println(isCollision);
             }
         } else if (this.getControlHandler().downKeyPressed) {
             this.setDirection("down");
@@ -164,6 +176,7 @@ public class Player extends Human {
 
     public void checkObject(Object obj){
         Rectangle recIntersection = playerArea.intersection(obj.solidArea);
+        System.out.println("test");
         if(playerArea.intersects(obj.solidArea)){
             if(obj.getClass().getInterfaces()[0].getSimpleName().equals("Interactable")) {
                 interactObj = (Interactable) obj;
