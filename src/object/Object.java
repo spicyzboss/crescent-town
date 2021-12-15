@@ -2,6 +2,7 @@ package object;
 
 import entity.Player;
 import main.Game;
+import main.GameControlHandler;
 import tile.Map;
 
 import javax.imageio.ImageIO;
@@ -9,27 +10,21 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Object{
-    private String name;
-    protected boolean isActive = false;
-    public BufferedImage activeImage, deactiveImage;
-    public Rectangle solidArea;
-    private double pixelPosX, pixelPosY;
-    private double tilePosX, tilePosY;
+public abstract class Object implements Serializable {
+    protected String fileName;
+    private String type;
     private String map;
-
-    public Object(String name){
-        this.name = name;
-        objectInit();
-    }
-
-    public void objectInit(){
+    public Rectangle solidArea;
+    protected BufferedImage image;
+    private double pixelPosX, pixelPosY, tilePosX, tilePosY;
+    public Object(String fileName){
+        System.out.println("Hi object");
+        this.fileName = fileName;
         this.solidArea = new Rectangle(0, 0, Game.scaledTileSize, Game.scaledTileSize);
-        this.deactiveImage = loadImage(this.name.replace(" ", "_"));
-        this.activeImage = loadImage(this.name.replace(" ", "_").concat("_active"));
     }
 
     public BufferedImage loadImage(String file) {
@@ -41,10 +36,6 @@ public class Object{
             System.out.println("\u001B[31m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - ERROR: object " + file + "\u001B[0m");
         }
         return null;
-    }
-
-    public void update(){
-
     }
 
     public void draw(Graphics2D renderer, Player player) {
@@ -62,18 +53,26 @@ public class Object{
             if(Player.interactObj != null)
                 if(Player.interactObj.equals(this))
                     renderer.setColor(Color.ORANGE);
-            this.solidArea.setRect((int) screenX, (int) screenY, Game.scaledTileSize, Game.scaledTileSize);
+            this.solidArea.setRect((int) screenX, (int) screenY, this.solidArea.width, this.solidArea.height);
             renderer.fillRect(this.solidArea.x, this.solidArea.y, this.solidArea.width, this.solidArea.height);
-            renderer.drawImage(this.getActiveImage(), (int) screenX, (int) screenY, this.solidArea.width, this.solidArea.height, null);
+            renderer.drawImage(this.getImage(), (int) screenX, (int) screenY, this.solidArea.width, this.solidArea.height, null);
         }
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
 
-    public BufferedImage getActiveImage(){
-        if(isActive){
-            return activeImage;
-        }
-        return deactiveImage;
+    public String getType() {
+        return type;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
+    public BufferedImage getImage() {
+        return image;
     }
 
     public void setPixelPosX(double pixelPosX) {
@@ -112,8 +111,8 @@ public class Object{
         return tilePosY;
     }
 
-    public String getName() {
-        return this.name;
+    public String getFileName() {
+        return this.fileName;
     }
 
     public String getMap() {
@@ -122,5 +121,27 @@ public class Object{
 
     public void setMap(String map) {
         this.map = map;
+    }
+
+    public void reset(){
+        Player.interactObj = null;
+        GameControlHandler.interact = false;
+    }
+
+    public abstract void interact(Graphics2D renderer, Player player);
+
+    @Override
+    public String toString() {
+        return "Object{" +
+                "fileName='" + fileName + '\'' +
+                ", type='" + type + '\'' +
+                ", map='" + map + '\'' +
+                ", solidArea=" + solidArea +
+                ", image=" + image +
+                ", pixelPosX=" + pixelPosX +
+                ", pixelPosY=" + pixelPosY +
+                ", tilePosX=" + tilePosX +
+                ", tilePosY=" + tilePosY +
+                '}';
     }
 }

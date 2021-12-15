@@ -45,9 +45,11 @@ public class Map {
         Arrays.sort(files);
         for(File layer : Objects.requireNonNull(files)){
             TileMap tileMap = new TileMap(name.replace(" ", "_")+"/"+layer.getName(), mapWidth, mapHeight);
-            if(layer.getName().endsWith("collision.csv"))
+            if(layer.getName().endsWith("collision.csv")) {
                 this.collisionTileMap = tileMap;
-            this.tileMaps.add(tileMap);
+            }
+            else
+                this.tileMaps.add(tileMap);
         }
     }
 
@@ -59,7 +61,7 @@ public class Map {
         for (int row = 0; row < this.getTileMaps().get(layer).mapHeight; row++) {
             for (int col = 0; col < this.getTileMaps().get(layer).mapWidth; col++) {
                 int tileNumber = this.getTileMaps().get(layer).map[row][col];
-                Tile tile = TileManager.getTileByNumber(tileNumber);
+                Tile tile = TileManager.getTile(tileNumber+"");
                 if (tile != null) {
                     BufferedImage tileImage = tile.getImage();
                     // draw tile in screen

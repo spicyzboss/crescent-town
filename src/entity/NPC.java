@@ -94,6 +94,13 @@ public class NPC extends Human implements Interactable {
     public void interact(Graphics2D renderer, Player player){
         if(GameControlHandler.interact){
             player.collisionEntity = false;
+            player.isInteracting = true;
+            switch (player.getDirection()){
+                case "up" -> this.setDirection("down");
+                case "down" -> this.setDirection("up");
+                case "left" -> this.setDirection("right");
+                case "right" -> this.setDirection("left");
+            }
             switch (GameControlHandler.dialog){
                 case 1 -> {
                     GameUI.drawDialog(renderer, "สวัสดีชั้นชื่อ Mongo เป็นพ่อค้า");
@@ -110,6 +117,7 @@ public class NPC extends Human implements Interactable {
                 default -> {
                     GameControlHandler.dialog  = 0;
                     player.collisionEntity = true;
+                    player.isInteracting = false;
                 }
             }
         }

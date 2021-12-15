@@ -15,7 +15,9 @@ public class Player extends Human {
     private Map currentMap;
     public static double screenPosX;
     public static double screenPosY;
-    public static Interactable interactEntity, interactObj;
+    public static Interactable interactEntity;
+    public static Object interactObj;
+    public boolean isInteracting;
     private int energy;
 
     private GameControlHandler controlHandler;
@@ -46,6 +48,7 @@ public class Player extends Human {
 
     public void update() {
 
+        System.out.println(this.getTilePosX() + ", " + this.getTilePosY());
 
         this.borderTop = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y;
         this.borderBot = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y + this.solidArea.height;
@@ -55,7 +58,6 @@ public class Player extends Human {
         this.collisionCheck();
 
         ArrayList<NPC> npcs = this.getCurrentMap().NPCs;
-        System.out.println("npc: "+npcs.isEmpty());
         if(!npcs.isEmpty()) {
             for (NPC npc : npcs) {
                 this.checkEntity(npc);
@@ -65,7 +67,6 @@ public class Player extends Human {
             this.collisionEntity = true;
         }
         ArrayList<Object> objects = this.getCurrentMap().objects;
-        System.out.println("object: "+objects.isEmpty());
         if(!objects.isEmpty()) {
             for (Object object : objects) {
                 this.checkObject(object);
@@ -75,7 +76,7 @@ public class Player extends Human {
             this.collisionObj = true;
         }
 
-        boolean isCollision = this.collisionTile && this.collisionEntity && this.collisionObj;
+        boolean isCollision = this.collisionTile && this.collisionEntity && this.collisionObj && !isInteracting;
         if (this.getControlHandler().scaleUp || this.getControlHandler().scaleDown) {
             this.setWalkSpeed(4 * Game.scale);
             this.setPixelPosX(getTilePosX() * Game.scaledTileSize);
@@ -102,20 +103,28 @@ public class Player extends Human {
                 this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) + this.getWalkSpeed());
             }
         }
-
+        if(collisionEntity)
+            interactEntity = null;
+        if(collisionObj)
+            interactObj = null;
         this.setScreenPosX((double) Game.width/2 - (double) Game.scaledTileSize/2);
         this.setScreenPosY((double) Game.height/2 - (double) Game.scaledTileSize/2);
-        playerArea.setRect((int)screenPosX, (int)screenPosY, Game.scaledTileSize, Game.scaledTileSize);
-
-
+        Player.playerArea.setRect((int)screenPosX, (int)screenPosY, Game.scaledTileSize, Game.scaledTileSize);
+        this.collisionEntity = true;
+        this.collisionObj = true;
     }
 
     public void draw(Graphics2D renderer) {
         this.setSpriteOnAction();
-        if (interactEntity != null)
+        if (interactEntity != null) {
             interactEntity.interact(renderer, this);
+        }
         if (interactObj != null) {
-            interactObj.interact(renderer, this);
+            System.out.println(interactObj.getType());
+            System.out.println(interactObj.getType().equals("passive"));
+            if(GameControlHandler.interact || interactObj.getType().equals("passive")){
+                interactObj.interact(renderer, this);
+            }
         }
 
         // draw player at center of screen
@@ -132,25 +141,25 @@ public class Player extends Human {
 
         switch (this.getDirection()){
             case "up" -> {
-                tile1 = TileManager.getTileByNumber(this.getCurrentMap().collisionTileMap.map[pixelToTile(borderTop)][pixelToTile(borderLeft)]);
-                tile2 = TileManager.getTileByNumber(this.getCurrentMap().collisionTileMap.map[pixelToTile(borderTop)][pixelToTile(borderRight)]);
+                tile1 = TileManager.getTile((this.getCurrentMap().collisionTileMap.map[pixelToTile(borderTop)][pixelToTile(borderLeft)])+"");
+                tile2 = TileManager.getTile((this.getCurrentMap().collisionTileMap.map[pixelToTile(borderTop)][pixelToTile(borderRight)])+"");
             }
             case "down" -> {
-                tile1 = TileManager.getTileByNumber(this.getCurrentMap().collisionTileMap.map[pixelToTile(borderBot)][pixelToTile(borderLeft)]);
-                tile2 = TileManager.getTileByNumber(this.getCurrentMap().collisionTileMap.map[pixelToTile(borderBot)][pixelToTile(borderRight)]);
+                tile1 = TileManager.getTile((this.getCurrentMap().collisionTileMap.map[pixelToTile(borderBot)][pixelToTile(borderLeft)])+"");
+                tile2 = TileManager.getTile((this.getCurrentMap().collisionTileMap.map[pixelToTile(borderBot)][pixelToTile(borderRight)])+"");
             }
             case "left" -> {
-                tile1 = TileManager.getTileByNumber(this.getCurrentMap().collisionTileMap.map[pixelToTile(borderTop)][pixelToTile(borderLeft)]);
-                tile2 = TileManager.getTileByNumber(this.getCurrentMap().collisionTileMap.map[pixelToTile(borderBot)][pixelToTile(borderLeft)]);
+                tile1 = TileManager.getTile((this.getCurrentMap().collisionTileMap.map[pixelToTile(borderTop)][pixelToTile(borderLeft)])+"");
+                tile2 = TileManager.getTile((this.getCurrentMap().collisionTileMap.map[pixelToTile(borderBot)][pixelToTile(borderLeft)])+"");
 
             }
             case "right" -> {
-                tile1 = TileManager.getTileByNumber(this.getCurrentMap().collisionTileMap.map[pixelToTile(borderTop)][pixelToTile(borderRight)]);
-                tile2 = TileManager.getTileByNumber(this.getCurrentMap().collisionTileMap.map[pixelToTile(borderBot)][pixelToTile(borderRight)]);
+                tile1 = TileManager.getTile((this.getCurrentMap().collisionTileMap.map[pixelToTile(borderTop)][pixelToTile(borderRight)])+"");
+                tile2 = TileManager.getTile((this.getCurrentMap().collisionTileMap.map[pixelToTile(borderBot)][pixelToTile(borderRight)])+"");
             }
         }
 
-        this.collisionTile = (((tile1 == null) ||(tile2 == null)));
+        this.collisionTile = (((tile1 == null) || (tile2 == null)));
     }
 
     public void checkEntity(Entity target){
@@ -168,29 +177,20 @@ public class Player extends Human {
             }
         }
         else{
-            this.collisionEntity = true;
             target.collisionEntity = true;
-            interactEntity = null;
         }
     }
 
     public void checkObject(Object obj){
         Rectangle recIntersection = playerArea.intersection(obj.solidArea);
-        System.out.println("test");
         if(playerArea.intersects(obj.solidArea)){
-            if(obj.getClass().getInterfaces()[0].getSimpleName().equals("Interactable")) {
-                interactObj = (Interactable) obj;
-            }
+            interactObj = obj;
             switch (this.getDirection()){
                 case "up" -> this.collisionObj = recIntersection.y != playerArea.y || recIntersection.width <= recIntersection.height;
                 case "down" -> this.collisionObj = recIntersection.y != obj.solidArea.y || recIntersection.width <= recIntersection.height;
                 case "left" -> this.collisionObj = recIntersection.x != playerArea.x || recIntersection.height <= recIntersection.width;
                 case "right" -> this.collisionObj = recIntersection.x != obj.solidArea.x || recIntersection.height <= recIntersection.width;
             }
-        }
-        else{
-            this.collisionObj = true;
-            interactObj = null;
         }
     }
 
