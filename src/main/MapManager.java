@@ -289,9 +289,6 @@ public class MapManager implements Serializable {
     }
 
     public static void Setting(Map map) {
-        System.out.println(objects.isEmpty());
-
-        System.out.println(map.name + " loaded");
         for (Object obj : objects) {
             if (obj.getMap().equals(map.name)) {
                 map.addObj(obj);

@@ -27,7 +27,10 @@ public class Player extends Human implements Serializable {
     private Inventory inventory;
     private int selectedItem;
     public double borderLeft, borderRight, borderTop, borderBot;
+    private Tile forwardTile;
+    private int fowardTilePosX, fowardTilePosY;
     private GameControlHandler controlHandler;
+
 
     public static Rectangle playerArea = new Rectangle();
 
@@ -66,9 +69,8 @@ public class Player extends Human implements Serializable {
             this.setSelectedItem(this.getControlHandler().numbers.indexOf(true));
         }
         if(this.getControlHandler().activeItem){
-            if(this.getInventory().getItem(this.getSelectedItem()).getName().equals("Hoe")){
-                this.getInventory().getItem(this.getSelectedItem()).active(this);
-            }
+            this.getInventory().getItem(this.getSelectedItem()).active(this);
+
         }
         if(this.getControlHandler().pos){
             System.out.println(this.getTilePosX()+", "+this.getTilePosY());
@@ -160,7 +162,36 @@ public class Player extends Human implements Serializable {
 //        renderer.fillRect(this.solidArea.x, this.solidArea.y, this.solidArea.width, this.solidArea.height);
     }
 
-
+    public void checkFowardTile() {
+        if (this.getCurrentMap().name.equals("village")) {
+            TileMap tileMap = this.getCurrentMap().tileMaps.get(1);
+            Tile choosenTile = null;
+            int centerX = Map.sceneX + Game.width / 2;
+            int centerY = Map.sceneY + Game.height / 2;
+            switch (this.getDirection()) {
+                case "up" -> {
+                    fowardTilePosX = this.pixelToTile(centerX);
+                    fowardTilePosY = this.pixelToTile(this.borderTop);
+                    forwardTile = TileManager.getTile((tileMap.map[fowardTilePosY][fowardTilePosX]) + "");
+                }
+                case "down" -> {
+                    fowardTilePosX = this.pixelToTile(centerX);
+                    fowardTilePosY = this.pixelToTile(this.borderBot);
+                    forwardTile = TileManager.getTile((tileMap.map[fowardTilePosY][fowardTilePosX]) + "");
+                }
+                case "left" -> {
+                    fowardTilePosX = this.pixelToTile(this.borderLeft);
+                    fowardTilePosY = this.pixelToTile(centerY);
+                    forwardTile = TileManager.getTile((tileMap.map[fowardTilePosY][fowardTilePosX]) + "");
+                }
+                case "right" -> {
+                    fowardTilePosX = this.pixelToTile(this.borderRight);
+                    fowardTilePosY = this.pixelToTile(centerY);
+                    forwardTile = TileManager.getTile((tileMap.map[fowardTilePosY][fowardTilePosX]) + "");
+                }
+            }
+        }
+    }
     public void collisionCheck() {
         Tile tile1 = null;
         Tile tile2 = null;
@@ -305,5 +336,17 @@ public class Player extends Human implements Serializable {
 
     public int getSelectedItem() {
         return selectedItem;
+    }
+
+    public Tile getForwardTile() {
+        return forwardTile;
+    }
+
+    public int getFowardTilePosX() {
+        return fowardTilePosX;
+    }
+
+    public int getFowardTilePosY() {
+        return fowardTilePosY;
     }
 }

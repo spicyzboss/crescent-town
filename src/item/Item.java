@@ -19,9 +19,7 @@ public abstract class Item implements Serializable {
         this.setSellPrice(sellPrice);
         this.setSpriteNumber(0);
     }
-    public void active(Player player) {
-
-    }
+    public abstract void active(Player player);
 
     abstract void loadImage();
 

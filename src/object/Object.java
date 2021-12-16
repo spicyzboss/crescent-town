@@ -22,7 +22,6 @@ public abstract class Object implements Interactable {
     protected BufferedImage image;
     private double pixelPosX, pixelPosY, tilePosX, tilePosY;
     public Object(String fileName){
-        System.out.println("Hi object");
         this.fileName = fileName;
         this.solidArea = new Rectangle(0, 0, Game.scaledTileSize, Game.scaledTileSize);
     }
@@ -104,6 +103,10 @@ public abstract class Object implements Interactable {
 
     public double getTilePosY() {
         return tilePosY;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getFileName() {
