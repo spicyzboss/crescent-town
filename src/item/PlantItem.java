@@ -1,12 +1,22 @@
 package item;
 
+import entity.Player;
+import main.Game;
+import main.MapManager;
+import object.Plant;
+import tile.Map;
+import tile.Tile;
+import tile.TileManager;
+import tile.TileMap;
+
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
-public class PlantItem extends Item {
+public abstract class PlantItem extends Item {
     // growth duration in frame unit
     // 1 second = 60 frame
     // 1 day in game = 28800 frame = 8 mins
@@ -17,6 +27,20 @@ public class PlantItem extends Item {
         this.setGrowthDuration(growthDuration);
         this.loadImage();
     }
+
+    @Override
+    public void active(Player player) {
+        player.checkFowardTile();
+        if (player.getForwardTile().getTileNumber() == 117){
+            Plant plant = new Plant(this);
+            plant.setTilePosX(player.getFowardTilePosX());
+            plant.setTilePosY(player.getFowardTilePosY());
+            plant.setMap("vilage");
+            MapManager.objects.add(plant);
+        }
+    }
+
+
 
     public void loadImage() {
         try {

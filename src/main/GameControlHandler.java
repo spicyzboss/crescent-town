@@ -16,11 +16,12 @@ public class GameControlHandler implements KeyListener, Serializable {
     public boolean scaleUp;
     public boolean scaleDown;
     public boolean confirmExit = false;
-    public static boolean pos = false;
-    public static boolean interact = false;
+    public boolean pos = false;
+    public boolean interact = false;
     public static int dialog;
     public static boolean objState;
     public ArrayList<Boolean> numbers = new ArrayList<Boolean>(Arrays.asList(false, false, false, false, false, false, false, false, false));
+    public boolean activeItem = false;
 
     public void keyTyped(KeyEvent e) {
 
@@ -119,6 +120,7 @@ public class GameControlHandler implements KeyListener, Serializable {
                 } else if (e.getKeyCode() == KeyEvent.VK_P) {
                     pos = true;
                 } else if (e.getKeyCode() == KeyEvent.VK_Z) {
+                    activeItem = true;
                     if(!(Player.interactObj == null && Player.interactNPC == null))
                         interact = true;
                     if (Player.interactNPC != null)

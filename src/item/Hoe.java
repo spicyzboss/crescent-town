@@ -1,15 +1,36 @@
 package item;
 
+import entity.Player;
+import main.Game;
+import tile.Map;
+import tile.Tile;
+import tile.TileManager;
+import tile.TileMap;
+
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 public class Hoe extends Item {
+    private int choosenTilePosX;
+    private int choosenTilePosY;
     public Hoe() {
         super("Hoe", 0, 0);
         this.loadImage();
+    }
+
+    public void active(Player player){
+        int[] caltivatable = {5, 6, 7, 13, 14, 15, 21, 22, 23};
+        player.checkFowardTile();
+        if(Arrays.binarySearch(caltivatable, player.getForwardTile().getTileNumber()) >= 0){
+            TileMap tileMap = player.getCurrentMap().tileMaps.get(1);
+            tileMap.map[player.getFowardTilePosY()][player.getFowardTilePosX()] = 117;
+        }
+        player.getControlHandler().activeItem = false;
     }
 
     @Override

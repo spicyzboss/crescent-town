@@ -1,7 +1,7 @@
 package entity;
 
 import inventory.Inventory;
-import item.Hoe;
+import item.*;
 import main.Game;
 import main.GameControlHandler;
 import main.MapManager;
@@ -9,10 +9,12 @@ import object.Object;
 import tile.Map;
 import tile.Tile;
 import tile.TileManager;
+import tile.TileMap;
 
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Player extends Human implements Serializable, Runnable {
     private Map currentMap;
@@ -24,8 +26,11 @@ public class Player extends Human implements Serializable, Runnable {
     private int energy;
     private Inventory inventory;
     private int selectedItem;
-
+    public double borderLeft, borderRight, borderTop, borderBot;
+    private Tile forwardTile;
+    private int fowardTilePosX, fowardTilePosY;
     private GameControlHandler controlHandler;
+
 
     public static Rectangle playerArea = new Rectangle();
 
@@ -54,12 +59,12 @@ public class Player extends Human implements Serializable, Runnable {
         this.setWallet(new HumanWallet(100));
         this.setInventory(new Inventory(9));
         this.getInventory().addItem(new Hoe());
-//        this.getInventory().addItem(new BlueBush());
-//        this.getInventory().addItem(new Corn());
-//        this.getInventory().addItem(new Flowder());
-//        this.getInventory().addItem(new PinkBush());
-//        this.getInventory().addItem(new Lotus());
-//        this.getInventory().addItem(new PoiSian());
+        this.getInventory().addItem(new BlueBush());
+        this.getInventory().addItem(new Corn());
+        this.getInventory().addItem(new Flowder());
+        this.getInventory().addItem(new PinkBush());
+        this.getInventory().addItem(new Lotus());
+        this.getInventory().addItem(new PoiSian());
         this.setSelectedItem(0);
     }
 
@@ -67,10 +72,13 @@ public class Player extends Human implements Serializable, Runnable {
         if (this.getControlHandler().numbers.contains(true)) {
             this.setSelectedItem(this.getControlHandler().numbers.indexOf(true));
         }
+        if(this.getControlHandler().activeItem){
+            this.getInventory().getItem(this.getSelectedItem()).active(this);
 
-        if(GameControlHandler.pos){
+        }
+        if(this.getControlHandler().pos){
             System.out.println(this.getTilePosX()+", "+this.getTilePosY());
-            GameControlHandler.pos = false;
+            this.getControlHandler().pos = false;
         }
         this.borderTop = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y;
         this.borderBot = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y + this.solidArea.height;
@@ -104,6 +112,7 @@ public class Player extends Human implements Serializable, Runnable {
             this.setPixelPosX(getTilePosX() * Game.scaledTileSize);
             this.setPixelPosY(getTilePosY() * Game.scaledTileSize);
         }
+
         if (!this.isInteracting) {
             if (GameControlHandler.arrowKeyPressed) {
                 this.setEnergy(Math.max(0, this.getEnergy() - 1));
@@ -149,7 +158,7 @@ public class Player extends Human implements Serializable, Runnable {
             interactNPC.interact(renderer, this);
         }
         if (interactObj != null) {
-            if (GameControlHandler.interact || interactObj.getType().equals("passive")){
+            if (this.getControlHandler().interact || interactObj.getType().equals("passive")){
                 interactObj.interact(renderer, this);
             }
         }
@@ -162,6 +171,36 @@ public class Player extends Human implements Serializable, Runnable {
 //        renderer.fillRect(this.solidArea.x, this.solidArea.y, this.solidArea.width, this.solidArea.height);
     }
 
+    public void checkFowardTile() {
+        if (this.getCurrentMap().name.equals("village")) {
+            TileMap tileMap = this.getCurrentMap().tileMaps.get(1);
+            Tile choosenTile = null;
+            int centerX = Map.sceneX + Game.width / 2;
+            int centerY = Map.sceneY + Game.height / 2;
+            switch (this.getDirection()) {
+                case "up" -> {
+                    fowardTilePosX = this.pixelToTile(centerX);
+                    fowardTilePosY = this.pixelToTile(this.borderTop);
+                    forwardTile = TileManager.getTile((tileMap.map[fowardTilePosY][fowardTilePosX]) + "");
+                }
+                case "down" -> {
+                    fowardTilePosX = this.pixelToTile(centerX);
+                    fowardTilePosY = this.pixelToTile(this.borderBot);
+                    forwardTile = TileManager.getTile((tileMap.map[fowardTilePosY][fowardTilePosX]) + "");
+                }
+                case "left" -> {
+                    fowardTilePosX = this.pixelToTile(this.borderLeft);
+                    fowardTilePosY = this.pixelToTile(centerY);
+                    forwardTile = TileManager.getTile((tileMap.map[fowardTilePosY][fowardTilePosX]) + "");
+                }
+                case "right" -> {
+                    fowardTilePosX = this.pixelToTile(this.borderRight);
+                    fowardTilePosY = this.pixelToTile(centerY);
+                    forwardTile = TileManager.getTile((tileMap.map[fowardTilePosY][fowardTilePosX]) + "");
+                }
+            }
+        }
+    }
     public void collisionCheck() {
         Tile tile1 = null;
         Tile tile2 = null;
@@ -288,7 +327,7 @@ public class Player extends Human implements Serializable, Runnable {
     }
 
 
-    private int pixelToTile(double pixel){
+    public int pixelToTile(double pixel){
         return (int) pixel / Game.scaledTileSize;
     }
 
@@ -320,5 +359,17 @@ public class Player extends Human implements Serializable, Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    public Tile getForwardTile() {
+        return forwardTile;
+    }
+
+    public int getFowardTilePosX() {
+        return fowardTilePosX;
+    }
+
+    public int getFowardTilePosY() {
+        return fowardTilePosY;
     }
 }

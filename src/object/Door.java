@@ -4,7 +4,6 @@ import entity.Player;
 import main.GameControlHandler;
 
 import java.awt.*;
-import java.io.Serializable;
 
 public class Door extends PassiveTypeObject{
     public String destination;
@@ -44,7 +43,7 @@ public class Door extends PassiveTypeObject{
         player.setTilePosY(spawnPointY);
         player.setCurrentMapByName(this.getDestination());
         player.collisionObj = true;
-        GameControlHandler.interact = false;
-        this.reset();
+        this.resetPlayer(player);
+
     }
 }

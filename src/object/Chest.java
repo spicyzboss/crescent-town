@@ -4,7 +4,6 @@ import entity.Player;
 import main.GameControlHandler;
 
 import java.awt.*;
-import java.io.Serializable;
 
 public class Chest extends ActiveTypeObject {
 
@@ -14,10 +13,11 @@ public class Chest extends ActiveTypeObject {
 
     @Override
     public void interact(Graphics2D renderer, Player player) {
-        if(GameControlHandler.interact){
+        if(player.getControlHandler().interact){
             this.updateState();
         }
-        this.reset();
+        this.resetPlayer(player);
+
     }
 
 }

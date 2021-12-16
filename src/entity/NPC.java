@@ -174,7 +174,7 @@ public class NPC extends Human implements Interactable, Runnable {
     }
 
     public void interact(Graphics2D renderer, Player player){
-        if (GameControlHandler.interact) {
+        if (player.getControlHandler().interact) {
             player.collisionNPC = false;
             player.isInteracting = true;
             switch (player.getDirection()) {
@@ -191,7 +191,7 @@ public class NPC extends Human implements Interactable, Runnable {
                     GameControlHandler.dialog = 0;
                     player.collisionNPC = true;
                     player.isInteracting = false;
-                    GameControlHandler.interact = false;
+                    player.getControlHandler().interact = false;
                 }
             }
             else{

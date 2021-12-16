@@ -29,7 +29,7 @@ public class Map implements Serializable {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         loadMap(this.name);
-        MapManager.Setting(this);
+        MapManager.setting(this);
     }
 
     public void addNPC(NPC npc){
@@ -72,6 +72,9 @@ public class Map implements Serializable {
         }
     }
 
+    public void update(){
+        MapManager.setting(this);
+    }
     public void render(Graphics2D renderer, Player player){
         // find current scenario
         setSceneX((int)player.getPixelPosX() - (int)player.getScreenPosX());
@@ -90,6 +93,8 @@ public class Map implements Serializable {
             object.draw(renderer, player);
         }
         player.draw(renderer);
+
+        this.update();
     }
 
     public void setSceneX(int sceneX) {

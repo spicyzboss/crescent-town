@@ -15,7 +15,7 @@ public class MissionBoard extends ActiveTypeObject {
 
     @Override
     public void interact(Graphics2D renderer, Player player) {
-        if(GameControlHandler.interact){
+        if(player.getControlHandler().interact){
             this.isActive = true;
         }
         if(GameControlHandler.objState) {
@@ -24,7 +24,8 @@ public class MissionBoard extends ActiveTypeObject {
         }
         else {
             player.isInteracting = false;
-            this.reset();
+            this.resetPlayer(player);
+
         }
     }
 }

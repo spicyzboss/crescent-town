@@ -1,5 +1,6 @@
 package item;
 
+import entity.Player;
 import main.Game;
 
 import java.awt.image.BufferedImage;
@@ -18,6 +19,7 @@ public abstract class Item implements Serializable {
         this.setSellPrice(sellPrice);
         this.setSpriteNumber(0);
     }
+    public abstract void active(Player player);
 
     abstract void loadImage();
 

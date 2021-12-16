@@ -20,7 +20,7 @@ public class NPCMerchant extends NPC {
 
     }
     private void NPCMerchantInit(){
-        this.saleArea = new Rectangle(this.solidArea.x, this.solidArea.y+Game.scaledTileSize , Game.scaledTileSize, Game.scaledTileSize);
+        this.saleArea = new Rectangle(this.solidArea.x, this.solidArea.y+Game.scaledTileSize , Game.scaledTileSize, Game.scaledTileSize/2);
         this.saleDialog = new ArrayList<>();
     }
 
@@ -40,7 +40,7 @@ public class NPCMerchant extends NPC {
 
     @Override
     public void interact(Graphics2D renderer, Player player) {
-        if (GameControlHandler.interact) {
+        if (player.getControlHandler().interact) {
             if (onSale) {
                 switch (player.getDirection()) {
                     case "up" -> this.setDirection("down");
@@ -56,7 +56,7 @@ public class NPCMerchant extends NPC {
                         GameControlHandler.dialog = 0;
                         player.collisionNPC = true;
                         player.isInteracting = false;
-                        GameControlHandler.interact = false;
+                        player.getControlHandler().interact = false;
                         this.onSale = false;
                     }
                 } else {
