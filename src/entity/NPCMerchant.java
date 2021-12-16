@@ -51,8 +51,7 @@ public class NPCMerchant extends NPC {
                 if (!this.saleDialog.isEmpty() && GameControlHandler.dialog != 0) {
                     if (GameControlHandler.dialog-1 < this.saleDialog.size()) {
                         GameUI.drawDialog(renderer, this.getSaleDialog(GameControlHandler.dialog-1));
-                    }
-                    else {
+                    } else {
                         GameUI.drawDialog(renderer, ".....!!!!");
                         GameControlHandler.dialog = 0;
                         player.collisionNPC = true;
@@ -68,7 +67,6 @@ public class NPCMerchant extends NPC {
                     onSale = false;
                 }
             } else {
-                System.out.println("talk");
                 super.interact(renderer, player);
             }
         }

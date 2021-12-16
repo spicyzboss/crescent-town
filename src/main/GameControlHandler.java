@@ -48,14 +48,10 @@ public class GameControlHandler implements KeyListener, Serializable {
                     scaleDown = true;
                 } else if (KeyEvent.VK_1 <= e.getKeyCode() && e.getKeyCode() <= KeyEvent.VK_9) {
                     numbers.set(e.getKeyCode() - KeyEvent.VK_1, true);
-                } else if (e.getKeyCode() == KeyEvent.VK_D) {
-                    Game.globalState = Game.gameState.BUYING;
-                } else if (e.getKeyCode() == KeyEvent.VK_S) {
-                    Game.globalState = Game.gameState.SELLING;
                 }
             }
             case BUYING, SELLING -> {
-                 if (e.getKeyCode() == KeyEvent.VK_H) {
+                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     Game.globalState = Game.gameState.PLAY;
                 }
             }

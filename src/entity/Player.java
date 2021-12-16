@@ -105,6 +105,11 @@ public class Player extends Human implements Serializable, Runnable {
             this.setPixelPosY(getTilePosY() * Game.scaledTileSize);
         }
         if (!this.isInteracting) {
+            if (GameControlHandler.arrowKeyPressed) {
+                this.setEnergy(Math.max(0, this.getEnergy() - 1));
+            } else {
+                this.setEnergy(Math.min(100, this.getEnergy() + 1));
+            }
             if (this.getControlHandler().upKeyPressed) {
                 this.setDirection("up");
                 if (isCollision) {
@@ -131,8 +136,8 @@ public class Player extends Human implements Serializable, Runnable {
             interactNPC = null;
         if (collisionObj)
             interactObj = null;
-        this.setScreenPosX((double) Game.width/2 - (double) Game.scaledTileSize/2);
-        this.setScreenPosY((double) Game.height/2 - (double) Game.scaledTileSize/2);
+        this.setScreenPosX(Game.width/2D - Game.scaledTileSize/2D);
+        this.setScreenPosY(Game.height/2D - Game.scaledTileSize/2D);
         Player.playerArea.setRect((int)screenPosX, (int)screenPosY, Game.scaledTileSize, Game.scaledTileSize);
         this.collisionNPC = true;
         this.collisionObj = true;
@@ -193,6 +198,9 @@ public class Player extends Human implements Serializable, Runnable {
                 target.collisionNPC = false;
                 merchant.onSale = true;
                 collisionNPC(recIntersection, merchant.saleArea);
+                if (isInteracting) {
+                    Game.globalState = Game.gameState.SELLING;
+                }
             } else if (playerArea.intersects(target.solidArea)) {
                 recIntersection = playerArea.intersection(target.solidArea);
                 interactNPC = target;
