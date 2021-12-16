@@ -2,7 +2,7 @@ package object;
 
 import java.io.Serializable;
 
-public abstract class PassiveTypeObject extends Object implements Serializable {
+public abstract class PassiveTypeObject extends Object {
     public PassiveTypeObject(String fileName){
         super(fileName);
         passiveInit();

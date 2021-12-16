@@ -28,7 +28,7 @@ public class Entity {
     protected double borderBot;
     public boolean collisionObj = true;
     public boolean collisionTile = true;
-    public boolean collisionEntity = true;
+    public boolean collisionNPC = true;
 
     protected Rectangle solidArea;
 

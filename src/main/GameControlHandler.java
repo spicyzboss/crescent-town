@@ -16,7 +16,7 @@ public class GameControlHandler implements KeyListener, Serializable {
     public boolean scaleUp;
     public boolean scaleDown;
     public boolean confirmExit = false;
-    public static boolean move;
+    public static boolean pos = false;
     public static boolean interact = false;
     public static int dialog;
     public static boolean objState;
@@ -46,8 +46,6 @@ public class GameControlHandler implements KeyListener, Serializable {
                 } else if (e.getKeyCode() == KeyEvent.VK_G) {
                     Game.adjustTileSize(2);
                     scaleDown = true;
-                } else if (e.getKeyCode() == KeyEvent.VK_M) {
-                    move = true;
                 } else if (KeyEvent.VK_1 <= e.getKeyCode() && e.getKeyCode() <= KeyEvent.VK_9) {
                     numbers.set(e.getKeyCode() - KeyEvent.VK_1, true);
                 } else if (e.getKeyCode() == KeyEvent.VK_D) {
@@ -122,11 +120,12 @@ public class GameControlHandler implements KeyListener, Serializable {
                     scaleUp = false;
                 } else if (e.getKeyCode() == KeyEvent.VK_G) {
                     scaleDown = false;
-                } else if (e.getKeyCode() == KeyEvent.VK_M) {
-                    move = false;
+                } else if (e.getKeyCode() == KeyEvent.VK_P) {
+                    pos = true;
                 } else if (e.getKeyCode() == KeyEvent.VK_Z) {
-                    interact = true;
-                    if (Player.interactEntity != null)
+                    if(!(Player.interactObj == null && Player.interactNPC == null))
+                        interact = true;
+                    if (Player.interactNPC != null)
                         dialog++;
                     if (Player.interactObj != null)
                         objState = !objState;
