@@ -32,12 +32,15 @@ public abstract class PlantItem extends Item {
     public void active(Player player) {
         player.checkFowardTile();
         if (player.getForwardTile().getTileNumber() == 117){
-            Plant plant = new Plant(this);
-            plant.setTilePosX(player.getFowardTilePosX());
-            plant.setTilePosY(player.getFowardTilePosY());
-            plant.setMap("village");
-            plant.setType("active");
-            MapManager.objects.add(plant);
+            if(MapManager.maps.get("village").tileMaps.get(2).map[player.getFowardTilePosY()][player.getFowardTilePosX()] != -2) {
+                Plant plant = new Plant(this);
+                plant.setTilePosX(player.getFowardTilePosX());
+                plant.setTilePosY(player.getFowardTilePosY());
+                plant.setMap("village");
+                plant.setType("active");
+                MapManager.objects.add(plant);
+            }
+            MapManager.maps.get("village").tileMaps.get(2).map[player.getFowardTilePosY()][player.getFowardTilePosX()] = -2;
         }
 
 
