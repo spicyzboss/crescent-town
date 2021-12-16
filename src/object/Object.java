@@ -48,9 +48,13 @@ public abstract class Object implements Interactable {
 //                && this.getPixelPosX() - Game.scaledTileSize < player.getPixelPosX() + player.getScreenPosX()
 //                && this.getPixelPosY() + Game.scaledTileSize > player.getPixelPosY() - player.getScreenPosY()
 //                && this.getPixelPosY() - Game.scaledTileSize < player.getPixelPosY() + player.getScreenPosY()){
+
             renderer.setColor(new Color(55, 55, 55, 70));
             if(Player.interactObj != null)
+                if(Player.interactObj.equals(this))
+                    renderer.setColor(Color.ORANGE);
             this.solidArea.setRect((int) screenX, (int) screenY, this.solidArea.width, this.solidArea.height);
+            renderer.fillRect(this.solidArea.x, this.solidArea.y, this.solidArea.width, this.solidArea.height);
             renderer.drawImage(this.getImage(), (int) screenX, (int) screenY, this.solidArea.width, this.solidArea.height, null);
 //        }
     }

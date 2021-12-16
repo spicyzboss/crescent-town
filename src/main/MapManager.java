@@ -288,6 +288,17 @@ public class MapManager implements Serializable {
         return maps.get(name);
     }
 
+    public static void update(Map map){
+        ArrayList<Object> objs = new ArrayList<>();
+        for (Object obj : objects) {
+            if (obj.getMap().equals(map.name)) {
+                objs.add(obj);
+            }
+        }
+        map.objects = objs;
+
+    }
+
     public static void setting(Map map) {
         for (Object obj : objects) {
             if (obj.getMap().equals(map.name)) {

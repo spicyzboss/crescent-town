@@ -73,7 +73,7 @@ public class Map implements Serializable {
     }
 
     public void update(){
-        MapManager.setting(this);
+        MapManager.update(this);
     }
     public void render(Graphics2D renderer, Player player){
         // find current scenario

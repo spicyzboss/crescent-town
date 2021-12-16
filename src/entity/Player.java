@@ -87,18 +87,16 @@ public class Player extends Human implements Serializable, Runnable {
 
         this.collisionCheck();
 
-        ArrayList<NPC> npcs = this.getCurrentMap().NPCs;
-        if(!npcs.isEmpty()) {
-            for (NPC npc : npcs) {
+        if(!this.getCurrentMap().NPCs.isEmpty()) {
+            for (NPC npc : this.getCurrentMap().NPCs) {
                 this.checkNPC(npc);
             }
         }
         else{
             this.collisionNPC = true;
         }
-        ArrayList<Object> objects = this.getCurrentMap().objects;
-        if(!objects.isEmpty()) {
-            for (Object object : objects) {
+        if(!this.getCurrentMap().objects.isEmpty()) {
+            for (Object object : this.getCurrentMap().objects) {
                 this.checkObject(object);
             }
         }
