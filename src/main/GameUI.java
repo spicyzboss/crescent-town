@@ -3,7 +3,6 @@ package main;
 import entity.Player;
 
 import javax.imageio.ImageIO;
-import javax.swing.border.StrokeBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;

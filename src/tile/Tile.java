@@ -23,6 +23,9 @@ public class Tile {
             System.out.println("\u001B[31m" + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - ERROR: tile " + tileName + " not found" + "\u001B[0m");
         }
     }
+    public int getTileNumber(){
+        return Integer.parseInt(tileName);
+    }
 
     public BufferedImage getImage() {
         return image;

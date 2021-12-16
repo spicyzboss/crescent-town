@@ -1,9 +1,6 @@
 package entity;
 
 import main.Game;
-import tile.MainMap;
-import tile.Tile;
-import tile.TileManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,7 +9,7 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public abstract class Entity {
+public class Entity {
     private String name;
     private String direction;
     private BufferedImage sprite;
@@ -49,13 +46,12 @@ public abstract class Entity {
     }
 
     public void setSpriteOnAction(){
-        BufferedImage image = switch (this.direction != null?this.getDirection():"none") {
+        this.spriteOnAction = switch (this.direction != null? this.getDirection():"none") {
             case "left" -> this.spriteUpdate(1);
             case "right" -> this.spriteUpdate(2);
             case "up" -> this.spriteUpdate(3);
             default -> this.spriteUpdate(0);
         };
-        this.spriteOnAction = image;
     }
     private BufferedImage spriteUpdate(int spriteAction) {
         if (Game.frame != 0 && this.getSpriteLoadTime()!= 0) {
@@ -154,4 +150,5 @@ public abstract class Entity {
     public int getWalkSpeed() {
         return walkSpeed;
     }
+
 }

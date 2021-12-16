@@ -2,7 +2,6 @@ package main;
 
 import entity.NPC;
 import entity.Player;
-import tile.MainMap;
 import tile.TileManager;
 
 import java.awt.*;
@@ -69,17 +68,14 @@ public class Game extends JPanel implements Runnable {
 
     public static boolean loadedSave;
 
-    MainMap village = new MainMap("village" ,100, 100);
-    MainMap player_room = new MainMap("player room" ,25, 25);
-
-    public static Thread gameThread; // global attribute for threading
-
     GameControlHandler controlHandler = new GameControlHandler();
     Player player = new Player("gongcha", controlHandler);
     GameUI ui;
     public static SoundManager sound;
 
+    public static Thread gameThread; // global attribute for threading
     // Game constructor method for initialization
+
     public Game() {
         this.setFocusable(true);
         this.addKeyListener(controlHandler); // use KeyListener in GameControlHandler
@@ -88,7 +84,9 @@ public class Game extends JPanel implements Runnable {
         this.setDoubleBuffered(true); // buffer for performance
         new TileManager();
         new GameFonts();
-        player.setCurrentMap(village);
+        new Maps();
+
+        player.setCurrentMap(Maps.getMap("village"));
         globalState = gameState.INTRO;
         ui = new GameUI(controlHandler);
         sound = new SoundManager();
@@ -163,9 +161,7 @@ public class Game extends JPanel implements Runnable {
                 // Draw UI
                 ui.drawInterface(g2d, player);
             }
-            case INTRO -> {
-                ui.drawTitleScreen(g2d);
-            }
+            case INTRO -> ui.drawTitleScreen(g2d);
             default -> {
                 // ui.drawPauseScreen(g2d);
             }
