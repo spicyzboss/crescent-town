@@ -30,7 +30,6 @@ public class Hoe extends Item {
             TileMap tileMap = player.getCurrentMap().tileMaps.get(1);
             tileMap.map[player.getFowardTilePosY()][player.getFowardTilePosX()] = 117;
         }
-        player.getControlHandler().activeItem = false;
     }
 
     @Override

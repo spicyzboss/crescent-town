@@ -35,9 +35,12 @@ public abstract class PlantItem extends Item {
             Plant plant = new Plant(this);
             plant.setTilePosX(player.getFowardTilePosX());
             plant.setTilePosY(player.getFowardTilePosY());
-            plant.setMap("vilage");
+            plant.setMap("village");
+            plant.setType("active");
             MapManager.objects.add(plant);
         }
+
+
     }
 
 
