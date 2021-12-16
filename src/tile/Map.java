@@ -9,13 +9,14 @@ import main.Game;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.Serializable;
 import java.util.*;
 
-public class Map {
+public class Map implements Serializable {
     public String name;
     public ArrayList<TileMap> tileMaps;
-    public ArrayList<NPC> NPCs;
-    public ArrayList<Object> objects;
+    public transient ArrayList<NPC> NPCs;
+    public transient ArrayList<Object> objects;
     public TileMap collisionTileMap;
     public int mapWidth, mapHeight;
     public static int sceneX, sceneY;

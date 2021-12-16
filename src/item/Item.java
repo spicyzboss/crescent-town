@@ -3,10 +3,11 @@ package item;
 import main.Game;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public abstract class Item {
+public abstract class Item implements Serializable {
     private String name;
-    private BufferedImage image;
+    private transient BufferedImage image;
     private double buyPrice;
     private double sellPrice;
     private int spriteNumber;

@@ -4,10 +4,11 @@ package tile;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class TileMap {
+public class TileMap implements Serializable {
     public int[][] map;
     public int mapWidth;
     public int mapHeight;

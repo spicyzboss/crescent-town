@@ -14,16 +14,16 @@ import java.util.HashMap;
 public class GameUI {
     private static Font normalFont;
     private static int titleSelect;
-    private GameControlHandler controlHandler;
     private HashMap<String, BufferedImage> interfaces;
+    public static int shopIndex;
+    public static int confirmIndex;
+    public static boolean isConfirming;
 
-    public GameUI(GameControlHandler controlHandler) {
+    public GameUI() {
         this.loadFonts();
         GameUI.setTitleSelect(Game.loadedSave ? 2 : 1);
-        this.setControlHandler(controlHandler);
         interfaces = new HashMap<String, BufferedImage>();
         this.loadInterface("background", "introBackground");
-//        this.loadInterface("playerBar", "bar");
         this.loadInterface("coin", "coin");
         this.loadInterface("energy_0", "energy_0");
         this.loadInterface("energy_1", "energy_1");
@@ -43,6 +43,10 @@ public class GameUI {
         this.loadInterface("selectItem", "inventory_select");
         this.loadInterface("shop", "shop");
         this.loadInterface("shopSelect", "shop_select");
+        this.loadInterface("confirm", "confirm");
+        shopIndex = 0;
+        confirmIndex = 0;
+        isConfirming = false;
     }
 
     private void loadInterface(String interfaceType, String interfaceName) {
@@ -131,9 +135,11 @@ public class GameUI {
         renderer.setFont(new Font("2005_iannnnnCPU", Font.PLAIN, Game.tileSize*2));
         renderer.setColor(Color.WHITE);
 
+        // energy
         BufferedImage energy = interfaces.get("energy_" + (int)(player.getEnergy() / (100/13D)));
         renderer.drawImage(energy, Game.tileSize, 0, Game.tileSize * 2 * 4, Game.tileSize * 2, null);
 
+        // money
         renderer.drawImage(interfaces.get("coin"), Game.tileSize * 2 * 12, 0, Game.tileSize * 2, Game.tileSize * 2, null);
         renderer.drawString("X " + player.getWallet().getMoney(), Game.tileSize * 2 * 13, Game.tileSize + Game.tileSize/2);
 
@@ -143,11 +149,58 @@ public class GameUI {
             for (int i = 0; i < player.getInventory().getSize(); i++) {
                 renderer.drawImage(player.getInventory().getItem(i).getSprite(0), (Game.width/2 - Game.tileSize * 2 * 9 / 2) + (Game.tileSize * 2 * i), Game.height - Game.tileSize * 2, Game.tileSize * 2, Game.tileSize * 2, null);
             }
-
-            renderer.drawImage(interfaces.get("shop"), Game.tileSize * 2 * 4, Game.tileSize * 2 * 3, Game.tileSize * 2 * 8, Game.tileSize * 2 * 3, null);
-            int index = 7;
-            renderer.drawImage(interfaces.get("shopSelect"), Game.tileSize * 2 * 4 + (Game.tileSize * 2 * (2 * (index % 5))), Game.tileSize * 2 * 3 + (int)(Game.tileSize * 2 * (3/2D) * (index / 5)), Game.tileSize * 2 * 2, (int)(Game.tileSize * 2 * (3/2D)), null);
         }
+        if (Game.globalState == Game.gameState.BUYING) {
+            renderer.setFont(new Font("2005_iannnnnCPU", Font.PLAIN, Game.tileSize*3));
+            renderer.setColor(Color.BLACK);
+            String buy = "Buy Shop";
+            int buyTextWidth = (int)renderer.getFontMetrics().getStringBounds(buy, renderer).getWidth();
+            renderer.drawString(buy, Game.width / 2 - buyTextWidth/2, Game.tileSize * 2 * 2);
+            renderer.drawImage(interfaces.get("shop"), Game.tileSize * 2 * 4, Game.tileSize * 2 * 3, Game.tileSize * 2 * 8, Game.tileSize * 2 * 3, null);
+            renderer.drawImage(interfaces.get("shopSelect"), Game.tileSize * 2 * 4 + (Game.tileSize * 2 * (2 * (shopIndex % 4))), Game.tileSize * 2 * 3 + (int)(Game.tileSize * 2 * (3/2D) * (shopIndex / 4)), Game.tileSize * 2 * 2, (int)(Game.tileSize * 2 * (3/2D)), null);
+            if (isConfirming) {
+                this.drawConfirming(renderer, "Buy", "Cancel");
+            }
+        } else if (Game.globalState == Game.gameState.SELLING) {
+            renderer.setFont(new Font("2005_iannnnnCPU", Font.PLAIN, Game.tileSize*3));
+            renderer.setColor(Color.BLACK);
+            String sell = "Sell Shop";
+            int sellTextWidth = (int)renderer.getFontMetrics().getStringBounds(sell, renderer).getWidth();
+            renderer.drawString(sell, Game.width / 2 - sellTextWidth/2, Game.tileSize * 2 * 2);
+            renderer.drawImage(interfaces.get("shop"), Game.tileSize * 2 * 4, Game.tileSize * 2 * 3, Game.tileSize * 2 * 8, Game.tileSize * 2 * 3, null);
+            renderer.drawImage(interfaces.get("shopSelect"), Game.tileSize * 2 * 4 + (Game.tileSize * 2 * (2 * (shopIndex % 4))), Game.tileSize * 2 * 3 + (int)(Game.tileSize * 2 * (3/2D) * (shopIndex / 4)), Game.tileSize * 2 * 2, (int)(Game.tileSize * 2 * (3/2D)), null);
+            if (isConfirming) {
+                this.drawConfirming(renderer, "Sell", "Cancel");
+            }
+        } else if (Game.globalState == Game.gameState.EXITING) {
+            if (isConfirming) {
+                this.drawConfirming(renderer, "Quit", "Cancel");
+            }
+        }
+        else {
+            shopIndex = 0;
+            confirmIndex = 0;
+        }
+    }
+
+    public void drawConfirming(Graphics2D renderer, String confirm, String reject) {
+        renderer.drawImage(interfaces.get("confirm"), Game.width - (Game.tileSize * 2 * 3), Game.height - (Game.tileSize * 2 * 3), Game.tileSize * 2 * 2, Game.tileSize * 2 * 2, null);
+        renderer.setFont(new Font("2005_iannnnnCPU", Font.PLAIN, Game.tileSize*2));
+        if (confirmIndex == 0) {
+            renderer.setColor(Color.RED);
+        } else {
+            renderer.setColor(Color.BLACK);
+        }
+        int confirmTextWidth = (int)renderer.getFontMetrics().getStringBounds(confirm, renderer).getWidth();
+        renderer.drawString(confirm, Game.width - (Game.tileSize * 2 * 2) - confirmTextWidth / 2, Game.height - (Game.tileSize * 2 * 2) - (Game.tileSize / 2));
+
+        if (confirmIndex == 1) {
+            renderer.setColor(Color.RED);
+        } else {
+            renderer.setColor(Color.BLACK);
+        }
+        int rejectTextWidth = (int)renderer.getFontMetrics().getStringBounds(reject, renderer).getWidth();
+        renderer.drawString(reject, Game.width - (Game.tileSize * 2 * 2) - rejectTextWidth / 2, Game.height - (Game.tileSize * 2) - (Game.tileSize / 2));
     }
 
     private void setNormalFont(Font normalFont) {
@@ -156,14 +209,6 @@ public class GameUI {
 
     public static Font getNormalFont() {
         return normalFont;
-    }
-
-    public void setControlHandler(GameControlHandler controlHandler) {
-        this.controlHandler = controlHandler;
-    }
-
-    public GameControlHandler getControlHandler() {
-        return controlHandler;
     }
 
     public static void setTitleSelect(int titleSelect) {

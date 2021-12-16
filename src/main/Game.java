@@ -5,6 +5,7 @@ import entity.Player;
 import tile.TileManager;
 
 import java.awt.*;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
@@ -59,6 +60,9 @@ public class Game extends JPanel implements Runnable {
         INTRO,
         PLAY,
         PAUSE,
+        BUYING,
+        SELLING,
+        EXITING,
     }
 
     /**
@@ -88,7 +92,8 @@ public class Game extends JPanel implements Runnable {
 
         player.setCurrentMap(Maps.getMap("village"));
         globalState = gameState.INTRO;
-        ui = new GameUI(controlHandler);
+        loadedSave = new File("save/player.dat").exists();
+        ui = new GameUI();
         sound = new SoundManager();
         initThread();
     }
@@ -143,8 +148,13 @@ public class Game extends JPanel implements Runnable {
     public void update() {
         if (globalState == gameState.PLAY) {
             player.update();
-            for(NPC npc : player.getCurrentMap().NPCs){
+            for (NPC npc : player.getCurrentMap().NPCs){
                 npc.update();
+            }
+        } else if (globalState == gameState.EXITING) {
+            if (controlHandler.confirmExit) {
+                this.saveGame();
+                System.exit(0);
             }
         }
     }
@@ -154,7 +164,7 @@ public class Game extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         switch (globalState) {
-            case PLAY -> {
+            case PLAY, BUYING, SELLING, EXITING -> {
                 // Draw player and map
                 player.getCurrentMap().render(g2d, player);
 
@@ -183,5 +193,49 @@ public class Game extends JPanel implements Runnable {
     public static void playSoundEffect(String name) {
         sound.setSound(name);
         sound.playSound();
+    }
+
+    public void saveGame() {
+        File saveDir = new File("save");
+        if (!saveDir.exists()) {
+            saveDir.mkdir();
+        }
+        try (
+            FileOutputStream fos = new FileOutputStream("save/player.dat");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+        ) {
+            oos.writeObject(player);
+            System.out.println("Save Sucessfully!");
+        } catch (IOException error) {
+            error.printStackTrace();
+            System.out.println("Save Error!");
+        }
+    }
+
+    public void loadGame() {
+        File save = new File("save/player.dat");
+        if (save.exists()) {
+            try (
+                FileInputStream fis = new FileInputStream(save);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+            ) {
+                Player playerLoad = (Player) ois.readObject();
+                player.setSelectedItem(playerLoad.getSelectedItem());
+                player.setInventory(playerLoad.getInventory());
+                player.setWallet(playerLoad.getWallet());
+                player.setDirection(playerLoad.getDirection());
+                player.setScreenPosX(playerLoad.getScreenPosX());
+                player.setScreenPosY(playerLoad.getScreenPosY());
+                player.setTilePosX(playerLoad.getTilePosX());
+                player.setTilePosY(playerLoad.getTilePosY());
+                player.setPixelPosX(playerLoad.getPixelPosX());
+                player.setPixelPosY(playerLoad.getPixelPosY());
+                player.setEnergy(playerLoad.getEnergy());
+                player.setCurrentMap(playerLoad.getCurrentMap());
+                System.out.println("Load successfully");
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Load Error!");
+            }
+        }
     }
 }

@@ -3,9 +3,10 @@ package inventory;
 import entity.Human;
 import item.Item;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Inventory {
+public class Inventory implements Serializable {
     private ArrayList<Item> inventory;
     private int maxInventorySize;
 

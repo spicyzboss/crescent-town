@@ -3,10 +3,11 @@ package main;
 import entity.Player;
 
 import java.awt.event.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class GameControlHandler implements KeyListener {
+public class GameControlHandler implements KeyListener, Serializable {
     public static boolean arrowKeyPressed;
     public boolean upKeyPressed;
     public boolean downKeyPressed;
@@ -14,6 +15,7 @@ public class GameControlHandler implements KeyListener {
     public boolean rightKeyPressed;
     public boolean scaleUp;
     public boolean scaleDown;
+    public boolean confirmExit = false;
     public static boolean move;
     public static boolean interact = false;
     public static int dialog;
@@ -48,6 +50,15 @@ public class GameControlHandler implements KeyListener {
                     move = true;
                 } else if (KeyEvent.VK_1 <= e.getKeyCode() && e.getKeyCode() <= KeyEvent.VK_9) {
                     numbers.set(e.getKeyCode() - KeyEvent.VK_1, true);
+                } else if (e.getKeyCode() == KeyEvent.VK_D) {
+                    Game.globalState = Game.gameState.BUYING;
+                } else if (e.getKeyCode() == KeyEvent.VK_S) {
+                    Game.globalState = Game.gameState.SELLING;
+                }
+            }
+            case BUYING, SELLING -> {
+                 if (e.getKeyCode() == KeyEvent.VK_H) {
+                    Game.globalState = Game.gameState.PLAY;
                 }
             }
             case PAUSE, INTRO -> {
@@ -59,7 +70,7 @@ public class GameControlHandler implements KeyListener {
     public void keyReleased(KeyEvent e) {
         switch (Game.globalState) {
             case INTRO -> {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_Z) {
                     if (GameUI.getTitleSelect() == 1) {
                         Game.playSoundEffect("select");
                         Game.globalState = Game.gameState.PLAY;
@@ -73,6 +84,7 @@ public class GameControlHandler implements KeyListener {
                     } else if (GameUI.getTitleSelect() == 2) {
                         if (Game.loadedSave) {
                             Game.playSoundEffect("select");
+//                            Game.loadGame();
                         } else {
                             Game.playSoundEffect("cancel");
                         }
@@ -120,6 +132,46 @@ public class GameControlHandler implements KeyListener {
                         objState = !objState;
                 } else if (KeyEvent.VK_1 <= e.getKeyCode() && e.getKeyCode() <= KeyEvent.VK_9) {
                     numbers.set(e.getKeyCode() - KeyEvent.VK_1, false);
+                } else if (e.getKeyCode() == KeyEvent.VK_X) {
+                    Game.globalState = Game.gameState.EXITING;
+                    GameUI.isConfirming = true;
+                }
+            }
+            case BUYING, SELLING, EXITING -> {
+                if (!GameUI.isConfirming) {
+                    if (e.getKeyCode() == KeyEvent.VK_UP) {
+                        upKeyPressed = false;
+                    } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                        downKeyPressed = false;
+                    } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                        leftKeyPressed = false;
+                        GameUI.shopIndex = Math.max(GameUI.shopIndex - 1, 0);
+                    } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                        rightKeyPressed = false;
+                        GameUI.shopIndex = Math.min(GameUI.shopIndex + 1, 7);
+                    } else if (e.getKeyCode() == KeyEvent.VK_Z) {
+                        GameUI.isConfirming = true;
+                    } else if (e.getKeyCode() == KeyEvent.VK_X) {
+                        Game.globalState = Game.gameState.PLAY;
+                    }
+                } else {
+                    if (e.getKeyCode() == KeyEvent.VK_UP) {
+                        GameUI.confirmIndex = 0;
+                    } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                        GameUI.confirmIndex = 1;
+                    } else if (e.getKeyCode() == KeyEvent.VK_Z) {
+                        if (GameUI.confirmIndex == 0) {
+                            // buy or sell event
+                            if (Game.globalState == Game.gameState.EXITING) {
+                                // save state
+                                confirmExit = true;
+                            }
+                        } else {
+                            GameUI.isConfirming = false;
+                            if (Game.globalState == Game.gameState.EXITING)
+                                Game.globalState = Game.gameState.PLAY;
+                        }
+                    }
                 }
             }
             case PAUSE -> {

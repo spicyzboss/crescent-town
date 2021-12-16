@@ -11,9 +11,10 @@ import tile.Tile;
 import tile.TileManager;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player extends Human {
+public class Player extends Human implements Serializable {
     private Map currentMap;
     public static double screenPosX;
     public static double screenPosY;
@@ -48,6 +49,7 @@ public class Player extends Human {
         this.setSpriteLoadTime(Game.FPS/this.getMaxActionFrame());
         this.setWallet(new HumanWallet(100));
         this.setInventory(new Inventory(9));
+        this.getInventory().addItem(new Hoe());
 //        this.getInventory().addItem(new BlueBush());
 //        this.getInventory().addItem(new Corn());
 //        this.getInventory().addItem(new Flowder());

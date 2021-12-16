@@ -12,8 +12,8 @@ import java.time.format.DateTimeFormatter;
 public class Entity {
     private String name;
     private String direction;
-    private BufferedImage sprite;
-    private BufferedImage spriteOnAction;
+    private transient BufferedImage sprite;
+    private transient BufferedImage spriteOnAction;
     private int actionFrame;
     private int maxActionFrame;
     private int spriteLoadTime;
