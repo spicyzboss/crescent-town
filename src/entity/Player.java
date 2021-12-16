@@ -70,7 +70,7 @@ public class Player extends Human implements Serializable {
         }
         if(this.getControlHandler().activeItem){
             this.getInventory().getItem(this.getSelectedItem()).active(this);
-
+            this.getControlHandler().activeItem = false;
         }
         if(this.getControlHandler().pos){
             System.out.println(this.getTilePosX()+", "+this.getTilePosY());
