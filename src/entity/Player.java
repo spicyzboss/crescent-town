@@ -14,7 +14,7 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player extends Human implements Serializable {
+public class Player extends Human implements Serializable, Runnable {
     private Map currentMap;
     public static double screenPosX;
     public static double screenPosY;
@@ -29,11 +29,15 @@ public class Player extends Human implements Serializable {
 
     public static Rectangle playerArea = new Rectangle();
 
+    public static Thread playerThread;
+
     public Player(String name, GameControlHandler controlHandler) {
         setName(name);
         setControlHandler(controlHandler);
         loadSprite(name);
         playerInit();
+        playerThread = new Thread(this);
+        playerThread.start();
     }
 
     public void playerInit() {
@@ -297,5 +301,25 @@ public class Player extends Human implements Serializable {
 
     public int getSelectedItem() {
         return selectedItem;
+    }
+
+    public void run() {
+        double refreshInterval =  Math.pow(10, 9) / Game.FPS; // capture refresh rate to max FPS in nanosecond
+        long lastRefreshTime = System.nanoTime(); // last refresh time in nanosecond
+        long currentTime; // variable for current time in nanosecond
+        double delta = 0; // a difference variable for calculation next refresh time
+
+        // Game loop theory
+        while (playerThread != null) {
+            currentTime = System.nanoTime(); // get current system time in nanosecond
+            delta += (currentTime - lastRefreshTime) / refreshInterval; // capture CPU clock FPS to match game FPS
+            lastRefreshTime = currentTime; // update refresh time for last refresh time
+
+            // if delta time to 1 second update frame
+            if (delta >= 1) {
+                update();
+                --delta;
+            }
+        }
     }
 }

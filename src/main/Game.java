@@ -73,7 +73,7 @@ public class Game extends JPanel implements Runnable {
     public static boolean loadedSave;
 
     GameControlHandler controlHandler = new GameControlHandler();
-    Player player = new Player("gongcha", controlHandler);
+    Player player;
     GameUI ui;
     public static SoundManager sound;
 
@@ -90,6 +90,7 @@ public class Game extends JPanel implements Runnable {
         new GameFonts();
         new MapManager();
 
+        player = new Player("gongcha", controlHandler);
         player.setCurrentMap(MapManager.getMap("village"));
         globalState = gameState.INTRO;
         loadedSave = new File("save/player.dat").exists();
@@ -146,12 +147,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (globalState == gameState.PLAY) {
-            player.update();
-            for (NPC npc : player.getCurrentMap().NPCs){
-                npc.update();
-            }
-        } else if (globalState == gameState.EXITING) {
+        if (globalState == gameState.EXITING) {
             if (controlHandler.confirmExit) {
                 this.saveGame();
                 System.exit(0);
@@ -220,18 +216,18 @@ public class Game extends JPanel implements Runnable {
                 ObjectInputStream ois = new ObjectInputStream(fis);
             ) {
                 Player playerLoad = (Player) ois.readObject();
-                player.setSelectedItem(playerLoad.getSelectedItem());
-                player.setInventory(playerLoad.getInventory());
-                player.setWallet(playerLoad.getWallet());
-                player.setDirection(playerLoad.getDirection());
-                player.setScreenPosX(playerLoad.getScreenPosX());
-                player.setScreenPosY(playerLoad.getScreenPosY());
-                player.setTilePosX(playerLoad.getTilePosX());
-                player.setTilePosY(playerLoad.getTilePosY());
-                player.setPixelPosX(playerLoad.getPixelPosX());
-                player.setPixelPosY(playerLoad.getPixelPosY());
-                player.setEnergy(playerLoad.getEnergy());
-                player.setCurrentMap(playerLoad.getCurrentMap());
+//                player.setSelectedItem(playerLoad.getSelectedItem());
+//                player.setInventory(playerLoad.getInventory());
+//                player.setWallet(playerLoad.getWallet());
+//                player.setDirection(playerLoad.getDirection());
+//                player.setScreenPosX(playerLoad.getScreenPosX());
+//                player.setScreenPosY(playerLoad.getScreenPosY());
+//                player.setTilePosX(playerLoad.getTilePosX());
+//                player.setTilePosY(playerLoad.getTilePosY());
+//                player.setPixelPosX(playerLoad.getPixelPosX());
+//                player.setPixelPosY(playerLoad.getPixelPosY());
+//                player.setEnergy(playerLoad.getEnergy());
+//                player.setCurrentMap(playerLoad.getCurrentMap());
                 System.out.println("Load successfully");
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("Load Error!");

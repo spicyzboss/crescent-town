@@ -9,13 +9,14 @@ import tile.Map;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class NPC extends Human implements Interactable {
+public class NPC extends Human implements Interactable, Runnable {
     private String job;
     private boolean moving;
     protected int moveAble;
     protected int movedX;
     protected int movedY;
     protected int moveChangeState = 1;
+    private Thread NPCThread;
     protected String pattern;
     private String map;
     public ArrayList<String> dialog;
@@ -27,9 +28,11 @@ public class NPC extends Human implements Interactable {
         this.setInventory(new Inventory(5));
         this.setMoving(false);
         NPCInit();
+        NPCThread = new Thread(this);
+        NPCThread.start();
     }
 
-    public void NPCInit(){
+    public void NPCInit() {
         this.solidArea = new Rectangle();
         this.dialog = new ArrayList<>();
         this.loadSprite(this.getName());
@@ -68,8 +71,6 @@ public class NPC extends Human implements Interactable {
         && this.getPixelPosY() + Game.scaledTileSize > player.getPixelPosY() - player.getScreenPosY()
         && this.getPixelPosY() - Game.scaledTileSize < player.getPixelPosY() + player.getScreenPosY()){
             this.solidArea.setRect((int) screenX, (int) screenY, Game.scaledTileSize, Game.scaledTileSize);
-            g2d.setColor(Color.ORANGE);
-            g2d.fillRect(this.solidArea.x, this.solidArea.y, this.solidArea.width, this.solidArea.height);
             g2d.drawImage(this.getSpriteOnAction(), (int) screenX, (int) screenY, Game.scaledTileSize, Game.scaledTileSize, null);
         }
     }
@@ -80,7 +81,6 @@ public class NPC extends Human implements Interactable {
 
     public void setJob(String job) {
         this.job = job;
-
     }
 
     public int getMoveAble() {
@@ -92,8 +92,9 @@ public class NPC extends Human implements Interactable {
     }
 
     public void update(){
-        if(this.collisionNPC && moving) this.move(pattern);
-        this.setWalkSpeed(2* Game.scale);
+        if (this.collisionNPC && moving)
+            this.move(pattern);
+        this.setWalkSpeed(2 * Game.scale);
     }
 
     public void setPattern(String pattern) {
@@ -198,6 +199,27 @@ public class NPC extends Human implements Interactable {
                 GameControlHandler.dialog = 0;
                 player.collisionNPC = true;
                 player.isInteracting = false;
+            }
+        }
+    }
+
+    @Override
+    public void run() {
+        double refreshInterval =  Math.pow(10, 9) / Game.FPS; // capture refresh rate to max FPS in nanosecond
+        long lastRefreshTime = System.nanoTime(); // last refresh time in nanosecond
+        long currentTime; // variable for current time in nanosecond
+        double delta = 0; // a difference variable for calculation next refresh time
+
+        // Game loop theory
+        while (NPCThread != null) {
+            currentTime = System.nanoTime(); // get current system time in nanosecond
+            delta += (currentTime - lastRefreshTime) / refreshInterval; // capture CPU clock FPS to match game FPS
+            lastRefreshTime = currentTime; // update refresh time for last refresh time
+
+            // if delta time to 1 second update frame
+            if (delta >= 1) {
+                update();
+                --delta;
             }
         }
     }
