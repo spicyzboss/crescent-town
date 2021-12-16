@@ -1,7 +1,7 @@
 package entity;
 
 import inventory.Inventory;
-import item.Hoe;
+import item.*;
 import main.Game;
 import main.GameControlHandler;
 import main.MapManager;
@@ -55,12 +55,12 @@ public class Player extends Human implements Serializable {
         this.setWallet(new HumanWallet(100));
         this.setInventory(new Inventory(9));
         this.getInventory().addItem(new Hoe());
-//        this.getInventory().addItem(new BlueBush());
-//        this.getInventory().addItem(new Corn());
-//        this.getInventory().addItem(new Flowder());
-//        this.getInventory().addItem(new PinkBush());
-//        this.getInventory().addItem(new Lotus());
-//        this.getInventory().addItem(new PoiSian());
+        this.getInventory().addItem(new BlueBush());
+        this.getInventory().addItem(new Corn());
+        this.getInventory().addItem(new Flowder());
+        this.getInventory().addItem(new PinkBush());
+        this.getInventory().addItem(new Lotus());
+        this.getInventory().addItem(new PoiSian());
         this.setSelectedItem(0);
     }
 

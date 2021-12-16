@@ -7,8 +7,4 @@ public class PoiSian extends PlantItem {
         super("Poi Sian", 75, 170, 27600);
     }
 
-    @Override
-    public void active(Player player) {
-
-    }
 }

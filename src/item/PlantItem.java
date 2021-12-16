@@ -2,6 +2,8 @@ package item;
 
 import entity.Player;
 import main.Game;
+import main.MapManager;
+import object.Plant;
 import tile.Map;
 import tile.Tile;
 import tile.TileManager;
@@ -20,10 +22,6 @@ public abstract class PlantItem extends Item {
     // 1 day in game = 28800 frame = 8 mins
     private int growthDuration;
 
-    private boolean isLoosenDirt;
-    private int choosenTilePosX;
-    private int choosenTilePosY;
-
     public PlantItem(String name, double buyPrice, double sellPrice, int growthDuration) {
         super(name, buyPrice, sellPrice);
         this.setGrowthDuration(growthDuration);
@@ -34,7 +32,10 @@ public abstract class PlantItem extends Item {
     public void active(Player player) {
         player.checkFowardTile();
         if(player.getForwardTile().getTileNumber() == 117){
-
+            Plant plant = new Plant(this);
+            plant.setTilePosX(player.getFowardTilePosX());
+            plant.setTilePosY(player.getFowardTilePosY());
+            MapManager.objects.add(plant);
         }
     }
 
