@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class PlantItem extends Item {
+public abstract class PlantItem extends Item {
     // growth duration in frame unit
     // 1 second = 60 frame
     // 1 day in game = 28800 frame = 8 mins

@@ -1,7 +1,6 @@
 package object;
 
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 
 public abstract class ActiveTypeObject extends Object {
     public boolean isActive, hasActiveImage;

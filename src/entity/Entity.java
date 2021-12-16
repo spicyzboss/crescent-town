@@ -22,10 +22,7 @@ public class Entity {
     private double tilePosY;
     private double pixelPosX;
     private double pixelPosY;
-    protected double borderLeft;
-    protected double borderRight;
-    protected double borderTop;
-    protected double borderBot;
+
     public boolean collisionObj = true;
     public boolean collisionTile = true;
     public boolean collisionNPC = true;

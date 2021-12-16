@@ -9,10 +9,12 @@ import object.Object;
 import tile.Map;
 import tile.Tile;
 import tile.TileManager;
+import tile.TileMap;
 
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Player extends Human implements Serializable {
     private Map currentMap;
@@ -24,7 +26,7 @@ public class Player extends Human implements Serializable {
     private int energy;
     private Inventory inventory;
     private int selectedItem;
-
+    public double borderLeft, borderRight, borderTop, borderBot;
     private GameControlHandler controlHandler;
 
     public static Rectangle playerArea = new Rectangle();
@@ -63,10 +65,14 @@ public class Player extends Human implements Serializable {
         if (this.getControlHandler().numbers.contains(true)) {
             this.setSelectedItem(this.getControlHandler().numbers.indexOf(true));
         }
-
-        if(GameControlHandler.pos){
+        if(this.getControlHandler().activeItem){
+            if(this.getInventory().getItem(this.getSelectedItem()).getName().equals("Hoe")){
+                this.getInventory().getItem(this.getSelectedItem()).active(this);
+            }
+        }
+        if(this.getControlHandler().pos){
             System.out.println(this.getTilePosX()+", "+this.getTilePosY());
-            GameControlHandler.pos = false;
+            this.getControlHandler().pos = false;
         }
         this.borderTop = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y;
         this.borderBot = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y + this.solidArea.height;
@@ -100,6 +106,7 @@ public class Player extends Human implements Serializable {
             this.setPixelPosX(getTilePosX() * Game.scaledTileSize);
             this.setPixelPosY(getTilePosY() * Game.scaledTileSize);
         }
+
         if (!this.isInteracting) {
             if (this.getControlHandler().upKeyPressed) {
                 this.setDirection("up");
@@ -140,7 +147,7 @@ public class Player extends Human implements Serializable {
             interactNPC.interact(renderer, this);
         }
         if (interactObj != null) {
-            if (GameControlHandler.interact || interactObj.getType().equals("passive")){
+            if (this.getControlHandler().interact || interactObj.getType().equals("passive")){
                 interactObj.interact(renderer, this);
             }
         }
@@ -152,6 +159,7 @@ public class Player extends Human implements Serializable {
 //        renderer.setColor(Color.red);
 //        renderer.fillRect(this.solidArea.x, this.solidArea.y, this.solidArea.width, this.solidArea.height);
     }
+
 
     public void collisionCheck() {
         Tile tile1 = null;
@@ -279,7 +287,7 @@ public class Player extends Human implements Serializable {
     }
 
 
-    private int pixelToTile(double pixel){
+    public int pixelToTile(double pixel){
         return (int) pixel / Game.scaledTileSize;
     }
 

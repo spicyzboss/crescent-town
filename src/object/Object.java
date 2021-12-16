@@ -11,7 +11,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -76,11 +75,6 @@ public abstract class Object implements Interactable {
         return image;
     }
 
-    public void setPixelPosX(double pixelPosX) {
-        this.pixelPosX = pixelPosX;
-        this.tilePosX = pixelPosX/ Game.scaledTileSize;
-    }
-
     public double getPixelPosX() {
         return pixelPosX;
     }
@@ -124,9 +118,9 @@ public abstract class Object implements Interactable {
         this.map = map;
     }
 
-    public void reset(){
+    public void resetPlayer(Player player){
         Player.interactObj = null;
-        GameControlHandler.interact = false;
+        player.getControlHandler().interact = false;
     }
 
     public abstract void interact(Graphics2D renderer, Player player);
