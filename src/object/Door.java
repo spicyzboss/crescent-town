@@ -6,7 +6,7 @@ import main.GameControlHandler;
 import java.awt.*;
 import java.io.Serializable;
 
-public class Door extends PassiveTypeObject implements Serializable {
+public class Door extends PassiveTypeObject{
     public String destination;
     public double spawnPointX, spawnPointY;
 

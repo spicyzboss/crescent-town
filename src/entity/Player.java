@@ -1,10 +1,9 @@
 package entity;
 
 import inventory.Inventory;
-import item.*;
 import main.Game;
 import main.GameControlHandler;
-import main.Maps;
+import main.MapManager;
 import object.Object;
 import tile.Map;
 import tile.Tile;
@@ -17,7 +16,7 @@ public class Player extends Human {
     private Map currentMap;
     public static double screenPosX;
     public static double screenPosY;
-    public static Interactable interactEntity;
+    public static NPC interactNPC;
     public static Object interactObj;
     public boolean isInteracting;
     private int energy;
@@ -62,6 +61,10 @@ public class Player extends Human {
             this.setSelectedItem(this.getControlHandler().numbers.indexOf(true));
         }
 
+        if(GameControlHandler.pos){
+            System.out.println(this.getTilePosX()+", "+this.getTilePosY());
+            GameControlHandler.pos = false;
+        }
         this.borderTop = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y;
         this.borderBot = this.getPixelPosY() - this.getScreenPosY() + this.solidArea.y + this.solidArea.height;
         this.borderLeft = this.getPixelPosX() - this.getScreenPosX() + this.solidArea.x;
@@ -72,11 +75,11 @@ public class Player extends Human {
         ArrayList<NPC> npcs = this.getCurrentMap().NPCs;
         if(!npcs.isEmpty()) {
             for (NPC npc : npcs) {
-                this.checkEntity(npc);
+                this.checkNPC(npc);
             }
         }
         else{
-            this.collisionEntity = true;
+            this.collisionNPC = true;
         }
         ArrayList<Object> objects = this.getCurrentMap().objects;
         if(!objects.isEmpty()) {
@@ -88,9 +91,9 @@ public class Player extends Human {
             this.collisionObj = true;
         }
 
-        boolean isCollision = this.collisionTile && this.collisionEntity && this.collisionObj && !isInteracting;
+        boolean isCollision = this.collisionTile && this.collisionNPC && this.collisionObj && !isInteracting;
         if (this.getControlHandler().scaleUp || this.getControlHandler().scaleDown) {
-            this.setWalkSpeed(4 * Game.scale);
+            this.setWalkSpeed(2 * Game.scale);
             this.setPixelPosX(getTilePosX() * Game.scaledTileSize);
             this.setPixelPosY(getTilePosY() * Game.scaledTileSize);
         }
@@ -115,25 +118,23 @@ public class Player extends Human {
                 this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) + this.getWalkSpeed());
             }
         }
-        if(collisionEntity)
-            interactEntity = null;
+        if(collisionNPC)
+            interactNPC = null;
         if(collisionObj)
             interactObj = null;
         this.setScreenPosX((double) Game.width/2 - (double) Game.scaledTileSize/2);
         this.setScreenPosY((double) Game.height/2 - (double) Game.scaledTileSize/2);
         Player.playerArea.setRect((int)screenPosX, (int)screenPosY, Game.scaledTileSize, Game.scaledTileSize);
-        this.collisionEntity = true;
+        this.collisionNPC = true;
         this.collisionObj = true;
     }
 
     public void draw(Graphics2D renderer) {
         this.setSpriteOnAction();
-        if (interactEntity != null) {
-            interactEntity.interact(renderer, this);
+        if (interactNPC != null) {
+            interactNPC.interact(renderer, this);
         }
         if (interactObj != null) {
-            System.out.println(interactObj.getType());
-            System.out.println(interactObj.getType().equals("passive"));
             if(GameControlHandler.interact || interactObj.getType().equals("passive")){
                 interactObj.interact(renderer, this);
             }
@@ -170,26 +171,48 @@ public class Player extends Human {
                 tile2 = TileManager.getTile((this.getCurrentMap().collisionTileMap.map[pixelToTile(borderBot)][pixelToTile(borderRight)])+"");
             }
         }
-
         this.collisionTile = (((tile1 == null) || (tile2 == null)));
     }
 
-    public void checkEntity(Entity target){
-        Rectangle recIntersection = playerArea.intersection(target.solidArea);
-        if(playerArea.intersects(target.solidArea)){
-            if(target.getClass().getInterfaces()[0].getSimpleName().equals("Interactable")) {
-                interactEntity = (Interactable) target;
-            }
-            target.collisionEntity = false;
-            switch (this.getDirection()){
-                case "up" -> this.collisionEntity = recIntersection.y != playerArea.y || recIntersection.width <= recIntersection.height;
-                case "down" -> this.collisionEntity = recIntersection.y != target.solidArea.y || recIntersection.width <= recIntersection.height;
-                case "left" -> this.collisionEntity = recIntersection.x != playerArea.x || recIntersection.height <= recIntersection.width;
-                case "right" -> this.collisionEntity = recIntersection.x != target.solidArea.x || recIntersection.height <= recIntersection.width;
+    public void checkNPC(NPC target){
+        Rectangle recIntersection;
+        if(target.getJob().equals("merchant")) {
+            NPCMerchant merchant = (NPCMerchant) target;
+            if (playerArea.intersects(((NPCMerchant) target).saleArea)) {
+                recIntersection = playerArea.intersection(merchant.saleArea);
+                interactNPC = target;
+                target.collisionNPC = false;
+                merchant.onSale = true;
+                collisionNPC(recIntersection, merchant.saleArea);
+            } else if (playerArea.intersects(target.solidArea)) {
+                recIntersection = playerArea.intersection(target.solidArea);
+                interactNPC = target;
+                target.collisionNPC = false;
+                collisionNPC(recIntersection, merchant.solidArea);
+            } else {
+                target.collisionNPC = true;
             }
         }
         else{
-            target.collisionEntity = true;
+            recIntersection = playerArea.intersection(target.solidArea);
+            if(playerArea.intersects(target.solidArea)){
+                interactNPC = target;
+                target.collisionNPC = false;
+                collisionNPC(recIntersection, target.solidArea);
+            }
+            else{
+                target.collisionNPC = true;
+            }
+        }
+
+    }
+
+    public void collisionNPC(Rectangle recIntersection, Rectangle targetArea){
+        switch (this.getDirection()){
+            case "up" -> this.collisionNPC = recIntersection.y != playerArea.y || recIntersection.width <= recIntersection.height;
+            case "down" -> this.collisionNPC = recIntersection.y != targetArea.y || recIntersection.width <= recIntersection.height;
+            case "left" -> this.collisionNPC = recIntersection.x != playerArea.x || recIntersection.height <= recIntersection.width;
+            case "right" -> this.collisionNPC = recIntersection.x != targetArea.x || recIntersection.height <= recIntersection.width;
         }
     }
 
@@ -247,7 +270,7 @@ public class Player extends Human {
     }
 
     public void setCurrentMapByName(String destination){
-        this.setCurrentMap(Maps.getMap(destination));
+        this.setCurrentMap(MapManager.getMap(destination));
     }
 
 

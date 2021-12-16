@@ -1,7 +1,7 @@
 package tile;
 
 import entity.NPC;
-import main.Maps;
+import main.MapManager;
 import object.Object;
 import entity.Player;
 import main.Game;
@@ -28,7 +28,7 @@ public class Map {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         loadMap(this.name);
-        Maps.Setting(this);
+        MapManager.Setting(this);
     }
 
     public void addNPC(NPC npc){

@@ -6,10 +6,10 @@ import main.GameControlHandler;
 import java.awt.*;
 import java.io.Serializable;
 
-public class Chest extends ActiveTypeObject implements Serializable {
+public class Chest extends ActiveTypeObject {
 
-    public Chest(String name) {
-        super(name);
+    public Chest(String name, boolean hasActiveImage) {
+        super(name, hasActiveImage);
     }
 
     @Override
@@ -17,7 +17,7 @@ public class Chest extends ActiveTypeObject implements Serializable {
         if(GameControlHandler.interact){
             this.updateState();
         }
-        System.out.println(GameControlHandler.interact);
         this.reset();
     }
+
 }

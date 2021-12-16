@@ -84,9 +84,9 @@ public class Game extends JPanel implements Runnable {
         this.setDoubleBuffered(true); // buffer for performance
         new TileManager();
         new GameFonts();
-        new Maps();
+        new MapManager();
 
-        player.setCurrentMap(Maps.getMap("village"));
+        player.setCurrentMap(MapManager.getMap("village"));
         globalState = gameState.INTRO;
         ui = new GameUI(controlHandler);
         sound = new SoundManager();
