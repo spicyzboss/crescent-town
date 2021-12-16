@@ -78,8 +78,8 @@ public class Game extends JPanel implements Runnable {
     public static SoundManager sound;
 
     public static Thread gameThread; // global attribute for threading
-    // Game constructor method for initialization
 
+    // Game constructor for initialization
     public Game() {
         this.setFocusable(true);
         this.addKeyListener(controlHandler); // use KeyListener in GameControlHandler

@@ -190,7 +190,7 @@ public class Player extends Human implements Serializable, Runnable {
 
     public void checkNPC(NPC target){
         Rectangle recIntersection;
-        if(target.getJob().equals("merchant")) {
+        if (target.getJob().equals("merchant")) {
             NPCMerchant merchant = (NPCMerchant) target;
             if (playerArea.intersects(((NPCMerchant) target).saleArea)) {
                 recIntersection = playerArea.intersection(merchant.saleArea);
@@ -198,9 +198,6 @@ public class Player extends Human implements Serializable, Runnable {
                 target.collisionNPC = false;
                 merchant.onSale = true;
                 collisionNPC(recIntersection, merchant.saleArea);
-                if (isInteracting) {
-                    Game.globalState = Game.gameState.SELLING;
-                }
             } else if (playerArea.intersects(target.solidArea)) {
                 recIntersection = playerArea.intersection(target.solidArea);
                 interactNPC = target;
@@ -210,14 +207,14 @@ public class Player extends Human implements Serializable, Runnable {
                 target.collisionNPC = true;
             }
         }
-        else{
+        else {
             recIntersection = playerArea.intersection(target.solidArea);
-            if(playerArea.intersects(target.solidArea)){
+            if (playerArea.intersects(target.solidArea)){
                 interactNPC = target;
                 target.collisionNPC = false;
                 collisionNPC(recIntersection, target.solidArea);
             }
-            else{
+            else {
                 target.collisionNPC = true;
             }
         }
