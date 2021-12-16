@@ -26,6 +26,7 @@ public abstract class PlantItem extends Item {
         super(name, buyPrice, sellPrice);
         this.setGrowthDuration(growthDuration);
         this.loadImage();
+        this.setType("plant");
     }
 
     @Override

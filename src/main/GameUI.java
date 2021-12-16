@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import item.Item;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -9,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameUI {
@@ -18,6 +20,7 @@ public class GameUI {
     public static int shopIndex;
     public static int confirmIndex;
     public static boolean isConfirming;
+    public static ArrayList<Item> items;
 
     public GameUI() {
         this.loadFonts();
@@ -169,6 +172,20 @@ public class GameUI {
             renderer.drawString(sell, Game.width / 2 - sellTextWidth/2, Game.tileSize * 2 * 2);
             renderer.drawImage(interfaces.get("shop"), Game.tileSize * 2 * 4, Game.tileSize * 2 * 3, Game.tileSize * 2 * 8, Game.tileSize * 2 * 3, null);
             renderer.drawImage(interfaces.get("shopSelect"), Game.tileSize * 2 * 4 + (Game.tileSize * 2 * (2 * (shopIndex % 4))), Game.tileSize * 2 * 3 + (int)(Game.tileSize * 2 * (3/2D) * (shopIndex / 4)), Game.tileSize * 2 * 2, (int)(Game.tileSize * 2 * (3/2D)), null);
+
+            items = player.getInventory().filter("plant", player);
+            int blockWidth = Game.tileSize * 2 * 2;
+            int blockHeight = (int)(Game.tileSize * 2 * (3/2D));
+            int row = 0;
+            int col = 0;
+            for(Item item: items){
+                if(col > 3){
+                    row++;
+                    col = 0;
+                }
+                renderer.drawImage(item.getSprite(0), Game.tileSize * 2 * 4+blockWidth*col, Game.tileSize * 2 * 3+blockHeight*row, Game.tileSize * 2 * 2, (int)(Game.tileSize * 2 * (3/2D)), null);
+                col++;
+            }
             if (isConfirming) {
                 this.drawConfirming(renderer, "Sell", "Cancel");
             }

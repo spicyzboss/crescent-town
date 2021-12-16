@@ -24,6 +24,14 @@ public class HumanWallet {
         }
     }
 
+    public void receiveMoney(Human human,  double amount){
+        if(amount > 0) {
+            human.getWallet().setMoney(human.getWallet().getMoney() + amount);
+        }else{
+            Game.playSoundEffect("cancel");
+        }
+    }
+
     public void setMoney(double money) {
         this.money = money;
     }

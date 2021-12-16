@@ -5,6 +5,7 @@ import main.Game;
 
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public abstract class Item implements Serializable {
     private String name;
@@ -12,6 +13,7 @@ public abstract class Item implements Serializable {
     private double buyPrice;
     private double sellPrice;
     private int spriteNumber;
+    private String type;
 
     public Item(String name, double buyPrice, double sellPrice) {
         this.setName(name);
@@ -66,4 +68,15 @@ public abstract class Item implements Serializable {
     public BufferedImage getSprite(int spriteNumber) {
         return this.getImage().getSubimage(spriteNumber * Game.tileSize, 0, Game.tileSize, Game.tileSize);
     }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+
+
 }
