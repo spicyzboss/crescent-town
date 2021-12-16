@@ -206,20 +206,14 @@ public class NPC extends Human implements Interactable, Runnable {
     @Override
     public void run() {
         double refreshInterval =  Math.pow(10, 9) / Game.FPS; // capture refresh rate to max FPS in nanosecond
-        long lastRefreshTime = System.nanoTime(); // last refresh time in nanosecond
-        long currentTime; // variable for current time in nanosecond
-        double delta = 0; // a difference variable for calculation next refresh time
 
         // Game loop theory
         while (NPCThread != null) {
-            currentTime = System.nanoTime(); // get current system time in nanosecond
-            delta += (currentTime - lastRefreshTime) / refreshInterval; // capture CPU clock FPS to match game FPS
-            lastRefreshTime = currentTime; // update refresh time for last refresh time
-
-            // if delta time to 1 second update frame
-            if (delta >= 1) {
-                update();
-                --delta;
+            update();
+            try {
+                Thread.sleep((long) ((refreshInterval/Math.pow(10, 9)) * 1000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

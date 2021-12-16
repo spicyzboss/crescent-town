@@ -116,29 +116,23 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void run() {
-        double refreshInterval =  Math.pow(10, 9) / FPS; // capture refresh rate to max FPS in nanosecond
-        long lastRefreshTime = System.nanoTime(); // last refresh time in nanosecond
-        long currentTime; // variable for current time in nanosecond
-        double delta = 0; // a difference variable for calculation next refresh time
-        int timer = 0; // timer for 1 second
+        double refreshInterval =  Math.pow(10, 9) / Game.FPS; // capture refresh rate to max FPS in nanosecond
+        long timer = 0;
+        long lastRefresh = System.nanoTime();
 
         // Game loop theory
         while (gameThread != null) {
-            currentTime = System.nanoTime(); // get current system time in nanosecond
-            delta += (currentTime - lastRefreshTime) / refreshInterval; // capture CPU clock FPS to match game FPS
-            timer += (currentTime - lastRefreshTime);
-            lastRefreshTime = currentTime; // update refresh time for last refresh time
-
-            // if delta time to 1 second update frame
-            if (delta >= 1) {
-                update();
-                repaint();
-                --delta;
-                ++frame;
+            lastRefresh = System.nanoTime();
+            ++frame;
+            update();
+            repaint();
+            try {
+                Thread.sleep((long) ((refreshInterval/Math.pow(10, 9)) * 1000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-
-            // if 1 second elapsed puts out loaded frame
-            if (timer >= (int) Math.pow(10, 9)) {
+            timer += System.nanoTime() - lastRefresh;
+            if (timer > Math.pow(10, 9)) {
                 System.out.println(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now()) + " - FPS: " + frame);
                 frame = 0;
                 timer = 0;
