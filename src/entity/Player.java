@@ -13,8 +13,6 @@ import tile.TileMap;
 
 import java.awt.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Player extends Human implements Serializable, Runnable {
     private Map currentMap;
@@ -72,7 +70,7 @@ public class Player extends Human implements Serializable, Runnable {
         if (this.getControlHandler().numbers.contains(true)) {
             this.setSelectedItem(this.getControlHandler().numbers.indexOf(true));
         }
-        if(this.getControlHandler().activeItem){
+        if(this.getControlHandler().activeItem && this.getSelectedItem() < this.getInventory().getSize()){
             this.getInventory().getItem(this.getSelectedItem()).active(this);
             this.getControlHandler().activeItem = false;
         }

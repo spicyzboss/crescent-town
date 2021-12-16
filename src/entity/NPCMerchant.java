@@ -3,7 +3,6 @@ package entity;
 import main.Game;
 import main.GameControlHandler;
 import main.GameUI;
-import org.w3c.dom.ls.LSOutput;
 
 import java.awt.*;
 import java.util.ArrayList;

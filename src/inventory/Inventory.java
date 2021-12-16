@@ -51,4 +51,8 @@ public class Inventory implements Serializable {
     public int getSize() {
         return this.getInventory().size();
     }
+
+    public boolean isAvailable() {
+        return this.getSize() < this.maxInventorySize;
+    }
 }

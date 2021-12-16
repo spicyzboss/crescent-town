@@ -24,9 +24,9 @@ public class Hoe extends Item {
     }
 
     public void active(Player player){
-        int[] caltivatable = {5, 6, 7, 13, 14, 15, 21, 22, 23};
+        int[] cultivatable = {5, 6, 7, 13, 14, 15, 21, 22, 23};
         player.checkFowardTile();
-        if(Arrays.binarySearch(caltivatable, player.getForwardTile().getTileNumber()) >= 0){
+        if (Arrays.binarySearch(cultivatable, player.getForwardTile().getTileNumber()) >= 0){
             TileMap tileMap = player.getCurrentMap().tileMaps.get(1);
             tileMap.map[player.getFowardTilePosY()][player.getFowardTilePosX()] = 117;
         }

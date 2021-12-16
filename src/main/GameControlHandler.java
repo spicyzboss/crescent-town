@@ -129,6 +129,7 @@ public class GameControlHandler implements KeyListener, Serializable {
                         objState = !objState;
                 } else if (KeyEvent.VK_1 <= e.getKeyCode() && e.getKeyCode() <= KeyEvent.VK_9) {
                     numbers.set(e.getKeyCode() - KeyEvent.VK_1, false);
+                    Game.playSoundEffect("select");
                 } else if (e.getKeyCode() == KeyEvent.VK_X) {
                     Game.globalState = Game.gameState.EXITING;
                     GameUI.isConfirming = true;

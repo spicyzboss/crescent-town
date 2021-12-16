@@ -1,30 +1,26 @@
 package item;
 
 import entity.Player;
-import main.Game;
 import main.MapManager;
 import object.Plant;
-import tile.Map;
-import tile.Tile;
-import tile.TileManager;
-import tile.TileMap;
 
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 
 public abstract class PlantItem extends Item {
     // growth duration in frame unit
     // 1 second = 60 frame
     // 1 day in game = 28800 frame = 8 mins
     private int growthDuration;
+    private int maxGrowthState;
 
-    public PlantItem(String name, double buyPrice, double sellPrice, int growthDuration) {
+    public PlantItem(String name, double buyPrice, double sellPrice, int growthDuration, int maxGrowthState) {
         super(name, buyPrice, sellPrice);
         this.setGrowthDuration(growthDuration);
+        this.setMaxGrowthState(maxGrowthState);
         this.loadImage();
     }
 
@@ -42,11 +38,7 @@ public abstract class PlantItem extends Item {
             }
             MapManager.maps.get("village").tileMaps.get(2).map[player.getFowardTilePosY()][player.getFowardTilePosX()] = -2;
         }
-
-
     }
-
-
 
     public void loadImage() {
         try {
@@ -63,5 +55,13 @@ public abstract class PlantItem extends Item {
 
     public void setGrowthDuration(int growthDuration) {
         this.growthDuration = growthDuration;
+    }
+
+    public int getMaxGrowthState() {
+        return maxGrowthState;
+    }
+
+    public void setMaxGrowthState(int maxGrowthState) {
+        this.maxGrowthState = maxGrowthState;
     }
 }
