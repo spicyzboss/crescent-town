@@ -1,6 +1,7 @@
 package inventory;
 
 import entity.Human;
+import entity.Player;
 import item.Item;
 
 import java.io.Serializable;
@@ -50,6 +51,16 @@ public class Inventory implements Serializable {
 
     public int getSize() {
         return this.getInventory().size();
+    }
+
+    public ArrayList<Item> filter(String type, Player player){
+        ArrayList<Item> items = new ArrayList<>();
+        for(Item item : player.getInventory().getInventory()){
+            if(item.getType().equals(type)){
+                items.add(item);
+            }
+        }
+        return items;
     }
 
     public boolean isAvailable() {

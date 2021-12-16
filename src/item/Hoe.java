@@ -21,14 +21,17 @@ public class Hoe extends Item {
     public Hoe() {
         super("Hoe", 0, 0);
         this.loadImage();
+        this.setType("tool");
     }
 
     public void active(Player player){
         int[] cultivatable = {5, 6, 7, 13, 14, 15, 21, 22, 23};
         player.checkFowardTile();
-        if (Arrays.binarySearch(cultivatable, player.getForwardTile().getTileNumber()) >= 0){
-            TileMap tileMap = player.getCurrentMap().tileMaps.get(1);
-            tileMap.map[player.getFowardTilePosY()][player.getFowardTilePosX()] = 117;
+        if(player.getForwardTile() != null){
+            if(Arrays.binarySearch(cultivatable, player.getForwardTile().getTileNumber()) >= 0) {
+                TileMap tileMap = player.getCurrentMap().tileMaps.get(1);
+                tileMap.map[player.getFowardTilePosY()][player.getFowardTilePosX()] = 117;
+            }
         }
     }
 

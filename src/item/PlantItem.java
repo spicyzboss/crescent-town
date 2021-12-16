@@ -22,6 +22,7 @@ public abstract class PlantItem extends Item {
         this.setGrowthDuration(growthDuration);
         this.setMaxGrowthState(maxGrowthState);
         this.loadImage();
+        this.setType("plant");
     }
 
     @Override
