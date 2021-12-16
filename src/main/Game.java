@@ -184,11 +184,4 @@ public class Game extends JPanel implements Runnable {
         sound.setSound(name);
         sound.playSound();
     }
-
-//    public void changeMap(){
-//        switch (player.getCurrentMap().name){
-//            case -> {
-//            }
-//        }
-//    }
 }

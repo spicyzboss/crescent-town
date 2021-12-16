@@ -41,6 +41,8 @@ public class GameUI {
         this.loadInterface("energy_13", "energy_13");
         this.loadInterface("inventoryBar", "inventory");
         this.loadInterface("selectItem", "inventory_select");
+        this.loadInterface("shop", "shop");
+        this.loadInterface("shopSelect", "shop_select");
     }
 
     private void loadInterface(String interfaceType, String interfaceName) {
@@ -135,10 +137,16 @@ public class GameUI {
         renderer.drawImage(interfaces.get("coin"), Game.tileSize * 2 * 12, 0, Game.tileSize * 2, Game.tileSize * 2, null);
         renderer.drawString("X " + player.getWallet().getMoney(), Game.tileSize * 2 * 13, Game.tileSize + Game.tileSize/2);
 
-        renderer.drawImage(interfaces.get("inventoryBar"), Game.width/2 - Game.tileSize * 2 * 9 / 2, Game.height - Game.tileSize * 2, Game.tileSize * 2 * 9, Game.tileSize * 2, null);
-        renderer.drawImage(interfaces.get("selectItem"), (Game.width/2 - Game.tileSize * 2 * 9 / 2) + (Game.tileSize * 2 * player.getSelectedItem()), Game.height - Game.tileSize * 2, Game.tileSize * 2, Game.tileSize * 2, null);
-        for (int i = 0; i < player.getInventory().getSize(); i++) {
-            renderer.drawImage(player.getInventory().getItem(i).getSprite(0), (Game.width/2 - Game.tileSize * 2 * 9 / 2) + (Game.tileSize * 2 * i), Game.height - Game.tileSize * 2, Game.tileSize * 2, Game.tileSize * 2, null);
+        if (!player.isInteracting) {
+            renderer.drawImage(interfaces.get("inventoryBar"), Game.width/2 - Game.tileSize * 2 * 9 / 2, Game.height - Game.tileSize * 2, Game.tileSize * 2 * 9, Game.tileSize * 2, null);
+            renderer.drawImage(interfaces.get("selectItem"), (Game.width/2 - Game.tileSize * 2 * 9 / 2) + (Game.tileSize * 2 * player.getSelectedItem()), Game.height - Game.tileSize * 2, Game.tileSize * 2, Game.tileSize * 2, null);
+            for (int i = 0; i < player.getInventory().getSize(); i++) {
+                renderer.drawImage(player.getInventory().getItem(i).getSprite(0), (Game.width/2 - Game.tileSize * 2 * 9 / 2) + (Game.tileSize * 2 * i), Game.height - Game.tileSize * 2, Game.tileSize * 2, Game.tileSize * 2, null);
+            }
+
+            renderer.drawImage(interfaces.get("shop"), Game.tileSize * 2 * 4, Game.tileSize * 2 * 3, Game.tileSize * 2 * 8, Game.tileSize * 2 * 3, null);
+            int index = 7;
+            renderer.drawImage(interfaces.get("shopSelect"), Game.tileSize * 2 * 4 + (Game.tileSize * 2 * (2 * (index % 5))), Game.tileSize * 2 * 3 + (int)(Game.tileSize * 2 * (3/2D) * (index / 5)), Game.tileSize * 2 * 2, (int)(Game.tileSize * 2 * (3/2D)), null);
         }
     }
 

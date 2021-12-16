@@ -90,34 +90,36 @@ public class Player extends Human {
 
         boolean isCollision = this.collisionTile && this.collisionEntity && this.collisionObj && !isInteracting;
         if (this.getControlHandler().scaleUp || this.getControlHandler().scaleDown) {
-            this.setWalkSpeed(4 * Game.scale);
+            this.setWalkSpeed(2 * Game.scale);
             this.setPixelPosX(getTilePosX() * Game.scaledTileSize);
             this.setPixelPosY(getTilePosY() * Game.scaledTileSize);
         }
-        if (this.getControlHandler().upKeyPressed) {
-            this.setDirection("up");
-            if (isCollision) {
-                this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) - this.getWalkSpeed());
-            }
-        } else if (this.getControlHandler().downKeyPressed) {
-            this.setDirection("down");
-            if (isCollision) {
-                this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) + this.getWalkSpeed());
-            }
-        } else if (this.getControlHandler().leftKeyPressed) {
-            this.setDirection("left");
-            if (isCollision) {
-                this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) - this.getWalkSpeed());
-            }
-        } else if (this.getControlHandler().rightKeyPressed) {
-            this.setDirection("right");
-            if (isCollision) {
-                this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) + this.getWalkSpeed());
+        if (!this.isInteracting) {
+            if (this.getControlHandler().upKeyPressed) {
+                this.setDirection("up");
+                if (isCollision) {
+                    this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) - this.getWalkSpeed());
+                }
+            } else if (this.getControlHandler().downKeyPressed) {
+                this.setDirection("down");
+                if (isCollision) {
+                    this.setPixelPosY((this.getTilePosY() * Game.scaledTileSize) + this.getWalkSpeed());
+                }
+            } else if (this.getControlHandler().leftKeyPressed) {
+                this.setDirection("left");
+                if (isCollision) {
+                    this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) - this.getWalkSpeed());
+                }
+            } else if (this.getControlHandler().rightKeyPressed) {
+                this.setDirection("right");
+                if (isCollision) {
+                    this.setPixelPosX((this.getTilePosX() * Game.scaledTileSize) + this.getWalkSpeed());
+                }
             }
         }
-        if(collisionEntity)
+        if (collisionEntity)
             interactEntity = null;
-        if(collisionObj)
+        if (collisionObj)
             interactObj = null;
         this.setScreenPosX((double) Game.width/2 - (double) Game.scaledTileSize/2);
         this.setScreenPosY((double) Game.height/2 - (double) Game.scaledTileSize/2);
@@ -132,9 +134,7 @@ public class Player extends Human {
             interactEntity.interact(renderer, this);
         }
         if (interactObj != null) {
-            System.out.println(interactObj.getType());
-            System.out.println(interactObj.getType().equals("passive"));
-            if(GameControlHandler.interact || interactObj.getType().equals("passive")){
+            if (GameControlHandler.interact || interactObj.getType().equals("passive")){
                 interactObj.interact(renderer, this);
             }
         }
