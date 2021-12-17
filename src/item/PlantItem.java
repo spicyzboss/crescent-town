@@ -16,6 +16,7 @@ public abstract class PlantItem extends Item {
     // 1 day in game = 28800 frame = 8 mins
     private int growthDuration;
     private int maxGrowthState;
+    private boolean isGrowth = false;
 
     public PlantItem(String name, double buyPrice, double sellPrice, int growthDuration, int maxGrowthState) {
         super(name, buyPrice, sellPrice);
@@ -27,17 +28,20 @@ public abstract class PlantItem extends Item {
 
     @Override
     public void active(Player player) {
-        player.checkFowardTile();
-        if (player.getForwardTile().getTileNumber() == 117){
-            if(MapManager.maps.get("village").tileMaps.get(2).map[player.getFowardTilePosY()][player.getFowardTilePosX()] != -2) {
-                Plant plant = new Plant(this);
-                plant.setTilePosX(player.getFowardTilePosX());
-                plant.setTilePosY(player.getFowardTilePosY());
-                plant.setMap("village");
-                plant.setType("active");
-                MapManager.objects.add(plant);
+        if(!this.isGrowth()) {
+            player.checkFowardTile();
+            if (player.getForwardTile().getTileNumber() == 117) {
+                if (MapManager.maps.get("village").tileMaps.get(2).map[player.getFowardTilePosY()][player.getFowardTilePosX()] != -2) {
+                    Plant plant = new Plant(this);
+                    plant.setTilePosX(player.getFowardTilePosX());
+                    plant.setTilePosY(player.getFowardTilePosY());
+                    plant.setMap("village");
+                    plant.setType("active");
+                    MapManager.objects.add(plant);
+                    player.getInventory().removeItem(this);
+                }
+                MapManager.maps.get("village").tileMaps.get(2).map[player.getFowardTilePosY()][player.getFowardTilePosX()] = -2;
             }
-            MapManager.maps.get("village").tileMaps.get(2).map[player.getFowardTilePosY()][player.getFowardTilePosX()] = -2;
         }
     }
 
@@ -64,5 +68,13 @@ public abstract class PlantItem extends Item {
 
     public void setMaxGrowthState(int maxGrowthState) {
         this.maxGrowthState = maxGrowthState;
+    }
+
+    public void setGrowth(boolean growth) {
+        isGrowth = growth;
+    }
+
+    public boolean isGrowth() {
+        return isGrowth;
     }
 }
