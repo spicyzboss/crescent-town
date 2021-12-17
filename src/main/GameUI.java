@@ -208,7 +208,9 @@ public class GameUI {
                     row++;
                     col = 0;
                 }
-                renderer.drawImage(item.getSprite(((PlantItem)item).getMaxGrowthState() - 1), Game.tileSize * 2 * 4 + blockWidth*col + Game.tileSize/2, Game.tileSize * 2 * 3+blockHeight*row, (int)(Game.tileSize * 2 * (3/2D)), (int)(Game.tileSize * 2 * (3/2D)), null);
+                if (((PlantItem)item).isGrowth()) {
+                    renderer.drawImage(item.getSprite(0), Game.tileSize * 2 * 4 + blockWidth*col + Game.tileSize/2, Game.tileSize * 2 * 3+blockHeight*row, (int)(Game.tileSize * 2 * (3/2D)), (int)(Game.tileSize * 2 * (3/2D)), null);
+                }
                 col++;
             }
             if (isConfirming) {
