@@ -153,6 +153,13 @@ public class MapManager implements Serializable {
         leaveMark.setMap("player_room");
         objects.add(leaveMark);
 
+        Bed bed = new Bed("green_bed");
+        bed.setTilePosX(21);
+        bed.setTilePosY(13);
+        bed.solidArea.setSize(Game.scaledTileSize, Game.scaledTileSize * 2);
+        bed.setMap("player_room");
+        objects.add(bed);
+
         //storage
         Door doorStorage = new Door("door01");
         doorStorage.setTilePosX(33);

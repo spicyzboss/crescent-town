@@ -57,10 +57,10 @@ public class Player extends Human implements Serializable, Runnable {
         this.setWallet(new HumanWallet(100));
         this.setInventory(new Inventory(9));
         this.getInventory().addItem(new Hoe());
+        this.getInventory().addItem(new PinkBush());
         this.getInventory().addItem(new BlueBush());
         this.getInventory().addItem(new Corn());
         this.getInventory().addItem(new Flowder());
-        this.getInventory().addItem(new PinkBush());
         this.getInventory().addItem(new Lotus());
         this.getInventory().addItem(new PoiSian());
         this.setSelectedItem(0);
@@ -71,7 +71,8 @@ public class Player extends Human implements Serializable, Runnable {
             this.setSelectedItem(this.getControlHandler().numbers.indexOf(true));
         }
         if(this.getControlHandler().activeItem && this.getSelectedItem() < this.getInventory().getSize()){
-            this.getInventory().getItem(this.getSelectedItem()).active(this);
+            if(!(this.getInventory().getItem(this.getSelectedItem()).getName().equals("Hoe") && this.getEnergy() < 10))
+                this.getInventory().getItem(this.getSelectedItem()).active(this);
             this.getControlHandler().activeItem = false;
         }
         if(this.getControlHandler().pos){
@@ -110,11 +111,6 @@ public class Player extends Human implements Serializable, Runnable {
         }
 
         if (!this.isInteracting) {
-            if (GameControlHandler.arrowKeyPressed) {
-                this.setEnergy(Math.max(0, this.getEnergy() - 1));
-            } else {
-                this.setEnergy(Math.min(100, this.getEnergy() + 1));
-            }
             if (this.getControlHandler().upKeyPressed) {
                 this.setDirection("up");
                 if (isCollision) {
@@ -156,6 +152,7 @@ public class Player extends Human implements Serializable, Runnable {
         if (interactObj != null) {
             if (this.getControlHandler().interact || interactObj.getType().equals("passive")){
                 interactObj.interact(renderer, this);
+                this.getControlHandler().interact = false;
             }
         }
 

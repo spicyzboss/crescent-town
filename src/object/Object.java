@@ -124,7 +124,6 @@ public abstract class Object implements Interactable {
 
     public void resetPlayer(Player player){
         Player.interactObj = null;
-        player.getControlHandler().interact = false;
     }
 
     public abstract void interact(Graphics2D renderer, Player player);

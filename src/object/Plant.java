@@ -3,9 +3,12 @@ package object;
 import entity.Player;
 import item.PlantItem;
 import main.Game;
+import main.MapManager;
+import tile.TileManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class Plant extends Object implements Runnable {
     private PlantItem plant;
@@ -18,7 +21,7 @@ public class Plant extends Object implements Runnable {
         super(plant.getName());
         this.setPlant(plant);
         this.setImage(plant.getSprite(0));
-        this.setGrowthPerStage(this.getPlant().getGrowthDuration()/(this.getPlant().getMaxGrowthState() - 1));
+        this.setGrowthPerStage(this.getPlant().getGrowthDuration()/(this.getPlant().getMaxGrowthState()));
         this.setGrowthStage(0);
         plantThread = new Thread(this);
         plantThread.start();
@@ -26,9 +29,15 @@ public class Plant extends Object implements Runnable {
 
     @Override
     public void interact(Graphics2D renderer, Player player) {
+        System.out.println(this.isCollectable());
         if (this.isCollectable()) {
             if (player.getInventory().isAvailable()) {
-//                player.getInventory().addItem();
+                plant.setImage(plant.getSprite(this.getGrowthStage()));
+                plant.setGrowth(true);
+                player.getInventory().addItem(plant);
+                MapManager.maps.get("village").tileMaps.get(2).map[(int) this.getTilePosY()][(int) this.getTilePosX()] = -1;
+                MapManager.objects.remove(this);
+                player.getControlHandler().interact = false;
             }
         }
     }

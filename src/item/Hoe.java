@@ -16,8 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class Hoe extends Item {
-    private int choosenTilePosX;
-    private int choosenTilePosY;
     public Hoe() {
         super("Hoe", 0, 0);
         this.loadImage();
@@ -28,6 +26,7 @@ public class Hoe extends Item {
         int[] cultivatable = {5, 6, 7, 13, 14, 15, 21, 22, 23};
         player.checkFowardTile();
         if(player.getForwardTile() != null){
+            player.setEnergy(player.getEnergy() - 5);
             if(Arrays.binarySearch(cultivatable, player.getForwardTile().getTileNumber()) >= 0) {
                 TileMap tileMap = player.getCurrentMap().tileMaps.get(1);
                 tileMap.map[player.getFowardTilePosY()][player.getFowardTilePosX()] = 117;
