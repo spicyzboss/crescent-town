@@ -1,7 +1,7 @@
 package main;
 
 import entity.Player;
-import item.Item;
+import item.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -22,6 +22,7 @@ public class GameUI {
     public static boolean isConfirming;
     public static ArrayList<Item> items;
 
+    ArrayList<Item> buyLists;
     public GameUI() {
         this.loadFonts();
         GameUI.setTitleSelect(Game.loadedSave ? 2 : 1);
@@ -50,6 +51,13 @@ public class GameUI {
         shopIndex = 0;
         confirmIndex = 0;
         isConfirming = false;
+        buyLists = new ArrayList<>();
+        buyLists.add(new BlueBush());
+        buyLists.add(new Corn());
+        buyLists.add(new Flowder());
+        buyLists.add(new PinkBush());
+        buyLists.add(new Lotus());
+        buyLists.add(new PoiSian());
     }
 
     private void loadInterface(String interfaceType, String interfaceName) {
@@ -158,11 +166,28 @@ public class GameUI {
             renderer.setColor(Color.BLACK);
             String buy = "Buy Shop";
             int buyTextWidth = (int)renderer.getFontMetrics().getStringBounds(buy, renderer).getWidth();
+
+
             renderer.drawString(buy, Game.width / 2 - buyTextWidth/2, Game.tileSize * 2 * 2);
             renderer.drawImage(interfaces.get("shop"), Game.tileSize * 2 * 4, Game.tileSize * 2 * 3, Game.tileSize * 2 * 8, Game.tileSize * 2 * 3, null);
             renderer.drawImage(interfaces.get("shopSelect"), Game.tileSize * 2 * 4 + (Game.tileSize * 2 * (2 * (shopIndex % 4))), Game.tileSize * 2 * 3 + (int)(Game.tileSize * 2 * (3/2D) * (shopIndex / 4)), Game.tileSize * 2 * 2, (int)(Game.tileSize * 2 * (3/2D)), null);
+
+            for (int i = 0; i < buyLists.size(); i++) {
+                renderer.drawImage(buyLists.get(i).getSprite(((PlantItem)buyLists.get(i)).getMaxGrowthState() - 1), Game.tileSize * 2 * 4 + Game.tileSize * 2 * 2 * (i%4) + Game.tileSize/2, Game.tileSize * 2 * 3+(int)(Game.tileSize * 2 * (3/2D))*(i/4), (int)(Game.tileSize * 2 * (3/2D)), (int)(Game.tileSize * 2 * (3/2D)), null);
+            }
             if (isConfirming) {
                 this.drawConfirming(renderer, "Buy", "Cancel");
+                if (GameControlHandler.confirmTransaction) {
+                    if (player.getWallet().getMoney() >= buyLists.get(shopIndex).getBuyPrice() && player.getInventory().isAvailable()) {
+                        player.getWallet().reduceMoney(buyLists.get(shopIndex).getBuyPrice());
+                        player.getInventory().addItem(buyLists.get(shopIndex));
+                    } else {
+                        Game.playSoundEffect("cancel");
+                    }
+                    isConfirming = false;
+                    GameControlHandler.confirmTransaction = false;
+                    Game.globalState = Game.gameState.PLAY;
+                }
             }
         } else if (Game.globalState == Game.gameState.SELLING) {
             renderer.setFont(new Font("2005_iannnnnCPU", Font.PLAIN, Game.tileSize*3));
@@ -178,16 +203,23 @@ public class GameUI {
             int blockHeight = (int)(Game.tileSize * 2 * (3/2D));
             int row = 0;
             int col = 0;
-            for(Item item: items){
-                if(col > 3){
+            for (Item item : items) {
+                if (col > 3) {
                     row++;
                     col = 0;
                 }
-                renderer.drawImage(item.getSprite(0), Game.tileSize * 2 * 4+blockWidth*col, Game.tileSize * 2 * 3+blockHeight*row, Game.tileSize * 2 * 2, (int)(Game.tileSize * 2 * (3/2D)), null);
+                renderer.drawImage(item.getSprite(((PlantItem)item).getMaxGrowthState() - 1), Game.tileSize * 2 * 4 + blockWidth*col + Game.tileSize/2, Game.tileSize * 2 * 3+blockHeight*row, (int)(Game.tileSize * 2 * (3/2D)), (int)(Game.tileSize * 2 * (3/2D)), null);
                 col++;
             }
             if (isConfirming) {
                 this.drawConfirming(renderer, "Sell", "Cancel");
+                if (GameControlHandler.confirmTransaction) {
+                    player.getWallet().receiveMoney(items.get(shopIndex).getSellPrice());
+                    player.getInventory().removeItem(items.get(shopIndex));
+                    isConfirming = false;
+                    GameControlHandler.confirmTransaction = false;
+                    Game.globalState = Game.gameState.PLAY;
+                }
             }
         } else if (Game.globalState == Game.gameState.EXITING) {
             if (isConfirming) {

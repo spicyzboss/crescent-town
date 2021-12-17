@@ -35,25 +35,25 @@ public class MapManager implements Serializable {
 
     public void loadNpc() {
         // NPCs
-        NPCMerchant mongo = new NPCMerchant("mongo", "male");
+        NPCMerchant mongo = new NPCMerchant("mongo", "male", "buy");
         mongo.setTilePosX(19);
         mongo.setTilePosY(7);
         mongo.addDialog("สวัสดีชั้นชื่อ Mongo เป็นพ่อค้า");
         mongo.addDialog("ว่าไงนะแกว่าชั้นว่าหน้าโฉดเกินจะเป็นพ่อค้างั้นหรอ");
         mongo.addDialog("บังอาจ!!!!");
         mongo.addDialog("...");
-        mongo.addSaleDialog("อยากได้อะไรละ");
+        mongo.addSaleDialog("อยากซื้ออะไรล่ะ?");
         mongo.setMap("shop1");
         NPCs.add(mongo);
 
-        NPCMerchant andru = new NPCMerchant("andru", "male");
+        NPCMerchant andru = new NPCMerchant("andru", "male", "sell");
         andru.setTilePosX(19);
         andru.setTilePosY(7);
         andru.addDialog("สวัสดีชั้นชื่อ Andru เป็นพ่อค้า");
         andru.addDialog("โอ้นายมาใหม่งั้นหรอ ไม่ต้องตกใจไปทุกคนที่นี่ก็เหมือนกันนั่นแหละ");
         andru.addDialog("หากนายต้องการข้อมูลเพิ่มเติมไปบ้านด้านขวาของร้านนี้ดูสิ");
         andru.addDialog("...");
-        andru.addSaleDialog("อยากได้อะไรละ");
+        andru.addSaleDialog("อยากขายอะไรล่ะ?");
         andru.setMap("shop2");
         NPCs.add(andru);
 
@@ -92,19 +92,18 @@ public class MapManager implements Serializable {
         luka.setTilePosY(29);
         luka.setPattern("find direction");
         luka.addDialog("เอ ตรงนี้มันตรงไหนของเกาะกันน๊าาา");
-        luka.addDialog("ชั้นต้อไปทางไหนละเนี่ย ต้องโดน Fiona สวดอีกแน่เลย");
+        luka.addDialog("ชั้นต้องไปทางไหนละเนี่ย ต้องโดน Fiona สวดอีกแน่เลย");
         luka.setMap("village");
         luka.setMoveAble(4);
         luka.setMoving(true);
         NPCs.add(luka);
 
-        NPCMerchant mana = new NPCMerchant("Mana", "female");
+        NPC mana = new NPC("Mana", "female", "unemployed");
         mana.setTilePosX(14);
         mana.setTilePosY(10);
         mana.addDialog("สวัสดีนายเด็กใหม่ที่เค้าล่ำลือกันสินะ");
         mana.addDialog("ที่นี่คือโรงพยาบาล Crescent ถ้าเกิดป่วยขึ้นมาก็มาปรึกษาได้นะ");
-        mana.addDialog("เอาละแนะนำตัวเสร็จแล้ว ไนายเองก็ไปได้แล้วละ");
-        mana.addSaleDialog("ตอนนี้สินค้ากำลังอยู่ในช่วงทดสอบอยู่หนะ อีกสัก 50 ปี ค่อยกลับมาใหม่นะ");
+        mana.addDialog("เอาละแนะนำตัวเสร็จแล้ว นายเองก็ไปได้แล้วละ");
         mana.setMap("village");
         NPCs.add(mana);
     }

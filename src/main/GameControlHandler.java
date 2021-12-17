@@ -18,6 +18,7 @@ public class GameControlHandler implements KeyListener, Serializable {
     public boolean confirmExit = false;
     public boolean pos = false;
     public boolean interact = false;
+    public static boolean confirmTransaction;
     public static int dialog;
     public static boolean objState;
     public ArrayList<Boolean> numbers = new ArrayList<Boolean>(Arrays.asList(false, false, false, false, false, false, false, false, false));
@@ -159,10 +160,12 @@ public class GameControlHandler implements KeyListener, Serializable {
                         GameUI.confirmIndex = 1;
                     } else if (e.getKeyCode() == KeyEvent.VK_Z) {
                         if (GameUI.confirmIndex == 0) {
-                            // buy or sell event
                             if (Game.globalState == Game.gameState.EXITING) {
-                                // save state
+                                // exit with save game
                                 confirmExit = true;
+                            } else {
+                                // buy or sale
+                                confirmTransaction = true;
                             }
                         } else {
                             GameUI.isConfirming = false;

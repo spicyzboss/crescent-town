@@ -104,7 +104,7 @@ public class Player extends Human implements Serializable, Runnable {
 
         boolean isCollision = this.collisionTile && this.collisionNPC && this.collisionObj && !isInteracting;
         if (this.getControlHandler().scaleUp || this.getControlHandler().scaleDown) {
-            this.setWalkSpeed(2 * Game.scale);
+            this.setWalkSpeed(5 * Game.scale);
             this.setPixelPosX(getTilePosX() * Game.scaledTileSize);
             this.setPixelPosY(getTilePosY() * Game.scaledTileSize);
         }
@@ -161,10 +161,6 @@ public class Player extends Human implements Serializable, Runnable {
 
         // draw player at center of screen
         renderer.drawImage(this.getSpriteOnAction(), playerArea.x, playerArea.y, playerArea.width, playerArea.height, null);
-//        renderer.setColor(Color.CYAN);
-//        renderer.fillRect(playerArea.x, playerArea.y, playerArea.width, playerArea.height);
-//        renderer.setColor(Color.red);
-//        renderer.fillRect(this.solidArea.x, this.solidArea.y, this.solidArea.width, this.solidArea.height);
     }
 
     public void checkFowardTile() {

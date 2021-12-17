@@ -8,15 +8,15 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class NPCMerchant extends NPC {
-
     public Rectangle saleArea;
     public boolean onSale = false;
     public ArrayList<String> saleDialog;
+    public String type;
 
-    public NPCMerchant(String name, String gender) {
+    public NPCMerchant(String name, String gender, String type) {
         super(name, gender, "merchant");
+        this.setType(type);
         NPCMerchantInit();
-
     }
     private void NPCMerchantInit(){
         this.saleArea = new Rectangle(this.solidArea.x, this.solidArea.y+Game.scaledTileSize , Game.scaledTileSize, Game.scaledTileSize/2);
@@ -51,7 +51,11 @@ public class NPCMerchant extends NPC {
                     if (GameControlHandler.dialog-1 < this.saleDialog.size()) {
                         GameUI.drawDialog(renderer, this.getSaleDialog(GameControlHandler.dialog-1));
                     } else {
-                        Game.globalState = Game.gameState.SELLING;
+                        if (this.getType().equals("buy")) {
+                            Game.globalState = Game.gameState.BUYING;
+                        } else if (this.getType().equals("sell")) {
+                            Game.globalState = Game.gameState.SELLING;
+                        }
                         GameControlHandler.dialog = 0;
                         player.collisionNPC = true;
                         player.isInteracting = false;
@@ -69,6 +73,13 @@ public class NPCMerchant extends NPC {
                 super.interact(renderer, player);
             }
         }
+    }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

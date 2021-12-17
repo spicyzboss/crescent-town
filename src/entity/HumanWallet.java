@@ -24,10 +24,18 @@ public class HumanWallet {
         }
     }
 
-    public void receiveMoney(Human human,  double amount){
+    public void receiveMoney(double amount){
         if(amount > 0) {
-            human.getWallet().setMoney(human.getWallet().getMoney() + amount);
-        }else{
+            this.setMoney(this.getMoney() + amount);
+        } else {
+            Game.playSoundEffect("cancel");
+        }
+    }
+
+    public void reduceMoney(double amount) {
+        if (amount > 0) {
+            this.setMoney(this.getMoney() - amount);
+        } else {
             Game.playSoundEffect("cancel");
         }
     }
